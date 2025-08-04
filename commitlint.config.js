@@ -4,6 +4,7 @@ export default {
       2,
       'always',
       [
+        'init',
         'feat',
         'fix',
         'docs',
@@ -19,6 +20,7 @@ export default {
       2,
       'always',
       [
+        'project',
         'url',
         'user',
         'api-token',
