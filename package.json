@@ -1,0 +1,46 @@
+{
+  "name": "minimourl",
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "",
+  "private": true,
+  "author": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "description": "Minimourl allows you to convert long unaccessible URL to short, neat URL",
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "main": "./dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pm2-dev ./dist/main.js",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "URL",
+    "URI",
+    "Short URL",
+    "Long URL"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "commitizen": "^4.3.1",
+    "commitlint": "^19.8.1",
+    "husky": "^9.1.7",
+    "pm2": "^6.0.8",
+    "typescript": "^5.8.3"
+  }
+}
