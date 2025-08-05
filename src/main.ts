@@ -1,12 +1,12 @@
 // Imports
 import dotenv from "dotenv"
-import express from 'express'
-
 dotenv.config()
+
+import express from 'express'
 const app = express()
 
-app.get("/", (req, res) => {
-    res.send("hello world")
+app.get("/", async (req, res) => {
+   
 })
 
 /**
