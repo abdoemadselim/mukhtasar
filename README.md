@@ -1,22 +1,36 @@
 # Project Structure
 
-This project follows a feature-based architecture with clean separation of concerns.
+This project follows a feature-based, clean architecture with a clear separation of concerns and route types (API vs UI). It supports both:
+
+- **External API consumers** via `/api` (authenticated using opaque API keys)
+- **Internal interface users** via `/` (e.g. via the Next frontend)
 
 ## 📁 Directory Structure
 
 ```
+.husky/ The folder husky generates for hooking the commitlint to git commit
+|
+docs/ Diagrams and design files
+|
 src/
 ├── features/           # Feature modules organized by business domain
-│   ├── feature1/      # e.g URL shortening functionality
+│   ├── feature1/         # e.g URL shortening functionality
+|   |   ├── routes/
+│   |   |   ├── api.ts            # External API routes (e.g., /api/shorten)
+│   |   |   └── ui.ts             # Internal interface routes (e.g., /shorten)
 │   │   ├── data-access/    # Data layer for URL shortening
 │   │   ├── domain/         # Business logic and entities
 │   │   └── test/           # Feature-specific tests
-|   |   |__ api.ts          # It works as the controller for this feature
 │   ├── feature2/         # e.g. API tokens #
+|   |   ├── routes/
+│   |   |   ├── api.ts            # External API routes (e.g., /api/shorten)
+│   |   |   └── ui.ts             # Internal interface routes (e.g., /shorten)
 │   │   ├── data-access/    # Data layer for Token data operations
 │   │   ├── domain/         # Token business logic
 │   │   └── test/           # Token-related tests
-|   |   |__ api.ts          # It works as the controller for this feature
+├── routes/
+│   ├── api.ts # Main router for /api endpoints
+  │ └── ui.ts # Main router for internal UI routes
 ├── lib/                # Shared utilities and libraries
 │   ├── db/             # Database configuration and connection
 │   │   └── db-connection.ts
@@ -29,15 +43,21 @@ src/
 ## 🏗️ Architecture Principles
 
 ### Feature-Based Organization
-Each feature is self-contained with its own:
-- **Data Access Layer**: Handles database operations and external API calls
-- **Domain Layer**: Contains business logic, entities, and use cases
-- **Test Layer**: Feature-specific unit and integration tests
+### Feature-Based Modularity
+Each business feature (e.g. URL, Tokens, Analytics) is self-contained with its own:
+- `routes/api/` → Express routes for external APIs
+- `routes/ui/` → Express routes for internal interface usage
+- `data-access/` → DB logic (SQL, queries)
+- `domain/` → Use cases, business rules
+- `test/` → Focused tests per feature
+
+### Route Separation
+- `/api/**` → Designed for API clients (authenticated via opaque API keys)
+- `/**`     → Designed for internal users via the internal UI (e.g., Next.js app)
 
 ### Clean Architecture
-- **Separation of Concerns**: Each layer has a single responsibility
-- **Dependency Inversion**: Higher-level modules don't depend on lower-level modules
-- **Testability**: Each layer can be tested independently
+- **Separation of concerns** between routes, domain logic, and persistence
+- **Testability** and **scalability** are key priorities
 
 ## 🔧 Key Components
 

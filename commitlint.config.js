@@ -20,6 +20,7 @@ export default {
       2,
       'always',
       [
+        'archi',
         'project',
         'url',
         'user',
