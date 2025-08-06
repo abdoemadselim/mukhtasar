@@ -1,13 +1,12 @@
 // Imports
 import dotenv from "dotenv"
-dotenv.config()
-
 import express from 'express'
+import apiRoutes from "./routes/api.routes.js"
+
+dotenv.config()
 const app = express()
 
-app.get("/", async (req, res) => {
-   
-})
+app.use("/api", apiRoutes)
 
 /**
  * Server activation

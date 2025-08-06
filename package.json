@@ -4,6 +4,12 @@
   "type": "module",
   "homepage": "",
   "private": true,
+  "imports": {
+    "#root/*": "./dist/*",
+    "#features/*": "./dist/features/*",
+    "#lib/*": "./dist/lib/*",
+    "#routes/*": "./dist/routes/*"
+  },
   "author": {
     "name": "",
     "email": "",
