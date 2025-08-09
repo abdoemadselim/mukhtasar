@@ -11,9 +11,12 @@
     "#routes/*": "./dist/routes/*"
   },
   "author": {
-    "name": "",
-    "email": "",
+    "name": "Abdelrahman Emad",
+    "email": "abdulrahman3mad@gmail.com",
     "url": ""
+  },
+  "overrides": {
+    "tmp": "^0.2.4"
   },
   "description": "Minimourl allows you to convert long unaccessible URL to short, neat URL",
   "engines": {
@@ -36,7 +39,10 @@
   "dependencies": {
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "express-rate-limit": "^8.0.1",
+    "pg": "^8.16.3",
+    "rate-limit-redis": "^4.2.1",
+    "zod": "^4.0.15"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

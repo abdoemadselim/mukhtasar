@@ -1,13 +1,18 @@
-// import { getCountryModel } from './models/country-model';
+import { query } from "#lib/db/db-connection.js";
+import type { UrlType} from "#features/url/types.js";
+import type { ParamsType } from "#features/url/domain/url-schemas.js";
 
-// type CountryRecord = {
-//   id: number;
-//   name: string;
-// };
+const urlRepository = {
+    async getUrl({ alias, domain }: ParamsType): Promise<UrlType | undefined> {
+        console.log(alias, domain)
+        const result = await query(
+            "SELECT alias, domain, original_url, short_url, click_count FROM url WHERE alias = $1 AND domain = $2",
+            [alias, domain]
+        )
 
-// // ️️️✅ Best Practice: The repository pattern - Wrap the entire DB layer with a simple interface that returns plain JS objects
-// export async function getAllCountries(): Promise<CountryRecord[] | null> {
-//   const results = getCountryModel().findAll();
+        return result.rows[0];
+    }
+}
 
-//   return results;
-// }
+
+export default urlRepository
