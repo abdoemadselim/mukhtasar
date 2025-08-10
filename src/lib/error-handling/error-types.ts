@@ -70,3 +70,12 @@ export class ValidationException extends HttpException {
 export class NoException {
     static NoErrorCode: number = 0;
 }
+
+export class ConflictException extends HttpException {
+    constructor(message: string) {
+        super(409, 7, message)
+
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this);
+    }
+}

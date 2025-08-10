@@ -2,16 +2,27 @@
 import dotenv from "dotenv"
 import express from "express";
 import type { Request, Response, NextFunction } from 'express'
+import bodyParser from "body-parser";
 
 import apiRoutes from "#routes/api.routes.js"
 import { HttpException, InternalServerException, ValidationException } from "#lib/error-handling/error-types.js"
 
+/**
+ * App Configuration
+ */
 dotenv.config()
 const app = express()
+app.use(bodyParser.json())
 
+/**
+ * App Routes
+*/
 app.use("/api", apiRoutes)
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+/**
+ * Error Handler Middleware
+*/
+app.use((err: Error | HttpException, req: Request, res: Response, next: NextFunction) => {
     // 1- Validation errors (alias too long, domain is invalid, etc.)
     if (err instanceof ValidationException) {
         return res.status(err.statusCode).json({

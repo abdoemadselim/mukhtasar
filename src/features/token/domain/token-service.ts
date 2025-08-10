@@ -1,9 +1,10 @@
 import type { Request, Response, NextFunction } from "express"
 
-import { UnAuthorizedException } from "#lib/error-handling/error-types.js"
 import tokenRepository from "#features/token/data-access/token.repository.js"
 import type { TokenPermission, TokenType, TokenWithUrlType } from "#features/token/types.js";
 import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
+
+import { UnAuthorizedException } from "#lib/error-handling/error-types.js"
 
 export function authToken(requiredPermission: TokenPermission) {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -14,12 +15,13 @@ export function authToken(requiredPermission: TokenPermission) {
         const db_token = await validateTokenExistenceInDB(header_token)
 
         // there is a token passed and it exists in db, but it doesn't have access for this specific short url (it's another user's short urls)
-        const { alias, domain } = req.params;
-        validateTokenOwnership(db_token as TokenWithUrlType, { alias, domain })
+        const domain = req.params.domain || req.body.domain;
+        validateTokenOwnership(db_token as TokenWithUrlType, { domain })
 
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
 
+        req.body.user_id = db_token.user_id;
         // the token is totally valid and has required access
         next()
     }
@@ -36,7 +38,7 @@ function validateAndExtractToken(req: Request): string {
     return token;
 }
 
-async function validateTokenExistenceInDB(header_token: string): Promise<TokenType | TokenWithUrlType> {
+async function validateTokenExistenceInDB(header_token: string): Promise<TokenType> {
     const db_token = await tokenRepository.getTokenWithUrl({ token: header_token });
     if (!db_token) {
         throw new UnAuthorizedException();
@@ -45,16 +47,16 @@ async function validateTokenExistenceInDB(header_token: string): Promise<TokenTy
     return db_token;
 }
 
-function validateTokenOwnership(token: TokenWithUrlType, params: { alias: string; domain: string }) {
-    const { alias, domain } = params;
-    if (token.alias !== alias || token.domain !== domain) {
+function validateTokenOwnership(token: TokenWithUrlType, params: { domain: string }) {
+    const { domain } = params;
+    if (token.domain !== domain) {
         throw new UnAuthorizedException();
     }
 }
 
 function validateTokenPermission(token: TokenType, requiredPermission: TokenPermission) {
     if (requiredPermission !== READ_URL_PERMISSION) {
-        if (token[READ_URL_PERMISSION] !== true) {
+        if (token[requiredPermission] !== true) {
             throw new UnAuthorizedException();
         }
     }

@@ -35,7 +35,7 @@ pool.on("error", (err) => {
 /*
     all queries go from here, so it's easy to log them
 */
-export const query = (text: string, params: QueryConfigValues<string[]>) => {
+export const query = (text: string, params?: QueryConfigValues<string[]>) => {
     // ADD LOGGING HERE
     
     return pool.query(text, params)

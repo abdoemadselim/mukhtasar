@@ -28,8 +28,8 @@ const CreateUrlBodySchema = zod.object({
         hostname: zod.regexes.domain
     }),
 
-    alias: aliasSchema,
-    domain: domainSchema,
+    alias: zod.optional(aliasSchema),
+    domain: zod.optional(domainSchema),
     description: zod.string().trim().max(300)
 })
 
