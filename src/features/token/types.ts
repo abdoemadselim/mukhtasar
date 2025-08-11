@@ -1,5 +1,6 @@
 export type TokenPermission = "can_read" | "can_create" | "can_update" | "can_delete";
 export type TokenType = {
+    id: number,
     user_id: number,
     token_string: string,
     label: string,

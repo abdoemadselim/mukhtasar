@@ -59,7 +59,7 @@ export class ValidationException extends HttpException {
     validationErrors: string[];
 
     constructor(validationErrors: string[]) {
-        super(422, 3, "Validation failed on one of the properties.");
+        super(422, 3, `${validationErrors.join(",")}`);
         this.validationErrors = validationErrors;
 
         this.name = this.constructor.name;

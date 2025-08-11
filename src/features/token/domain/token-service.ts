@@ -22,6 +22,7 @@ export function authToken(requiredPermission: TokenPermission) {
         validateTokenPermission(db_token, requiredPermission);
 
         req.body.user_id = db_token.user_id;
+        req.body.token = db_token.id;
         // the token is totally valid and has required access
         next()
     }

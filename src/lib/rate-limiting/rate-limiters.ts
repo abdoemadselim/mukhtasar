@@ -1,17 +1,10 @@
 import { rateLimit } from 'express-rate-limit'
 import type { Request } from "express"
 
-import { RateLimitingException, UnAuthorizedException } from '#lib/error-handling/error-types.js';
+import { RateLimitingException } from '#lib/error-handling/error-types.js';
 
-function getTokenFromHeader(req: Request) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) throw new UnAuthorizedException();
-
-    const [scheme, token] = authHeader.split(" ");
-    if (scheme !== "Bearer" || !token) {
-        throw new UnAuthorizedException();
-    }
-    return token;
+function getToken(req: Request) {
+    return req.body.token
 }
 
 export function apiRateLimiter(windowInMin: number, limit: number) {
@@ -20,7 +13,7 @@ export function apiRateLimiter(windowInMin: number, limit: number) {
         limit: limit, // Limit each Token to 50 requests per `window` (here, per 15 minutes)
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-        keyGenerator: (req, res) => getTokenFromHeader(req),
+        keyGenerator: (req, res) => getToken(req),
         handler: () => { throw new RateLimitingException }
     })
 }
