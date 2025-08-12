@@ -8,7 +8,8 @@
     "#root/*": "./dist/*",
     "#features/*": "./dist/features/*",
     "#lib/*": "./dist/lib/*",
-    "#routes/*": "./dist/routes/*"
+    "#routes/*": "./dist/routes/*",
+    "#middlewares/*": "./dist/middlewares/*"
   },
   "author": {
     "name": "Abdelrahman Emad",
