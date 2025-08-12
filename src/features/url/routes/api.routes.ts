@@ -16,9 +16,9 @@ const router = Router();
 // Returns the details of a shortened URL
 router.get(
     "/:domain/:alias",
-    validateRequest([paramsSchema]),
     authToken(READ_URL_PERMISSION),
     apiRateLimiter(1, 2),
+    validateRequest([paramsSchema]),
     async (req: Request, res: Response) => {
         const start = Date.now();
         // 1- prepare the data for the service
@@ -56,9 +56,9 @@ router.get(
 
 // Create a short URL
 router.post("/",
-    validateRequest([shortUrlSchema]),
     authToken(CREATE_URL_PERMISSION),
     apiRateLimiter(1, 50),
+    validateRequest([shortUrlSchema]),
     async (req: Request, res: Response) => {
         const start = Date.now();
 

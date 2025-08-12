@@ -26,7 +26,7 @@
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pm2-dev ./dist/main.js",
+    "dev": "node --watch --import ./dist/instrument.js ./dist/main.js",
     "prepare": "husky"
   },
   "keywords": [
@@ -37,6 +37,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@sentry/node": "^10.5.0",
     "body-parser": "^2.2.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

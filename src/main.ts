@@ -1,4 +1,6 @@
 // Imports
+import "#lib/logger/instrument.js"
+import * as Sentry from "@sentry/node"
 import { randomUUID } from "node:crypto"
 import { AsyncLocalStorage } from 'node:async_hooks';
 
@@ -30,6 +32,7 @@ export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: st
  * asyncLocalStorage is used here, so all methods under a particular request has access to the store (its requestId and tokenId),
  * they are both needed for logging
 */
+
 app.use((req, res, next) => {
     const requestId = randomUUID();
     const token = req.headers.authorization?.split(" ")[1];
@@ -43,15 +46,18 @@ app.use("/*splat", (req, res) => {
     throw new NotFoundException("Endpoint not found")
 })
 
+Sentry.setupExpressErrorHandler(app)
+
 // TODO: becomes messy and needs refactoring now (e.g. abstract the logic away in a separate file)
 /**
  * Error Handler Middleware
 */
 app.use((err: Error | HttpException, req: Request, res: Response, next: NextFunction) => {
     const store = asyncStore.getStore();
+
     // Common log metadata
     const logMeta = {
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         tokenId: store?.tokenId,
