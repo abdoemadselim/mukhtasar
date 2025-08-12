@@ -7,7 +7,8 @@ const urlRepository = {
         const result = await query(
             "SELECT alias, domain, original_url, short_url, click_count FROM url WHERE alias = $1 AND domain = $2",
             [alias, domain]
-        )
+        );
+
         return result.rows[0];
     },
 
@@ -15,7 +16,8 @@ const urlRepository = {
         const result = await query(
             "SELECT short_url, alias, domain, original_url, created_at FROM url WHERE alias = $1",
             [alias]
-        )
+        );
+
         return result.rows[0];
     },
 
@@ -23,7 +25,7 @@ const urlRepository = {
         const result = await query(
             "SELECT short_url, alias, domain, original_url, created_at FROM url WHERE url_hash=DECODE(MD5($1), 'hex')",
             [original_url]
-        )
+        );
 
         return result.rows[0];
     },
@@ -31,7 +33,7 @@ const urlRepository = {
     async getIdBatch(batch_size: number) {
         const result = await query(
             `SELECT SETVAL('url_unique_id', NEXTVAL('url_unique_id') + ${batch_size} - 1) - ${batch_size} + 1 AS batch_start`,
-        )
+        );
 
         return result.rows[0];
     },
@@ -45,7 +47,7 @@ const urlRepository = {
              RETURNING short_url, created_at
             `,
             [alias, domain, original_url, String(user_id), description]
-        )
+        );
 
         return result.rows[0];
     },
@@ -56,22 +58,32 @@ const urlRepository = {
              WHERE alias = $1 AND domain = $2
             `,
             [alias, domain]
-        )
+        );
 
-        return result.rows[0]
+        return result.rows[0];
     },
 
     async updateUrl({ alias, domain }: ParamsType, original_url: string) {
-        console.log(original_url)
         const result = await query(`
             UPDATE url
             SET original_url = $1
             WHERE alias = $2 AND domain = $3
             `,
             [original_url, alias, domain]
-        )
+        );
 
         return result.rows[0];
+    },
+
+    async getUrlClickCounts({ alias, domain }: ParamsType) {
+        const result = await query(`
+            SELECT click_count FROM url
+            WHERE alias = $1 AND domain = $2
+            `,
+            [alias, domain]
+        );
+
+        return Number(result.rows[0]?.click_count);
     }
 }
 

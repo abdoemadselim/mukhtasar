@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express"
 
-import { createUrl, deleteUrl, getUrlInfo, updateUrl } from "#features/url/domain/url.service.js";
+import { createUrl, deleteUrl, getUrlClickCount, getUrlInfo, updateUrl } from "#features/url/domain/url.service.js";
 import { authToken } from "#features/token/domain/token-service.js";
 import { shortUrlSchema, paramsSchema, toUpdateUrlSchema } from "#features/url/domain/url-schemas.js";
 import { CREATE_URL_PERMISSION, DELETE_URL_PERMISSION, READ_URL_PERMISSION, UPDATE_URL_PERMISSION } from "#features/token/data-access/const.js";
@@ -85,7 +85,7 @@ router.post("/",
         const store = asyncStore.getStore()
 
         logger.info({
-            message: "Get URL info",
+            message: "Create URL",
             requestId: req.body.requestId,
             method: req.method,
             path: req.originalUrl,
@@ -161,7 +161,49 @@ router.patch("/:domain/:alias",
         const store = asyncStore.getStore()
 
         logger.info({
-            message: "Delete URL",
+            message: "Update URL",
+            requestId: req.body.requestId,
+            method: req.method,
+            path: req.originalUrl,
+            status: 200,
+            durationMs,
+            tokenId: store?.tokenId
+        })
+
+        // 4- send the response
+        res.json(response)
+    })
+
+
+// Get the click count for a URL
+router.get("/:domain/:alias/count",
+    validateRequest([paramsSchema]),
+    authToken(READ_URL_PERMISSION),
+    apiRateLimiter(1, 50),
+    async (req: Request, res: Response) => {
+        const start = Date.now();
+
+        // 1- prepare the data for the service
+        const { alias, domain } = req.params;
+
+        // 2- pass the prepared data to the service
+        const clickCount = await getUrlClickCount({ alias, domain })
+        // 3- prepare the response
+        const response = {
+            data: {
+                alias,
+                domain,
+                clickCount
+            },
+            errors: [],
+            code: NoException.NoErrorCode
+        }
+
+        const durationMs = Date.now() - start;
+        const store = asyncStore.getStore()
+
+        logger.info({
+            message: "Get URL click count",
             requestId: req.body.requestId,
             method: req.method,
             path: req.originalUrl,
