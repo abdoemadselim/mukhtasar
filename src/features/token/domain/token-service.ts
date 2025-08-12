@@ -14,15 +14,18 @@ export function authToken(requiredPermission: TokenPermission) {
         // there is token attached to the authorization header, but the token doesn't exist in db
         const db_token = await validateTokenExistenceInDB(header_token)
 
-        // there is a token passed and it exists in db, but it doesn't have access for this specific short url (it's another user's short urls)
-        const domain = req.params.domain || req.body.domain;
-        validateTokenOwnership(db_token as TokenWithUrlType, { domain })
-
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
 
+        // there is a token passed and it exists in db, but it doesn't have access for this specific short url (it's another user's short urls)
+        const { domain } = req.params || req.body;
+
+        if (domain) {
+            validateTokenOwnership(db_token as TokenWithUrlType, { domain })
+        }
+
         req.body.user_id = db_token.user_id;
-        req.body.token = db_token.id;
+        
         // the token is totally valid and has required access
         next()
     }

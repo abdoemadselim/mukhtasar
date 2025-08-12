@@ -1,6 +1,6 @@
 import urlRepository from "#features/url/data-access/url.repository.js";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
-import type { ParamsType } from "#features/url/domain/url-schemas.js";
+import type { ParamsType, ToUpdateUrlType } from "#features/url/domain/url-schemas.js";
 import { UrlType } from "#features/url/types.js";
 import generate_id from "#features/url/domain/id-generator.js";
 
@@ -48,6 +48,33 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<UrlType> {
 
     // 3- construct new URL record
     return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
+}
+
+export async function deleteUrl({ domain, alias }: ParamsType) {
+    const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
+    if (!url) {
+        throw new URLNotFoundException();
+    }
+
+    await urlRepository.deleteUrl({ alias, domain });
+    return url;
+}
+
+export async function updateUrl({ domain, alias }: ParamsType, original_url: string) {
+    //1. Check if the URL even exists to update
+    const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
+    if (!url) {
+        throw new URLNotFoundException();
+    }
+
+    if(url.original_url == original_url){
+        return original_url;
+    }
+
+    // 2. Update the existing url
+    const result = await urlRepository.updateUrl({alias, domain}, original_url)
+    
+    return result;
 }
 
 async function saveUrl({

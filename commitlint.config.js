@@ -23,6 +23,7 @@ export default {
         'archi',
         'project',
         'url',
+        'logging',
         'user',
         'api-token',
         'analytics',

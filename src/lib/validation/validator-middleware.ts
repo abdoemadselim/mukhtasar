@@ -10,7 +10,6 @@ type SchemaDataType = "body" | "query" | "params";
 function validateRequest(schemas: { schemaDataType: SchemaDataType, schemaObject: zod.ZodObject }[]) {
     return (req: Request, res: Response, next: NextFunction) => {
         schemas.forEach(({ schemaDataType, schemaObject }) => {
-
             const data = schemaDataType == "body" ? req.body : schemaDataType == "query" ? req.query : req.params;
             const result = schemaObject.safeParse(data)
 

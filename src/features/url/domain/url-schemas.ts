@@ -12,29 +12,35 @@ const aliasSchema = zod
     )
 
 const domainSchema = zod
-    .string()
-    .regex(zod.regexes.domain, "The domain is invalid.")
+    .string("Domain is required")
+    .regex(zod.regexes.domain, "This domain is invalid.")
 
+const urlSchema = zod.url({
+    protocol: /^https?$/,
+    hostname: zod.regexes.domain,
+    error: (url) => url.input == undefined ? "URL is required" : "Invalid URL format"
+})
 
 const ParamsSchema = zod.object({
     domain: domainSchema,
     alias: aliasSchema
 })
 
-
-const CreateUrlBodySchema = zod.object({
-    original_url: zod.url({
-        protocol: /^https?$/,
-        hostname: zod.regexes.domain
-    }),
-
+const ShortUrlSchema = zod.object({
+    original_url: urlSchema,
     alias: zod.optional(aliasSchema),
     domain: zod.optional(domainSchema),
-    description: zod.string().trim().max(300)
+    description: zod.optional(zod.string().trim().max(300))
 })
 
-export const paramsSchema =  schemaWrapper("params", ParamsSchema);
-export const createUrlBodySchema = schemaWrapper("body", CreateUrlBodySchema);
+const ToUpdateUrlSchema = zod.object({
+    original_url: urlSchema
+})
+
+export const paramsSchema = schemaWrapper("params", ParamsSchema);
+export const shortUrlSchema = schemaWrapper("body", ShortUrlSchema);
+export const toUpdateUrlSchema = schemaWrapper("body", ToUpdateUrlSchema);
 
 export type ParamsType = zod.infer<typeof ParamsSchema>;
-export type CreateUrlBodyType = zod.infer<typeof CreateUrlBodySchema>;
+export type ShortUrlType = zod.infer<typeof ShortUrlSchema>;
+export type ToUpdateUrlType = zod.infer<typeof ToUpdateUrlSchema>;

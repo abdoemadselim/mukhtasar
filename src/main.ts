@@ -1,14 +1,16 @@
 // Imports
+import { randomUUID } from "node:crypto"
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import dotenv from "dotenv"
 import express from "express";
 import type { Request, Response, NextFunction } from 'express'
 import bodyParser from "body-parser";
 
 import apiRoutes from "#routes/api.routes.js"
-import { HttpException, InternalServerException, NotFoundException, RateLimitingException, ValidationException } from "#lib/error-handling/error-types.js"
+import { HttpException, InternalServerException, NotFoundException, ValidationException } from "#lib/error-handling/error-types.js"
 import { logger } from "#lib/logger/logger.js";
-import { randomUUID } from "node:crypto"
-import { AsyncLocalStorage } from 'node:async_hooks';
+
 
 /**
  * App Configuration
@@ -16,20 +18,26 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 dotenv.config()
 const app = express()
 app.use(bodyParser.json())
-export const asyncLocalStorage = new AsyncLocalStorage<{ requestId: string }>()
+export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
 
 /**
  * App Routes
 */
-// TODO: why adding to req.body and not req (makes sense more to add to the req object not req.body)
+
+/** Attach a requestId for each coming request, so all subsequent logs for
+ *  a particular request has the same requestId attached to them (correlated request id)
+ * 
+ * asyncLocalStorage is used here, so all methods under a particular request has access to the store (its requestId and tokenId),
+ * they are both needed for logging
+*/
 app.use((req, res, next) => {
     const requestId = randomUUID();
     const token = req.headers.authorization?.split(" ")[1];
-    const tokenId = token ? `${token.slice(0, 6)}...` : undefined;
-    req.body.tokenId = tokenId;
+    const tokenId = token ? `${token.slice(0, 6)}...` : "";
 
-    asyncLocalStorage.run({ requestId }, next)
+    asyncStore.run({ requestId, tokenId }, next)
 })
+
 app.use("/api", apiRoutes)
 app.use("/*splat", (req, res) => {
     throw new NotFoundException("Endpoint not found")
@@ -40,12 +48,13 @@ app.use("/*splat", (req, res) => {
  * Error Handler Middleware
 */
 app.use((err: Error | HttpException, req: Request, res: Response, next: NextFunction) => {
+    const store = asyncStore.getStore();
     // Common log metadata
     const logMeta = {
         requestId: req.body.requestId,
         method: req.method,
         path: req.originalUrl,
-        tokenId: req.body.tokeId,
+        tokenId: store?.tokenId,
         stack: err.stack // <-- capture stack trace
     };
 

@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 dotenv.config()
 import { Pool, QueryConfigValues } from 'pg'
 import { logger } from "#lib/logger/logger.js";
-import { asyncLocalStorage } from "#root/main.js";
+import { asyncStore } from "#root/main.js";
 
 /*
   database connection
@@ -45,7 +45,7 @@ export const query = async (text: string, params?: QueryConfigValues<string[]>) 
     const result = await pool.query(text, params);
 
     const duration = Date.now() - start;
-    const store = asyncLocalStorage.getStore()
+    const store = asyncStore.getStore()
     logger.info({
         message: "SQL query executed successfully",
         query: text,
