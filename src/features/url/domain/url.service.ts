@@ -7,7 +7,6 @@ import generate_id from "#features/url/domain/id-generator.js";
 import { ConflictException } from "#lib/error-handling/error-types.js";
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 
-
 // Returns the details of a shortened URL
 export async function getUrlInfo({ domain, alias }: ParamsType) {
     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
@@ -39,14 +38,13 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<UrlType> {
 
     // 3. Generate alias when none is provided
 
-    // 1- generate unique id
-    const sequenceNumber = await generate_id();
-    const uniqueId = (Number(process.env.MACHINE_ID) || 0) + sequenceNumber;
+    // 3.1- generate unique id
+    const uniqueId = await generate_id();
 
-    // 2- convert to base62
+    // 3.2- convert to base62 for readable URLs
     const uniqueIdBase62 = toBase62(uniqueId)
 
-    // 3- construct new URL record
+    // 3.3- construct new URL record
     return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
 }
 

@@ -31,7 +31,7 @@ const pool = new Pool({
 pool.on("error", (err) => logger.error('Unexpected error on idle PostgreSQL client', { error: err }))
 
 /*
-    all queries go from here, so it's easy to log them
+    All queries go from here, so it's easy to log them
 */
 export const query = async (text: string, params?: QueryConfigValues<string[]>) => {
     const start = Date.now();

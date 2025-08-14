@@ -16,7 +16,6 @@ import routesContext from "./middlewares/routes-context.js";
 
 const app = express()
 
-
 // ------ App Configuration -------------
 dotenv.config()
 app.use(bodyParser.json())

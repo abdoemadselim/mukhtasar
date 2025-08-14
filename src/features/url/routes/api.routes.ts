@@ -3,7 +3,12 @@ import { Router, type Request, type Response } from "express"
 import { createUrl, deleteUrl, getUrlClickCount, getUrlInfo, updateUrl } from "#features/url/domain/url.service.js";
 import { authToken } from "#features/token/domain/token-service.js";
 import { shortUrlSchema, paramsSchema, toUpdateUrlSchema } from "#features/url/domain/url-schemas.js";
-import { CREATE_URL_PERMISSION, DELETE_URL_PERMISSION, READ_URL_PERMISSION, UPDATE_URL_PERMISSION } from "#features/token/data-access/const.js";
+import {
+    CREATE_URL_PERMISSION,
+    DELETE_URL_PERMISSION,
+    READ_URL_PERMISSION,
+    UPDATE_URL_PERMISSION
+} from "#features/token/data-access/const.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
 import { NoException } from "#lib/error-handling/error-types.js";
@@ -38,6 +43,7 @@ router.get(
             code: NoException.NoErrorCode
         }
 
+        // TODO: Can't be abstracted?
         const durationMs = Date.now() - start;
         const store = asyncStore.getStore()
         logger.info({
@@ -81,6 +87,8 @@ router.post("/",
             code: NoException.NoErrorCode
         }
 
+        // Logging logic
+        // TODO: Can't be abstracted?
         const durationMs = Date.now() - start;
         const store = asyncStore.getStore()
 
@@ -96,6 +104,7 @@ router.post("/",
         res.json(response)
     })
 
+// Delete a short URL
 router.delete("/:domain/:alias",
     validateRequest([paramsSchema]),
     authToken(DELETE_URL_PERMISSION),
@@ -116,6 +125,7 @@ router.delete("/:domain/:alias",
             code: NoException.NoErrorCode
         }
 
+        // TODO: Can't be abstracted?
         const durationMs = Date.now() - start;
         logger.info({
             message: "Delete URL",
@@ -157,6 +167,7 @@ router.patch("/:domain/:alias",
             code: NoException.NoErrorCode
         }
 
+        // TODO: Can't be abstracted?
         const durationMs = Date.now() - start;
         const store = asyncStore.getStore()
 
@@ -199,6 +210,7 @@ router.get("/:domain/:alias/count",
             code: NoException.NoErrorCode
         }
 
+        // TODO: Can't be abstracted?
         const durationMs = Date.now() - start;
         const store = asyncStore.getStore()
 

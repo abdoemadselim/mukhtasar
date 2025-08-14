@@ -8,8 +8,12 @@ async function get_new_batch() {
     batch_start_id = Number(batch_start);
 }
 
+// It works by fetching a batch of ids from DB with the defined batch_size
+// That improves performance by skipping the db query for each new URL to get a new ID
+// Only after consuming all the IDs, a request is sent to DB to fetch another batch
+// All the logic is abstracted inside this function
 export default async function generate_id(): Promise<number> {
-    // Get a new batch when all the id batch is consumed, or when the machine just restarts 
+    // Get a new batch when all the id batch is consumed, or when the machine just restarts
     if (batch_start_id == -1 || local_counter == batch_size) {
         await get_new_batch();
         local_counter = 0;
@@ -19,5 +23,8 @@ export default async function generate_id(): Promise<number> {
     let current_id = batch_start_id + local_counter;
     local_counter++
 
-    return current_id;
+    // Why machine_id? So it's easier to scale out by adding more machines
+    // For distributed system, a new server with defined MACHINE_ID (e.g 1, 2) is added
+    // A DB server shard is created (each server --talks to --> it's relative DB shard)
+    return (Number(process.env.MACHINE_ID) || 0) + current_id;
 }
