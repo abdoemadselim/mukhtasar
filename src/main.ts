@@ -11,10 +11,12 @@ import express from "express";
 import bodyParser from "body-parser";
 
 import apiRoutes from "#routes/api.routes.js"
+
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 import { logger } from "#lib/logger/logger.js";
+
 import errorHandlerMiddleware from "#middlewares/error-handler.js";
-import routesContext from "#root/middlewares/routes-context.js";
+import routesContext from "#middlewares/routes-context.js";
 
 const app = express()
 

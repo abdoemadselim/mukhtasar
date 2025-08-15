@@ -22,6 +22,8 @@ src/
 │   │   ├── domain/         # Business logic and entities
 │   │   └── test/           # Feature-specific tests
 │   ├── feature2/         # e.g. API tokens #
+|   |── |── controllers/
+|   |   |   |── feature.controller.ts  # It contains all the controllers for this feature
 |   |   ├── routes/
 │   |   |   ├── api.ts            # External API routes (e.g., /api/shorten)
 │   |   |   └── ui.ts             # Internal interface routes (e.g., /shorten)
