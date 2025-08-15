@@ -27,7 +27,7 @@
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch --import ./dist/instrument.js ./dist/main.js",
+    "dev": "node --watch --import ./dist/lib/logger/instrument.js ./dist/main.js",
     "prepare": "husky"
   },
   "keywords": [
@@ -39,10 +39,13 @@
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^10.5.0",
+    "@types/compression": "^1.8.1",
     "body-parser": "^2.2.0",
+    "compression": "^1.8.1",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
     "pg": "^8.16.3",
     "rate-limit-redis": "^4.2.1",
     "winston": "^3.17.0",

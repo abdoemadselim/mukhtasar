@@ -22,7 +22,7 @@ const router = Router();
 router.get(
     "/:domain/:alias",
     authToken(READ_URL_PERMISSION),
-    apiRateLimiter(1, 2),
+    apiRateLimiter(1, 20),
     validateRequest([paramsSchema]),
     async (req: Request, res: Response) => {
         const start = Date.now();

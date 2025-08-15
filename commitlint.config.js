@@ -13,7 +13,8 @@ export default {
         'perf',
         'test',
         'chore',
-        'revert'
+        'revert',
+        'setup'
       ]
     ],
     'scope-enum': [
@@ -31,7 +32,8 @@ export default {
         'db',
         'config',
         'test',
-        'readme'
+        'readme',
+        'lib'
       ]
     ],
     'type-empty': [2, 'never'],
