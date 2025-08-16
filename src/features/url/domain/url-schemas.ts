@@ -4,11 +4,11 @@ import { schemaWrapper } from "#lib/validation/validator-middleware.js";
 const aliasSchema = zod
     .string()
     .trim()
-    .min(1, "The Alias must not be less than 1 character.")
-    .max(20, "The Alias must not be greater than 20 characters.")
+    .min(1, "Alias must not be less than 1 character.")
+    .max(20, "Alias must not be greater than 20 characters.")
     .regex(
         /^[^`~,<>;':"\/\[\]^{}()=+!*@&$?%#|]*$/,
-        "The Alias format is invalid."
+        "Alias format is invalid."
     )
 
 const domainSchema = zod

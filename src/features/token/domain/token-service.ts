@@ -1,3 +1,4 @@
+import { createHash, randomBytes } from "node:crypto";
 import type { Request, Response, NextFunction } from "express"
 
 import tokenRepository from "#features/token/data-access/token.repository.js"
@@ -25,7 +26,7 @@ export function authToken(requiredPermission: TokenPermission) {
         }
 
         req.body.user_id = db_token.user_id;
-        
+
         // the token is totally valid and has required access
         next()
     }
@@ -64,4 +65,15 @@ function validateTokenPermission(token: TokenType, requiredPermission: TokenPerm
             throw new UnAuthorizedException();
         }
     }
+}
+
+export function generateToken() {
+    // Generate token and hash it (why hashing? a layer of security in case the db leaks)
+    const token = randomBytes(32).toString('hex')
+    const tokenHash = createHash("sha256").update(token).digest('hex');
+
+    // Store the token in db
+    // tokenRepository.createToken({ tokenHash })
+
+    return tokenHash
 }

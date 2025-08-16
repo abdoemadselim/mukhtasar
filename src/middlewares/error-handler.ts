@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 
 import { HttpException, InternalServerException, ValidationException } from "#lib/error-handling/error-types.js";
-import { logger } from "#lib/logger/logger.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { asyncStore } from "#root/main.js";
 
 const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: Response, next: NextFunction) => {
@@ -18,11 +18,12 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
 
     // 1- Validation errors (alias too long, domain is invalid, etc.)
     if (err instanceof ValidationException) {
-        logger.warn({
+        log(LOG_TYPE.WARN, {
             ...logMeta,
             message: err.message,
             status: err.statusCode,
         })
+
         return res.status(err.statusCode).json({
             data: {},
             errors: err.validationErrors,
@@ -32,7 +33,7 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
 
     // 2- Other errors such as notfoundUrl, etc.
     if (err instanceof HttpException) {
-        logger.warn({
+        log(LOG_TYPE.WARN, {
             ...logMeta,
             message: err.message,
             status: err.statusCode,
@@ -46,11 +47,12 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
     }
 
     // 3- Any other unexpected thrown error 
-    logger.error({
+    log(LOG_TYPE.ERROR, {
         ...logMeta,
         message: err.message,
         status: InternalServerException.STATUS_CODE,
     })
+
     return res.status(InternalServerException.STATUS_CODE).json({
         data: {},
         errors: [InternalServerException.MESSAGE],

@@ -8,7 +8,14 @@ import {
     READ_URL_PERMISSION,
     UPDATE_URL_PERMISSION
 } from "#features/token/data-access/const.js";
-import { createUrl, deleteUrl, getShortUrlInfo, getUrlClickCounts } from "#features/url/controllers/url.controllers.js"
+
+import {
+    createUrl,
+    deleteUrl,
+    getShortUrlInfo,
+    getUrlClickCounts,
+    updateUrl
+} from "#features/url/controllers/url.controllers.js"
 
 import validateRequest from "#lib/validation/validator-middleware.js";
 import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
@@ -45,8 +52,8 @@ router.patch("/:domain/:alias",
     validateRequest([paramsSchema, toUpdateUrlSchema]),
     authToken(UPDATE_URL_PERMISSION),
     apiRateLimiter(1, 50),
+    updateUrl
 )
-
 
 // Get the click count for a URL
 router.get("/:domain/:alias/count",

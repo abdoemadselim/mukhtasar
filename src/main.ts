@@ -11,6 +11,7 @@ import express from "express";
 import bodyParser from "body-parser";
 
 import apiRoutes from "#routes/api.routes.js"
+import uiRoutes from "#routes/ui.routes.js"
 
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 import { logger } from "#lib/logger/logger.js";
@@ -30,6 +31,7 @@ app.use(routesContext)
 
 // ------- App Routes -------------------
 app.use("/api", apiRoutes)
+app.use("/", uiRoutes)
 
 // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
 app.use("/*splat", (req, res) => {

@@ -2,7 +2,7 @@
 import dotenv from "dotenv"
 dotenv.config()
 import { Pool, QueryConfigValues } from 'pg'
-import { logger } from "#lib/logger/logger.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { asyncStore } from "#root/main.js";
 
 /*
@@ -28,7 +28,7 @@ const pool = new Pool({
  The DB goes down or the network breaks
  The PG client emits an event on the Node.js event loop, not during any Express request
 */
-pool.on("error", (err) => logger.error('Unexpected error on idle PostgreSQL client', { error: err }))
+pool.on("error", (err) => log(LOG_TYPE.ERROR, { message: 'Unexpected error on idle PostgreSQL client', error: err }))
 
 /*
     All queries go from here, so it's easy to log them
@@ -36,7 +36,7 @@ pool.on("error", (err) => logger.error('Unexpected error on idle PostgreSQL clie
 export const query = async (text: string, params?: QueryConfigValues<string[]>) => {
     const start = Date.now();
 
-    logger.debug({
+    log(LOG_TYPE.DEBUG, {
         message: "Executing SQL query",
         query: text,
         params
@@ -46,7 +46,8 @@ export const query = async (text: string, params?: QueryConfigValues<string[]>) 
 
     const duration = Date.now() - start;
     const store = asyncStore.getStore()
-    logger.info({
+
+    log(LOG_TYPE.INFO, {
         message: "SQL query executed successfully",
         query: text,
         durationMs: duration,

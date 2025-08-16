@@ -1,9 +1,9 @@
 import { type Request, type Response } from "express"
 
 import * as urlService from "#features/url/domain/url.service.js"
-;
+    ;
 import { NoException } from "#lib/error-handling/error-types.js";
-import { logger } from "#lib/logger/logger.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { asyncStore } from "#root/main.js";
 
 export async function getShortUrlInfo(req: Request, res: Response) {
@@ -28,7 +28,8 @@ export async function getShortUrlInfo(req: Request, res: Response) {
     // TODO: Can't be abstracted?
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore()
-    logger.info({
+
+    log(LOG_TYPE.INFO, {
         message: "Get URL info",
         requestId: req.body.requestId,
         method: req.method,
@@ -69,7 +70,8 @@ export async function createUrl(req: Request, res: Response) {
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore()
 
-    logger.info({
+    log(LOG_TYPE.INFO, {
+        level: "info",
         message: "Create URL",
         requestId: req.body.requestId,
         method: req.method,
@@ -78,6 +80,7 @@ export async function createUrl(req: Request, res: Response) {
         durationMs,
         tokenId: store?.tokenId
     })
+
     res.json(response)
 }
 
@@ -99,14 +102,16 @@ export async function deleteUrl(req: Request, res: Response) {
 
     // TODO: Can't be abstracted?
     const durationMs = Date.now() - start;
-    logger.info({
+    const store = asyncStore.getStore()
+
+    log(LOG_TYPE.INFO, {
         message: "Delete URL",
         requestId: req.body.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
         durationMs,
-        tokenId: req.body.tokenId
+        tokenId: store?.tokenId
     })
 
     // 4- send the response
@@ -138,7 +143,7 @@ export async function updateUrl(req: Request, res: Response) {
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore()
 
-    logger.info({
+    log(LOG_TYPE.INFO, {
         message: "Update URL",
         requestId: req.body.requestId,
         method: req.method,
@@ -175,7 +180,7 @@ export async function getUrlClickCounts(req: Request, res: Response) {
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore()
 
-    logger.info({
+    log(LOG_TYPE.INFO, {
         message: "Get URL click count",
         requestId: req.body.requestId,
         method: req.method,

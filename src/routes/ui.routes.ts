@@ -1,9 +1,8 @@
-// import express from 'express';
-// import urlUiRoutes from '../features/url/ui/ui.routes';
+import { Router } from "express"
 
-// const router = express.Router();
+import tokenRoutes from "#features/token/routes/ui.routes.js"
 
-// router.use('/shorten', urlUiRoutes);
-// // etc...
+const router = Router()
 
-// export default router;
+router.use("/token", tokenRoutes)
+export default router;
