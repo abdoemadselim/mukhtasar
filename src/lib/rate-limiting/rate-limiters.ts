@@ -1,7 +1,9 @@
 import { rateLimit } from 'express-rate-limit'
+import { RedisStore } from 'rate-limit-redis'
 
 import { RateLimitingException } from '#lib/error-handling/error-types.js';
 import { asyncStore } from '#root/main.js';
+import { client as redisClient } from '#lib/db/redis-connection.js';
 
 function getToken(): string {
     const store = asyncStore.getStore()
@@ -15,6 +17,9 @@ export function apiRateLimiter(windowInMin: number, limit: number) {
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false, // Disable the `X-RateLimit-*` headers
         keyGenerator: (req, res) => getToken(),
-        handler: () => { throw new RateLimitingException }
+        handler: () => { throw new RateLimitingException },
+        store: new RedisStore({
+            sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+        }),
     })
 }

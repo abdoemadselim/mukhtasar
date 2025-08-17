@@ -79,3 +79,24 @@ export class ConflictException extends HttpException {
         Error.captureStackTrace(this);
     }
 }
+
+export class ResourceExpiredException extends HttpException {
+    static STATUS_CODE: number = 401;
+    static RESPONSE_CODE: number = 8;
+
+    constructor(message: string) {
+        super(401, 8, message)
+
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this);
+    }
+}
+
+export class LoginException extends HttpException {
+    constructor() {
+        super(401, 10, "Invalid Email or password.");
+
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this);
+    }
+}

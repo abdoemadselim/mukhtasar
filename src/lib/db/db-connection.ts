@@ -8,7 +8,7 @@ import { asyncStore } from "#root/main.js";
 /*
   database connection
 */
-const pool = new Pool({
+export const pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER_NAME,
     password: process.env.DB_PASSWORD,

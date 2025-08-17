@@ -34,6 +34,6 @@ export const logger = winston.createLogger({
 export function log<T extends { message: string }>(level: string, meta: T): void {
   logger.log({
     level,
-    message: meta.message
+    ...meta
   })
 }

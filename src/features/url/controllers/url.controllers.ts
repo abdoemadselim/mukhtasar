@@ -1,12 +1,13 @@
-import { type Request, type Response } from "express"
+import { type Request, type Response } from "express";
 
-import * as urlService from "#features/url/domain/url.service.js"
-    ;
+import * as urlService from "#features/url/domain/url.service.js";
+
 import { NoException } from "#lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { asyncStore } from "#root/main.js";
 
 export async function getShortUrlInfo(req: Request, res: Response) {
+    
     const start = Date.now();
     // 1- prepare the data for the service
     const { domain, alias } = req.params;
