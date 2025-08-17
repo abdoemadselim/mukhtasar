@@ -7,6 +7,7 @@ import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
 import { UnAuthorizedException } from "#lib/error-handling/error-types.js"
 
+// TODO: The service shouldn't depend on the request, response objects of express
 export function authToken(requiredPermission: TokenPermission) {
     return async (req: Request, res: Response, next: NextFunction) => {
         // no token is provided at all (no authorization field is set or it's sent with an empty value)

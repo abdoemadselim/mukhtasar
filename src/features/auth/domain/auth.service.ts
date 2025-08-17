@@ -6,9 +6,10 @@ import userRepository from "#features/user/data-access/user.repository.js";
 import authRepository from "#features/auth/data-access/auth.repository.js";
 import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
 
-import { ConflictException, LoginException, NotFoundException, ResourceExpiredException, ValidationException } from "#lib/error-handling/error-types.js";
+import { ConflictException, LoginException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
 import { sendVerificationMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
+import { NextFunction, Request, Response } from "express";
 
 // TODO: Can't we create a new type instead of omitting the password_confirmation everywhere?
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
@@ -117,5 +118,35 @@ export async function login({ email, password }: { email: string, password: stri
         name: user.name,
         email: user.email,
         verified: user.verified
+    }
+}
+
+// TODO: the service shouldn't depend on the req, res objects of express
+export function authSession() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const sessionId = req.cookies["muktasar-session"];
+
+        // No cookie? Not authenticated
+        if (!sessionId) {
+            throw new UnAuthorizedException();
+        }
+
+        const session = await redisClient.get(`sessions:${sessionId}`);
+
+        // No session in Redis (expired or invalidated)?
+        if (!session) {
+            throw new UnAuthorizedException();
+        }
+
+        const user = JSON.parse(session);
+
+        // @ts-ignore
+        req.user = {
+            name: user.name,
+            email: user.email,
+            verified: user.verified
+        };
+
+        next();
     }
 }
