@@ -1,0 +1,74 @@
+{
+  "name": "@mokhtasar/backend",
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "",
+  "private": true,
+  "imports": {
+    "#root/*": "./dist/*",
+    "#features/*": "./dist/features/*",
+    "#lib/*": "./dist/lib/*",
+    "#routes/*": "./dist/routes/*",
+    "#middlewares/*": "./dist/middlewares/*"
+  },
+  "author": {
+    "name": "Abdelrahman Emad",
+    "email": "abdulrahman3mad@gmail.com",
+    "url": ""
+  },
+  "overrides": {
+    "tmp": "^0.2.4"
+  },
+  "description": "Mokhtasar allows you to convert long unaccessible URL to short, neat URL",
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "main": "./dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
+    "prepare": "husky",
+    "watch": "tsc --watch -p tsconfig.json"
+  },
+  "keywords": [
+    "URL",
+    "URI",
+    "Short URL",
+    "Long URL"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@sentry/node": "^10.5.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "newrelic": "^13.1.0",
+    "nodemailer": "^7.0.5",
+    "pg": "^8.16.3",
+    "rate-limit-redis": "^4.2.2",
+    "redis": "^5.8.1",
+    "winston": "^3.17.0",
+    "zod": "^4.0.15"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^7.0.0",
+    "@types/pg": "^8.15.5",
+    "commitizen": "^4.3.1",
+    "commitlint": "^19.8.1",
+    "husky": "^9.1.7",
+    "pm2": "^6.0.8",
+    "typescript": "^5.8.3"
+  }
+}

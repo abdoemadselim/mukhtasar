@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "#root/*": ["./*"],
+      "#features/*": ["features/*"],
+      "#lib/*": ["lib/*"],
+      "#routes/*": ["routes/*"],
+      "#middlewares/*": ["middlewares/*"]
+    }
+  }
+}

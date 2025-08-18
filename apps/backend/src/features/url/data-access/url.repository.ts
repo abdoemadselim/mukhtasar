@@ -1,6 +1,6 @@
 import { query } from "#lib/db/db-connection.js";
 import type { UrlType } from "#features/url/types.js";
-import type { ParamsType, ToUpdateUrlType } from "#features/url/domain/url-schemas.js";
+import type { ParamsType} from "#features/url/domain/url-schemas.js";
 
 const urlRepository = {
     async getUrlByAliasAndDomain({ alias, domain }: ParamsType): Promise<UrlType | undefined> {

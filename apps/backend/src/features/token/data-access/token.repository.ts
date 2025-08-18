@@ -1,5 +1,5 @@
 import { query } from "#lib/db/db-connection.js";
-import type { Token, TokenInput, TokenWithUrlType } from "#features/token/types.js";
+import type { Token, TokenInput, TokenWithUrlType } from "#features/token/types";
 
 const tokenRepository = {
     async getTokenWithUrl({ token }: { token: string }): Promise<TokenWithUrlType | undefined> {
