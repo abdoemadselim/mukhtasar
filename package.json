@@ -27,7 +27,7 @@
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch --import ./dist/lib/logger/instrument.js ./dist/main.js",
+    "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
     "prepare": "husky"
   },
   "keywords": [
@@ -47,9 +47,9 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
-    "express-session": "^1.18.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "newrelic": "^13.1.0",
     "nodemailer": "^7.0.5",
     "pg": "^8.16.3",
     "rate-limit-redis": "^4.2.2",

@@ -2,10 +2,10 @@ import { createHash, randomBytes } from "node:crypto";
 import type { Request, Response, NextFunction } from "express"
 
 import tokenRepository from "#features/token/data-access/token.repository.js"
-import type { TokenPermission, TokenType, TokenWithUrlType } from "#features/token/types.js";
+import type { Token, TokenInput, TokenPermission, TokenWithUrlType } from "#features/token/types.js";
 import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
-import { UnAuthorizedException } from "#lib/error-handling/error-types.js"
+import { NotFoundException, UnAuthorizedException } from "#lib/error-handling/error-types.js"
 
 // TODO: The service shouldn't depend on the request, response objects of express
 export function authToken(requiredPermission: TokenPermission) {
@@ -26,7 +26,7 @@ export function authToken(requiredPermission: TokenPermission) {
             validateTokenOwnership(db_token as TokenWithUrlType, { domain })
         }
 
-        req.body.user_id = db_token.user_id;
+        req.body.userId = db_token.user_id;
 
         // the token is totally valid and has required access
         next()
@@ -44,7 +44,7 @@ function validateAndExtractToken(req: Request): string {
     return token;
 }
 
-async function validateTokenExistenceInDB(header_token: string): Promise<TokenType> {
+async function validateTokenExistenceInDB(header_token: string): Promise<TokenWithUrlType> {
     const db_token = await tokenRepository.getTokenWithUrl({ token: header_token });
     if (!db_token) {
         throw new UnAuthorizedException();
@@ -60,7 +60,7 @@ function validateTokenOwnership(token: TokenWithUrlType, params: { domain: strin
     }
 }
 
-function validateTokenPermission(token: TokenType, requiredPermission: TokenPermission) {
+function validateTokenPermission(token: Token, requiredPermission: TokenPermission) {
     if (requiredPermission !== READ_URL_PERMISSION) {
         if (token[requiredPermission] !== true) {
             throw new UnAuthorizedException();
@@ -68,13 +68,58 @@ function validateTokenPermission(token: TokenType, requiredPermission: TokenPerm
     }
 }
 
-export function generateToken() {
+export async function generateToken({
+    user_id,
+    label,
+    can_create,
+    can_update,
+    can_delete,
+}: TokenInput) {
     // Generate token and hash it (why hashing? a layer of security in case the db leaks)
-    const token = randomBytes(32).toString('hex')
-    const tokenHash = createHash("sha256").update(token).digest('hex');
+    const rawToken = randomBytes(32).toString("hex"); // 64 chars
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
 
-    // Store the token in db
-    // tokenRepository.createToken({ tokenHash })
+    const token = await tokenRepository.createToken({
+        tokenHash,
+        can_create,
+        can_update,
+        can_delete,
+        label,
+        user_id,
+    });
 
-    return tokenHash
+    // only return raw token once
+    return {
+        ...token,
+        rawToken,
+    }
+}
+
+export async function updateToken({
+    tokenId,
+    userId,
+    updates
+}: { tokenId: string, userId: string, updates: Partial<Omit<TokenInput, "userId">> }) {
+    const token = await tokenRepository.getTokenById(tokenId);
+    if (!token) throw new NotFoundException("This token doesn't exist");
+
+    if (token.user_id !== userId) throw new UnAuthorizedException();
+
+    const updated = await tokenRepository.updateToken({ tokenId, userId, updates });
+    return updated;
+}
+
+export async function deleteToken({ userId, tokenId }: { userId: string, tokenId: string }) {
+    const token = await tokenRepository.getTokenById(tokenId);
+    if (!token) throw new NotFoundException("This token doesn't exist");
+
+    if (token.user_id !== userId) throw new UnAuthorizedException();
+
+    const deleted = await tokenRepository.deleteToken(tokenId);
+    return deleted
+}
+
+export async function getTokens(userId: string) {
+    const tokens = await tokenRepository.getTokensByUserId(userId)
+    return tokens;
 }

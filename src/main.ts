@@ -1,9 +1,8 @@
 // Imports
-import "#lib/logger/instrument.js" // Sentry Setup
+// import 'newrelic';
 import "dotenv/config"
 import "#lib/db/redis-connection.js";
 
-import * as Sentry from "@sentry/node"
 import compression from "compression"
 import helmet from "helmet";
 
@@ -36,11 +35,9 @@ app.use("/api", apiRoutes)
 app.use("/", uiRoutes)
 
 // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
-app.use("/*splat", (req, res) => {
+app.use("{/*splat}", (req, res) => {
     throw new NotFoundException("Endpoint not found.")
 })
-
-Sentry.setupExpressErrorHandler(app)
 
 // ----- Error Handler Middleware ----------
 app.use(errorHandlerMiddleware)

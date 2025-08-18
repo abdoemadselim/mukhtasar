@@ -1,21 +1,23 @@
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 import userRepository from "#features/user/data-access/user.repository.js";
 import authRepository from "#features/auth/data-access/auth.repository.js";
 import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
+import { LoginException, UnVerifiedException } from "#features/auth/domain/error-types.js";
 
-import { ConflictException, LoginException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
+import { ConflictException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
 import { sendVerificationMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
-import { NextFunction, Request, Response } from "express";
+
 
 // TODO: Can't we create a new type instead of omitting the password_confirmation everywhere?
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
     const isPwned = await isPasswordPwned(password)
     if (isPwned) {
-        throw new ValidationException(["This password has appeared in known data breaches and may be unsafe to use. Please choose a different password."])
+        throw new ValidationException({ password: ["This password has appeared in known data breaches and may be unsafe to use. Please choose a different password."] })
     }
 
     const saltRounds = 6;
@@ -40,6 +42,7 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
         name: user.name,
         email: user.email,
         verified: false,
+        id: user.id
     };
 }
 
@@ -117,7 +120,8 @@ export async function login({ email, password }: { email: string, password: stri
     return {
         name: user.name,
         email: user.email,
-        verified: user.verified
+        verified: user.verified,
+        id: user.id
     }
 }
 
@@ -140,11 +144,16 @@ export function authSession() {
 
         const user = JSON.parse(session);
 
+        if (!user.verified) {
+            throw new UnVerifiedException()
+        }
+
         // @ts-ignore
         req.user = {
             name: user.name,
             email: user.email,
-            verified: user.verified
+            verified: user.verified,
+            id: user.id
         };
 
         next();

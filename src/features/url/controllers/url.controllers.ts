@@ -82,7 +82,7 @@ export async function createUrl(req: Request, res: Response) {
         tokenId: store?.tokenId
     })
 
-    res.json(response)
+    res.status(201).json(response)
 }
 
 export async function deleteUrl(req: Request, res: Response) {
@@ -146,7 +146,7 @@ export async function updateUrl(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "Update URL",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -183,7 +183,7 @@ export async function getUrlClickCounts(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "Get URL click count",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,

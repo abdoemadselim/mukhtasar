@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import * as zod from "zod";
 
-import { ValidationException } from "#lib/error-handling/error-types.js"
+import { FieldErrorsType, ValidationException } from "#lib/error-handling/error-types.js"
 
 type SchemaDataType = "body" | "query" | "params";
 
@@ -18,12 +18,9 @@ function validateRequest(schemas: { schemaDataType: SchemaDataType, schemaObject
                 // The original form of result.error is array of objects
                 // Here we're only interested in the errors (array of them)
                 // So we flat them, but still ZOD returns object of two errors types (formErrors, fieldErrors) --> Only interested in fieldErrors
-                const { fieldErrors } = zod.flattenError(result.error)
-
-                // fieldErrors = [[], []] --> we want to flat this to ["error message 1", "error message 2", etc.]
-                // and finally, we're sure here that that flat wouldn't be undefined so we assert (narrowing it down) to array of string
-                const errors = Object.values(fieldErrors).flat() as string[]
-                throw new ValidationException(errors)
+                const { fieldErrors, formErrors } = zod.flattenError(result.error)
+                
+                throw new ValidationException(fieldErrors as FieldErrorsType, formErrors)
             }
         })
         next()

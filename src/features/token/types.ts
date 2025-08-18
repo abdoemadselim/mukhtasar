@@ -1,17 +1,20 @@
 export type TokenPermission = "can_read" | "can_create" | "can_update" | "can_delete";
-export type TokenType = {
-    id: number,
-    user_id: number,
-    token_string: string,
-    label: string,
-    created_at?: string,
-    last_used?: string,
-    can_create: boolean, 
-    can_update: boolean, 
-    can_delete: boolean,
-    can_read: boolean
-}
-export type TokenWithUrlType = TokenType & {
+
+export type TokenInput = {
+    can_create: boolean;
+    can_update: boolean;
+    can_delete: boolean;
+    label: string;
+    user_id: string;
+};
+
+export type Token = TokenInput & {
+    id: string;
+    created_at: Date;
+};
+
+export type TokenWithUrlType = Token & {
     alias: string,
     domain: string
 }
+
