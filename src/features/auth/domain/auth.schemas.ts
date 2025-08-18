@@ -12,7 +12,7 @@ const EmailSchema = zod.email({
 })
 
 const PasswordSchema = zod
-    .string("password is required.")
+    .string("Password is required and it should be string.")
     .trim()
     .min(8, "Password must be at least 8 characters.")
     .max(64, "Password must be at most 64 characters.")
@@ -28,7 +28,7 @@ const NewUserSchema = zod.object({
     email: EmailSchema,
     password: PasswordSchema,
     password_confirmation: zod
-        .string("Password confirmation is required.")
+        .string("Password confirmation is required and it should be string.")
 }).refine((data) => data.password === data.password_confirmation, { message: "Password don't match.", path: ["password_confirmation"] })
 
 
