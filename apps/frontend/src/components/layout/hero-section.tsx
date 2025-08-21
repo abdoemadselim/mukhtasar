@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Highlighter } from "@/components/ui/highlighter";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,8 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import AnimatedGradientText from "../ui/animated-gradient-text";
-import { ShineBorder } from "../magicui/shine-border";
+import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 export default function HeroSection() {
     return (
