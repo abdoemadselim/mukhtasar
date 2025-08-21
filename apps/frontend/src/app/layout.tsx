@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans_Arabic } from "next/font/google";
+
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+export const notoSans = Noto_Sans_Arabic({
+  variable: "--primary-font",
+  subsets: ["arabic"],
+  preload: true,
+  fallback: ["Noto Sans Arabic", "Tajawal", "Cairo", "Amiri", "Arial", "sans-serif"]
 });
 
 export const metadata: Metadata = {
@@ -23,9 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" dir="rtl">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${notoSans.className} antialiased `}
       >
         {children}
       </body>
