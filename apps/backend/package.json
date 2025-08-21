@@ -29,7 +29,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
     "prepare": "husky",
-    "watch": "tsc --watch -p tsconfig.json"
+    "watch": "tsc --watch"
   },
   "keywords": [
     "URL",
@@ -39,11 +39,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@sentry/node": "^10.5.0",
+    "@types/body-parser": "^1.19.6",
+    "@types/cors": "^2.8.19",
+    "@types/swagger-ui-express": "^4.1.8",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
@@ -54,19 +57,19 @@
     "pg": "^8.16.3",
     "rate-limit-redis": "^4.2.2",
     "redis": "^5.8.1",
+    "swagger-ui-express": "^5.0.1",
+    "ua-parser-js": "^2.0.4",
     "winston": "^3.17.0",
     "zod": "^4.0.15"
   },
   "devDependencies": {
-    "@types/compression": "^1.8.1",
     "@types/bcrypt": "^6.0.0",
+    "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^7.0.0",
     "@types/pg": "^8.15.5",
-    "commitizen": "^4.3.1",
-    "commitlint": "^19.8.1",
     "husky": "^9.1.7",
     "pm2": "^6.0.8",
     "typescript": "^5.8.3"

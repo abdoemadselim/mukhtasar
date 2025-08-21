@@ -4,6 +4,8 @@ export default {
       2,
       'always',
       [
+        'backend',
+        'frontend',
         'init',
         'feat',
         'fix',

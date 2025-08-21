@@ -46,7 +46,7 @@ export class MethodNotAllowedException extends HttpException {
 
 export class UnAuthorizedException extends HttpException {
     constructor() {
-        super(401, 2, "You are not authorized to access this resource.", "UNAUTHORIZED");
+        super(401, 2, "You are not authorized to perform this action on this resource.", "UNAUTHORIZED");
         this.name = this.constructor.name;
         Error.captureStackTrace(this);
     }
@@ -75,6 +75,7 @@ export class ValidationException extends HttpException {
 
 export class NoException {
     static NoErrorCode: number = 0;
+    static NoErrorCodeString: string = "NO_ERROR"
 }
 
 export class ConflictException extends HttpException {

@@ -29,13 +29,13 @@ const NewUserSchema = zod.object({
     password: PasswordSchema,
     password_confirmation: zod
         .string("Password confirmation is required and it should be string.")
-}).refine((data) => data.password === data.password_confirmation, { message: "Password don't match.", path: ["password_confirmation"] })
+}, "Invalid data").refine((data) => data.password === data.password_confirmation, { message: "Password don't match.", path: ["password_confirmation"] })
 
 
 const LoginSchema = zod.object({
     email: EmailSchema,
     password: PasswordSchema
-})
+}, "Invalid data")
 
 export const newUserSchema = schemaWrapper("body", NewUserSchema);
 export const userVerificationSchema = schemaWrapper("query", UserVerificationSchema);

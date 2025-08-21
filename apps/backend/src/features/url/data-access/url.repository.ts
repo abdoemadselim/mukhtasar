@@ -1,6 +1,7 @@
+import type { UrlInputType, UrlType } from "#features/url/types.js";
+import type { ParamsType } from "#features/url/domain/url-schemas.js";
+
 import { query } from "#lib/db/db-connection.js";
-import type { UrlType } from "#features/url/types.js";
-import type { ParamsType} from "#features/url/domain/url-schemas.js";
 
 const urlRepository = {
     async getUrlByAliasAndDomain({ alias, domain }: ParamsType): Promise<UrlType | undefined> {
@@ -9,12 +10,15 @@ const urlRepository = {
             [alias, domain]
         );
 
+        if(result.rows.length){
+            result.rows[0].click_count = Number(result.rows[0].click_count)
+        }
         return result.rows[0];
     },
 
-    async getUrlByAlias({ alias }: { alias: string }): Promise<UrlType | undefined> {
+    async getUrlByAlias(alias: string): Promise<UrlType> {
         const result = await query(
-            "SELECT short_url, alias, domain, original_url, created_at FROM url WHERE alias = $1",
+            "SELECT id, original_url FROM url WHERE alias = $1",
             [alias]
         );
 
@@ -38,15 +42,30 @@ const urlRepository = {
         return result.rows[0];
     },
 
-    async createUrl(newUrl: UrlType) {
-        const { domain, alias, original_url, user_id, description } = newUrl
+    async createUrl(newUrl: UrlInputType) {
+        const fields: string[] = [];
+        const values: any[] = [];
+        const placeholders: string[] = [];
+        let i = 1;
+
+        for (const key of Object.keys(newUrl)) {
+            // @ts-ignore
+            if (newUrl[key] !== undefined) {
+                fields.push(key);                  // just the column name
+
+                placeholders.push(`$${i}`);        // parameter placeholder
+                // @ts-ignore
+                values.push(newUrl[key]);          // actual value
+                i++;
+            }
+        }
         const result = await query(
-            `INSERT INTO url
-             (alias, domain, original_url, user_id, description) 
-             VALUES($1, $2, $3, $4, $5)
-             RETURNING short_url, created_at
-            `,
-            [alias, domain, original_url, String(user_id), description]
+            `
+        INSERT INTO url (${fields.join(", ")})
+        VALUES (${placeholders.join(", ")})
+        RETURNING short_url, created_at
+        `,
+            values
         );
 
         return result.rows[0];

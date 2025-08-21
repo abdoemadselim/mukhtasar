@@ -1,5 +1,5 @@
 export type UrlType = {
-  id?: number;
+  id: number;
   alias: string;
   domain: string;
   original_url: string;
@@ -10,3 +10,13 @@ export type UrlType = {
   short_url?: string;
   description: string;
 };
+
+export type UrlInputType = {
+  short_url?: string;
+  description: string;
+  user_id: number;
+  analytics_enabled?: boolean;
+  alias: string;
+  domain: string;
+  original_url: string;
+}

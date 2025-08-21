@@ -4,6 +4,14 @@ import { log, LOG_TYPE } from '#lib/logger/logger.js';
 export const client = createClient({
     username: process.env.REDIS_USER_NAME,
     password: process.env.REDIS_PASSWORD,
+
+    // TODO: This needs more investigation and thinking process later when load increases 
+    RESP: 3,
+    clientSideCache: {
+        ttl: 86400,             // Time-to-live (0 = no expiration)
+        maxEntries: 1000,      // Maximum entries (0 = unlimited)
+        evictPolicy: "LRU"  // Eviction policy: "LRU" or "FIFO"
+    },
     socket: {
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT)

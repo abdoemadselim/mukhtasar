@@ -1,13 +1,12 @@
-import { type Request, type Response } from "express";
+import type { Request, Response } from "express";
+import { asyncStore } from "#root/main.js";
 
 import * as urlService from "#features/url/domain/url.service.js";
 
 import { NoException } from "#lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
-import { asyncStore } from "#root/main.js";
 
 export async function getShortUrlInfo(req: Request, res: Response) {
-    
     const start = Date.now();
     // 1- prepare the data for the service
     const { domain, alias } = req.params;
@@ -23,7 +22,8 @@ export async function getShortUrlInfo(req: Request, res: Response) {
     const response = {
         data: url,
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     }
 
     // TODO: Can't be abstracted?
@@ -32,7 +32,7 @@ export async function getShortUrlInfo(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "Get URL info",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -48,7 +48,11 @@ export async function createUrl(req: Request, res: Response) {
     const start = Date.now();
 
     // 1- prepare the data for the service
-    const newUrl = req.body;
+    const newUrl =
+    {
+        ...req.body,
+        user_id: (req as any).user_id
+    }
 
     // 2- pass the prepared data to the service
     const url = await urlService.createUrl(newUrl);
@@ -60,10 +64,12 @@ export async function createUrl(req: Request, res: Response) {
             alias: url.alias,
             domain: url.domain,
             original_url: url.original_url,
-            created_at: url.created_at
+            created_at: url.created_at,
+            description: url.description
         },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     }
 
     // Logging logic
@@ -74,7 +80,7 @@ export async function createUrl(req: Request, res: Response) {
     log(LOG_TYPE.INFO, {
         level: "info",
         message: "Create URL",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -98,7 +104,8 @@ export async function deleteUrl(req: Request, res: Response) {
     const response = {
         data: url,
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     }
 
     // TODO: Can't be abstracted?
@@ -107,7 +114,7 @@ export async function deleteUrl(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "Delete URL",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -137,7 +144,8 @@ export async function updateUrl(req: Request, res: Response) {
             domain
         },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     }
 
     // TODO: Can't be abstracted?
@@ -166,6 +174,7 @@ export async function getUrlClickCounts(req: Request, res: Response) {
 
     // 2- pass the prepared data to the service
     const clickCount = await urlService.getUrlClickCount({ alias, domain })
+
     // 3- prepare the response
     const response = {
         data: {
@@ -174,7 +183,8 @@ export async function getUrlClickCounts(req: Request, res: Response) {
             clickCount
         },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     }
 
     // TODO: Can't be abstracted?
@@ -193,4 +203,15 @@ export async function getUrlClickCounts(req: Request, res: Response) {
 
     // 4- send the response
     res.json(response)
+}
+
+export async function getOriginalUrl(req: Request, res: Response) {
+    // 1- prepare the data for the service
+    const { alias } = req.params;
+
+    // 2- pass the prepared data to the service
+    const original_url = await urlService.getOriginalUrl(alias);
+
+    // 3- redirect users (Why 302, so the request always goes through us, and browser doesn't cache the original URL with our shortened URL)
+    res.status(302).redirect(original_url)
 }

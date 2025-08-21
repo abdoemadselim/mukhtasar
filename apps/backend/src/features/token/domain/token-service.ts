@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express"
 
 import tokenRepository from "#features/token/data-access/token.repository.js"
 import type { Token, TokenInput, TokenPermission, TokenWithUrlType } from "#features/token/types.js";
-import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
+import { CREATE_URL_PERMISSION, READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
 import { NotFoundException, UnAuthorizedException } from "#lib/error-handling/error-types.js"
 
@@ -14,19 +14,20 @@ export function authToken(requiredPermission: TokenPermission) {
         const header_token = validateAndExtractToken(req);
 
         // there is token attached to the authorization header, but the token doesn't exist in db
-        const db_token = await validateTokenExistenceInDB(header_token)
+        const db_token = await validateTokenExistenceInDB(header_token, requiredPermission)
 
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
 
-        // there is a token passed and it exists in db, but it doesn't have access for this specific short url (it's another user's short urls)
-        const { domain } = req.params || req.body;
+        if (requiredPermission == CREATE_URL_PERMISSION) {
+            const domain = req.params.domain || req.body.domain;
 
-        if (domain) {
-            validateTokenOwnership(db_token as TokenWithUrlType, { domain })
+            if (domain) {
+                validateTokenOwnership(db_token as TokenWithUrlType, domain)
+            }
         }
 
-        req.body.userId = db_token.user_id;
+        (req as any).user_id = db_token?.user_id;
 
         // the token is totally valid and has required access
         next()
@@ -44,8 +45,21 @@ function validateAndExtractToken(req: Request): string {
     return token;
 }
 
-async function validateTokenExistenceInDB(header_token: string): Promise<TokenWithUrlType> {
-    const db_token = await tokenRepository.getTokenWithUrl({ token: header_token });
+
+
+async function validateTokenExistenceInDB(header_token: string, requiredPermission: TokenPermission): Promise<TokenWithUrlType> {
+    // Hash the token (The token is shown to the user only once, while stored hashed in db)
+    const token_hash = createHash("sha256").update(header_token).digest("hex");
+    let db_token = null;
+
+    // If it's a creation request, then there is no url.
+    // Just needs to ensure there is a token in db matches the provided token from user
+    if (requiredPermission == CREATE_URL_PERMISSION) {
+        db_token = await tokenRepository.getTokenByTokenHash(token_hash);
+    } else {
+        db_token = await tokenRepository.getTokenWithUrl(token_hash);
+    }
+
     if (!db_token) {
         throw new UnAuthorizedException();
     }
@@ -53,8 +67,11 @@ async function validateTokenExistenceInDB(header_token: string): Promise<TokenWi
     return db_token;
 }
 
-function validateTokenOwnership(token: TokenWithUrlType, params: { domain: string }) {
-    const { domain } = params;
+function validateTokenOwnership(token: TokenWithUrlType, domain: string) {
+    if (domain == process.env.ORIGINAL_DOMAIN) {
+        return;
+    }
+
     if (token.domain !== domain) {
         throw new UnAuthorizedException();
     }

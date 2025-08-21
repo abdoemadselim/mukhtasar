@@ -1,4 +1,6 @@
 import { NewUserType } from "#features/auth/domain/auth.schemas.js";
+
+// TODO: auth feature depends on user feature (is it OK?)
 import type { UserType } from "#features/user/type.js";
 
 import { query } from "#lib/db/db-connection.js";
@@ -14,7 +16,7 @@ const authRepository = {
         return result.rows[0]
     },
 
-    async setUserVerified(userId: string) {
+    async setUserVerified(userId: string): Promise<undefined> {
         const result = await query(`
             UPDATE users
             SET verified = true

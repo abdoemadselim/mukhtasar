@@ -2,22 +2,10 @@
   "name": "@mokhtasar",
   "version": "1.0.0",
   "type": "module",
-  "homepage": "",
-  "private": true,
-  "imports": {
-    "#root/*": "./dist/*",
-    "#features/*": "./dist/features/*",
-    "#lib/*": "./dist/lib/*",
-    "#routes/*": "./dist/routes/*",
-    "#middlewares/*": "./dist/middlewares/*"
-  },
   "author": {
     "name": "Abdelrahman Emad",
     "email": "abdulrahman3mad@gmail.com",
     "url": ""
-  },
-  "overrides": {
-    "tmp": "^0.2.4"
   },
   "description": "Minimourl allows you to convert long unaccessible URL to short, neat URL",
   "engines": {
@@ -26,15 +14,13 @@
   },
   "main": "./dist/main.js",
   "scripts": {
-    "dev:backend": "pnpm --filter backend dev",
-    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter @mokhtasar/backend dev",
+    "dev:frontend": "pnpm --filter @mokhtasar/frontend dev",
     "dev": "pnpm dev:backend & pnpm dev:frontend",
+    "watch:backend": "pnpm --filter @mokhtasar/backend watch",
     "build": "pnpm --parallel build",
     "prepare": "husky"
   },
-  "workspaces": [
-    "apps/*"
-  ],
   "keywords": [
     "URL",
     "URI",
@@ -43,19 +29,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^20",
     "dotenv": "^17.2.1",
     "newrelic": "^13.1.0",
     "winston": "^3.17.0",
     "zod": "^4.0.15"
   },
   "devDependencies": {
+    "@types/node": "^20",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "commitizen": "^4.3.1",
     "commitlint": "^19.8.1",
-    "husky": "^9.1.7",
-    "pm2": "^6.0.8",
-    "typescript": "^5.9.2"
+    "husky": "^9.1.7"
   }
 }

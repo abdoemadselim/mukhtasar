@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
+// TODO: auth feature depends on user feature (Is this OK?)
 import userRepository from "#features/user/data-access/user.repository.js";
 import authRepository from "#features/auth/data-access/auth.repository.js";
 import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
@@ -11,7 +12,7 @@ import { LoginException, UnVerifiedException } from "#features/auth/domain/error
 import { ConflictException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
 import { sendVerificationMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
-
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // TODO: Can't we create a new type instead of omitting the password_confirmation everywhere?
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
@@ -20,7 +21,7 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
         throw new ValidationException({ password: ["This password has appeared in known data breaches and may be unsafe to use. Please choose a different password."] })
     }
 
-    const saltRounds = 6;
+    const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds)
     if (!passwordHash) throw new Error()
 
@@ -33,10 +34,14 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
 
     const verificationToken = jwt.sign({
         userId: user.id,
+        type: "email_verification",
     }, process.env.EMAIL_VERIFICATION_SECRET_KEY as string, { expiresIn: "24h" })
 
-
-    await sendVerificationMail({ userEmail: user.email, userName: user.name, token: verificationToken })
+    // TODO: create a redis queue, and a worker that consumes the jobs from the queue 
+    sendVerificationMail({ userEmail: user.email, userName: user.name, token: verificationToken })
+        .catch((error) => {
+            log(LOG_TYPE.ERROR, { message: "Verification Email sending failed", stack: error.stack });
+        })
 
     return {
         name: user.name,
@@ -92,14 +97,19 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
         return user
     }
 
-    authRepository.setUserVerified(user.id)
+    authRepository.setUserVerified(user.id);
 
     if (sessionId) {
-        redisClient.set(`sessions:${sessionId}`, JSON.stringify({
-            name: user.name,
-            email: user.email,
-            verified: true
-        }))
+        const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
+        redisClient.setEx(
+            `sessions:${sessionId}`,
+            SESSION_DURATION / 1000,
+            JSON.stringify({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                verified: true
+            }))
     }
 
     return user;

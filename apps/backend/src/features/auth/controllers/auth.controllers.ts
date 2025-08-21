@@ -1,13 +1,15 @@
 import { randomUUID } from "node:crypto";
 import type { Request, Response } from "express";
 
+// TODO: a feature import from the main? (something's wrong here)
+import { asyncStore } from "#root/main.js";
+
 import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
 import * as authService from "#features/auth/domain/auth.service.js"
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { NoException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from "#root/lib/logger/logger.js";
-import { asyncStore } from "#root/main.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // ---------------------- LOGIN ----------------------
 export async function login(req: Request, res: Response) {
@@ -33,6 +35,7 @@ export async function login(req: Request, res: Response) {
         `sessions:${sessionId}`,
         SESSION_DURATION / 1000,
         JSON.stringify({
+            id: user.id,
             name: user.name,
             email: user.email,
             verified: user.verified
@@ -41,6 +44,7 @@ export async function login(req: Request, res: Response) {
     const response = {
         errors: [],
         code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
         data: {
             user: {
                 name: user.name,
@@ -55,7 +59,7 @@ export async function login(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "User login",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -92,6 +96,7 @@ export async function register(req: Request, res: Response) {
         `sessions:${sessionId}`,
         SESSION_DURATION / 1000,
         JSON.stringify({
+            id: user.id,
             name: user.name,
             email: user.email,
             verified: false
@@ -107,7 +112,8 @@ export async function register(req: Request, res: Response) {
                 isVerified: false
             }
         },
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     };
 
     const durationMs = Date.now() - start;
@@ -115,7 +121,7 @@ export async function register(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "User registered",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 201,
@@ -139,6 +145,20 @@ export async function verify(req: Request, res: Response) {
     if (session) {
         const user = JSON.parse(session);
         if (user.verified) {
+            const durationMs = Date.now() - start;
+            const store = asyncStore.getStore();
+
+            log(LOG_TYPE.INFO, {
+                message: "Email already verified",
+                requestId: store?.requestId,
+                method: req.method,
+                path: req.originalUrl,
+                status: 200,
+                durationMs,
+                tokenId: store?.tokenId,
+                userEmail: user.email
+            });
+
             return res.json({
                 errors: [],
                 data: {
@@ -146,20 +166,6 @@ export async function verify(req: Request, res: Response) {
                 }
             })
         }
-
-        const durationMs = Date.now() - start;
-        const store = asyncStore.getStore();
-
-        log(LOG_TYPE.INFO, {
-            message: "Email already verified",
-            requestId: req.body.requestId,
-            method: req.method,
-            path: req.originalUrl,
-            status: 200,
-            durationMs,
-            tokenId: store?.tokenId,
-            userEmail: user.email
-        });
     }
 
     const user = await authService.verifyEmail({ token, sessionId })
@@ -180,7 +186,7 @@ export async function verify(req: Request, res: Response) {
 
     log(LOG_TYPE.INFO, {
         message: "Email verified",
-        requestId: req.body.requestId,
+        requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,
         status: 200,
@@ -192,3 +198,18 @@ export async function verify(req: Request, res: Response) {
     res.json(response)
 }
 
+export async function logout(req: Request, res: Response) {
+    const { sessionId } = req.cookies["muktasar-session"];
+    if (sessionId) {
+        redisClient.del(`session:${sessionId}`);
+    }
+
+    // Clear cookie on client
+    res.clearCookie("muktasar-session", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+    });
+
+    return res.status(200).json({ data: {}, errors: [], message: "Logged out successfully" });
+}

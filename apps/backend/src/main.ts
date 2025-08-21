@@ -1,12 +1,12 @@
 // Imports
 // import 'newrelic';
 import "dotenv/config"
+import { AsyncLocalStorage } from 'node:async_hooks';
 import "#lib/db/redis-connection.js";
 
 import compression from "compression"
 import helmet from "helmet";
-
-import { AsyncLocalStorage } from 'node:async_hooks';
+import cors from "cors"
 
 import express from "express";
 import cookieParser from "cookie-parser"
@@ -14,6 +14,7 @@ import bodyParser from "body-parser";
 
 import apiRoutes from "#routes/api.routes.js"
 import uiRoutes from "#routes/ui.routes.js"
+import publicRoutes from "#routes/public.routes.js"
 
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 import { logger } from "#lib/logger/logger.js";
@@ -22,20 +23,26 @@ import errorHandlerMiddleware from "#middlewares/error-handler.js";
 import routesContext from "#middlewares/routes-context.js";
 const app = express()
 
+app.use(cors());
+
 // ------ App Configuration -------------
+app.set("trust proxy", true);
 app.use(compression());
-app.use(helmet())
+app.use("/ui", helmet())
 app.use(bodyParser.json())
-export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
 app.use(routesContext)
 app.use(cookieParser())
+app.disable("x-powered-by")
+
+export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
 
 // ------- App Routes -------------------
 app.use("/api", apiRoutes)
-app.use("/", uiRoutes)
+app.use("/ui", uiRoutes)
+app.use("/", publicRoutes)
 
 // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
-app.use("{/*splat}", (req, res) => {
+app.use("*splash", (req, res, next) => {
     throw new NotFoundException("Endpoint not found.")
 })
 

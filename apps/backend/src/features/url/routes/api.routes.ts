@@ -1,5 +1,6 @@
 import { Router } from "express"
 
+// TODO: we heavily depend on the token feature here
 import { authToken } from "#features/token/domain/token-service.js";
 import { shortUrlSchema, paramsSchema, toUpdateUrlSchema } from "#features/url/domain/url-schemas.js";
 import {
@@ -41,26 +42,25 @@ router.post("/",
 
 // Delete a short URL
 router.delete("/:domain/:alias",
-    validateRequest([paramsSchema]),
     authToken(DELETE_URL_PERMISSION),
     apiRateLimiter(1, 50),
+    validateRequest([paramsSchema]),
     deleteUrl
 )
 
 // Change the long url (Update the attached destination)
 router.patch("/:domain/:alias",
-    validateRequest([paramsSchema, toUpdateUrlSchema]),
     authToken(UPDATE_URL_PERMISSION),
     apiRateLimiter(1, 50),
+    validateRequest([paramsSchema, toUpdateUrlSchema]),
     updateUrl
 )
 
 // Get the click count for a URL
 router.get("/:domain/:alias/count",
-    validateRequest([paramsSchema]),
     authToken(READ_URL_PERMISSION),
     apiRateLimiter(1, 50),
+    validateRequest([paramsSchema]),
     getUrlClickCounts
 )
-
 export default router;

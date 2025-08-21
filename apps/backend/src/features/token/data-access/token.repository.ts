@@ -2,15 +2,26 @@ import { query } from "#lib/db/db-connection.js";
 import type { Token, TokenInput, TokenWithUrlType } from "#features/token/types";
 
 const tokenRepository = {
-    async getTokenWithUrl({ token }: { token: string }): Promise<TokenWithUrlType | undefined> {
+    async getTokenWithUrl(token_hash: string): Promise<TokenWithUrlType | undefined> {
         const result = await query(
             `SELECT api_token.id, api_token.user_id, can_create, can_update, can_delete, alias, domain
              FROM api_token JOIN url
              ON api_token.user_id = url.user_id
-             WHERE api_token.token_string = $1`,
+             WHERE api_token.token_hash = $1`,
 
-            [token]
+            [token_hash]
         )
+
+        return result.rows[0];
+    },
+
+    async getTokenByTokenHash(token_hash: string) {
+        const result = await query(
+            `SELECT id, user_id, label, can_create, can_update, can_delete, created_at
+             FROM api_token
+            WHERE token_hash = $1`,
+            [token_hash]
+        );
 
         return result.rows[0];
     },

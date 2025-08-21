@@ -2,10 +2,10 @@ import * as zod from "zod";
 import { schemaWrapper } from "#lib/validation/validator-middleware.js";
 
 const aliasSchema = zod
-    .string()
+    .string("Alias should be string.")
     .trim()
-    .min(1, "Alias must not be less than 1 character.")
-    .max(20, "Alias must not be greater than 20 characters.")
+    .min(1, "Alias must be between 1 and 20 characters.")
+    .max(20, "Alias must be between 1 and 20 characters.")
     .regex(
         /^[^`~,<>;':"\/\[\]^{}()=+!*@&$?%#|]*$/,
         "Alias format is invalid."

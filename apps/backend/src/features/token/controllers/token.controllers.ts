@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 
+import { asyncStore } from "#root/main.js";
 import * as tokenService from "#features/token/domain/token-service.js"
 
 import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from "#root/lib/logger/logger.js";
-import { asyncStore } from "#root/main.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 export async function generateToken(req: Request, res: Response) {
     const start = Date.now();
@@ -13,7 +13,7 @@ export async function generateToken(req: Request, res: Response) {
 
     // @ts-ignore
     const user_id = req.user?.id;
-
+    
     if (!user_id) {
         throw new UnAuthorizedException()
     }
@@ -29,7 +29,8 @@ export async function generateToken(req: Request, res: Response) {
     const response = {
         data: { token }, // only time you show raw token
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     };
 
     const durationMs = Date.now() - start;
@@ -63,7 +64,8 @@ export async function updateToken(req: Request, res: Response) {
     const response = {
         data: { token: updatedToken },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     };
 
     const durationMs = Date.now() - start;
@@ -98,7 +100,8 @@ export async function deleteToken(req: Request, res: Response) {
     const response = {
         data: { token: deletedToken },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     };
 
     const durationMs = Date.now() - start;
@@ -129,7 +132,8 @@ export async function getTokens(req: Request, res: Response) {
     const response = {
         data: { tokens },
         errors: [],
-        code: NoException.NoErrorCode
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
     };
 
     const durationMs = Date.now() - start;
