@@ -15,9 +15,9 @@ import Link from "next/link"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "#", label: "الأسعار", active: true },
-  { href: "#", label: "API" },
-  { href: "#", label: "الروابط" },
+  { href: "/pricing", label: "الأسعار", active: true },
+  { href: "/api/docs", label: "API" },
+  { href: "/urls", label: "الروابط" },
 ]
 
 export default function Navbar() {
@@ -87,7 +87,7 @@ export default function Navbar() {
                 alt="مختصر"
                 width={125}
                 height={50}
-                fetchPriority="high"
+                priority
               />
             </Link>
 

@@ -8,7 +8,7 @@ export default function SignUpForm() {
         <form
             action=""
             className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
-            <div className="p-8 pt-2 pb-6 w-[500px]">
+            <div className="p-8 pt-2 pb-6 w-[500px] mx-auto">
                 <div>
                     <h1 className="mb-1 mt-4 text-xl text-center text-primary font-semibold">أنشىء حسابك المجاني</h1>
                 </div>

@@ -24,17 +24,20 @@ export default function HeroSection() {
                             alt="مختصر"
                             width="210"
                             height="84"
+                            priority
                         />
                     </SparklesText>
                 </div>
                 <AnimatedGradientText text="أول منتج عربي متكامل لإختصار الروابط" />
 
-                <p className="text-xl md:max-w-[770px] max-w-[500px] pt-4 text-muted-foreground">
-                    حوّل روابطك الطويلة إلى روابط  قصيرة
-                    وأنيقة تمنح مستخدميك تجربة أسهل وأجمل، مع إحصائيات دقيقة تساعدك على فهم تفاعلهم بشكل أفضل.
-                </p>
+                <div className="pt-4 min-h-[100px] md:min-h-[120px] flex items-start justify-center">
+                    <p className="text-base md:text-lg lg:text-xl md:max-w-[770px] max-w-[500px] text-muted-foreground leading-relaxed">
+                        حوّل روابطك الطويلة إلى روابط قصيرة
+                        تمنح مستخدميك تجربة أسهل وأجمل، مع إحصائيات دقيقة تساعدك على فهم تفاعلهم بشكل أفضل.
+                    </p>
+                </div>
             </header>
-            <section className=" relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
+            <section className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
                 <div className="pb-8">
                     <Label htmlFor="original_url" className="pb-3 text-lg">ادخل رابطك الطويل هنا</Label>
                     <Input type="text" id="original_url" className="text-end h-[45px] border-gray-300" name="original_url" placeholder="http://example.com/very-long-url"></Input>
@@ -51,7 +54,7 @@ export default function HeroSection() {
                         <div className="w-full">
                             <Label htmlFor="domain" className="text-muted-foreground pb-3">الدومين</Label>
                             <Select name="domain">
-                                <SelectTrigger className="w-full border-gray-300">
+                                <SelectTrigger id="domain" className="w-full border-gray-300">
                                     <SelectValue placeholder="light" />
                                 </SelectTrigger>
                                 <SelectContent>

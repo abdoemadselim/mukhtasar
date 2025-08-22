@@ -16,6 +16,7 @@ export default function Layout({
                         width="210"
                         height="84"
                         className="mx-auto"
+                        fetchPriority="high"
                     />
                 </Link>
                 <p className="text-center pb-8 text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>
