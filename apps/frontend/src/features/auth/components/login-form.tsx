@@ -8,7 +8,7 @@ export default function LoginForm() {
         <form
             action=""
             className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
-            <div className="p-8 pt-2 pb-6 w-[500px]">
+            <div className="p-8 pt-2 pb-6 md:w-[500px] w-[350px] sm:w-[450px]">
                 <div>
                     <h1 className="mb-1 mt-4 text-xl text-center text-primary font-semibold">سجل الدخول لحسابك</h1>
                 </div>
@@ -51,14 +51,14 @@ export default function LoginForm() {
                             className='px-0 pt-3'
                             size="sm">
                             <Link
-                                href="#"
+                                href="/forget-password"
                                 className="link intent-info variant-ghost text-sm">
                                 هل نسيت كلمة المرور؟
                             </Link>
                         </Button>
                     </div>
 
-                    <Button className="w-full cursor-pointer mt-4 text-lg">تسجيل الدخول</Button>
+                    <Button className="w-full cursor-pointer mt-4 text-md">تسجيل الدخول</Button>
                 </div>
             </div>
 
