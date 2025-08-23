@@ -1,5 +1,10 @@
+'use client'
+
 import Image from "next/image"
 import Link from "next/link"
+
+import { usePathname } from "next/navigation"
+import clsx from "clsx"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,12 +21,13 @@ import {
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/pricing", label: "الأسعار", active: true },
+  { href: "/pricing", label: "خطط الأسعار", active: true },
   { href: "/api", label: "API" },
   { href: "/urls", label: "الروابط" },
 ]
 
 export default function Navbar() {
+  const pathname = usePathname();
   return (
     <header className="px-4 md:px-6 pt-4">
       <div className="container mx-auto bg-white px-10 rounded-xl">
@@ -99,9 +105,8 @@ export default function Navbar() {
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
                   <NavigationMenuLink
-                    active={link.active}
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary py-1.5 text-md font-medium"
+                    className={clsx("py-1.5 text-md font-medium text-muted-foreground hover:text-primary", pathname == link.href && "bg-accent text-primary")}
                   >
                     {link.label}
                   </NavigationMenuLink>
