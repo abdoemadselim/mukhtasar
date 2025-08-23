@@ -123,6 +123,7 @@ export const columns: ColumnDef<TokenType>[] = [
     },
     {
         id: "actions",
+        header: () => <p className="lg:text-lg">إجراءات</p>,
         cell: ({ row }) => {
             const handleDeleteToken = () => {
                 // Your delete logic here

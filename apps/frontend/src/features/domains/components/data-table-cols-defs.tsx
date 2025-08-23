@@ -1,12 +1,7 @@
 'use client'
 
-import Link from "next/link"
-import { toast } from "sonner"
-
-import {
-  Copy,
-  MoreVertical,
-} from "lucide-react"
+import clsx from "clsx"
+import { MoreVertical } from "lucide-react"
 
 import {
   ColumnDef,
@@ -21,58 +16,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Checkbox } from "@/components/ui/checkbox"
-import DragHandle from "@/components/data-table/drag-handle"
 
-import { UpdateUrlDialog } from "@/features/urls/components/update-url-dialog"
-import { UrlType } from "@/features/urls/schemas/scheme"
+import { DomainType } from "@/features/domains/schemas/schema"
 
-
-export const columns: ColumnDef<UrlType>[] = [
+export const columns: ColumnDef<DomainType>[] = [
   {
-    id: "drag",
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
-  },
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "alias",
-    header: () => <p className="lg:text-lg">الاسم المستعار</p>,
+    accessorKey: "date_added",
+    header: () => <p className="lg:text-lg">تاريخ الإضافة</p>,
     enableHiding: false,
     cell: (({ row }) => (
-      <p className="lg:text-lg">{row.original.alias}</p>
+      <p className="lg:text-lg lg:w-md">{row.original.date_added}</p>
     ))
   },
   {
     accessorKey: "domain",
     header: () => <p className="lg:text-lg">النطاق</p>,
     cell: ({ row }) => (
-      <div className="w-32 lg:text-lg">
+      <div className="w-32 lg:text-lg lg:w-md">
         <Badge variant="outline" className="text-muted-foreground px-1.5 lg:text-lg">
           {row.original.domain}
         </Badge>
@@ -80,67 +40,27 @@ export const columns: ColumnDef<UrlType>[] = [
     ),
   },
   {
-    accessorKey: "short_url",
-    header: () => <p className="lg:text-lg"> الرابط المختصر</p>,
-    cell: ({ row }) => {
-      const handleCopy = async () => {
-        await navigator.clipboard.writeText(row.original.short_url)
-        toast("تم نسخ الرابط إلى حافظة جهازك.")
-      }
-      return (
-        <div className="w-50 flex items-center gap-2" >
-          <div className="truncate max-w-xs text-primary cursor-pointer underline lg:text-lg">
-            <Button variant="ghost" className="cursor-pointer" onClick={handleCopy}>
-              <Copy size={20} className="text-red-400" />
-            </Button>
-            {row.original.short_url}
-          </div>
-        </div >
-      )
-    }
-  },
-  {
-    accessorKey: "original_url",
-    header: () => <p className="lg:text-lg">الرابط الأصلي</p>,
+    accessorKey: "status",
+    header: () => <p className="lg:text-lg">الحالة</p>,
     cell: ({ row }) => (
-      <div className="truncate max-w-xs text-gray-500 cursor-pointer underline lg:text-lg">
-        {row.original.original_url}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "created_at",
-    header: () => <p className="lg:text-lg">تاريخ الإنشاء</p>,
-    cell: ({ row }) => (
-      <div className="lg:text-lg">
-        {row.original.created_at}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "description",
-    header: () => <p className="lg:text-lg">الوصف</p>,
-    cell: ({ row }) => (
-      <div className="lg:text-lg">
-        {row.original.description}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "clicks",
-    header: () => <div className="w-full text-right lg:text-lg">عدد النقرات </div>,
-    cell: ({ row }) => (
-      <div className="text-right lg:text-lg">
-        {row.original.clicks}
+      <div className="w-32 lg:text-lg">
+        <Badge variant="outline" className={
+          clsx(
+            "px-1.5 lg:text-lg",
+            row.original.status == "active" ? "text-green-500" : "text-red-400"
+          )}>
+          {row.original.status}
+        </Badge>
       </div>
     ),
   },
   {
     id: "actions",
+    header: () => <p className="lg:text-lg">إجراءات</p>,
     cell: ({ row }) => {
-      const handleDeleteUrl = () => {
+      const handleDeleteDomain = () => {
         // Your delete logic here
-        console.log("Deleting URL:", row.original.short_url)
+        console.log("Deleting domain:", row.original.domain)
       }
 
       return (
@@ -152,31 +72,19 @@ export const columns: ColumnDef<UrlType>[] = [
               size="icon"
             >
               <MoreVertical />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">افتح القائمة</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem
-              className="block w-full text-right cursor-pointer"
-            >
-              <Link href={`/urls/${row.original.id}`}>
-                عرض التحليلات
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
-              <UpdateUrlDialog >
-                <span className="w-full block">تعديل الرابط</span>
-              </UpdateUrlDialog>
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
               <DeleteConfirmationDialog
-                title="حذف الرابط المختصر"
-                description="هذا الإجراء سيحذف الرابط المختصر نهائياً ولن يمكن التراجع عنه."
-                confirmationText={row.original.short_url}
-                confirmationLabel="اكتب الرابط المختصر لتأكيد الحذف:"
-                onConfirm={handleDeleteUrl}
+                title="حذف النطاق"
+                description="هذا الإجراء سيحذف النطاق نهائياً وسيتوقف عن العمل فوراً."
+                confirmationText={row.original.domain}
+                confirmationLabel="اكتب النطاق لتأكيد الحذف:"
+                onConfirm={handleDeleteDomain}
               >
-                <span className="w-full block text-red-600">إزالة الرابط</span>
+                <span className="w-full block text-red-600">إزالة النطاق</span>
               </DeleteConfirmationDialog>
             </DropdownMenuItem>
           </DropdownMenuContent>

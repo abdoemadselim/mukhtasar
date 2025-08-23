@@ -137,6 +137,7 @@ export const columns: ColumnDef<UrlType>[] = [
   },
   {
     id: "actions",
+    header: () => <p className="lg:text-lg">إجراءات</p>,
     cell: ({ row }) => {
       const handleDeleteUrl = () => {
         // Your delete logic here

@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 2,
+        "domain": "localhost.com",
+        "status": "inactive",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 3,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 4,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 5,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 6,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 7,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    },
+    {
+        "id": 8,
+        "domain": "localhost.com",
+        "status": "active",
+        "date_added": "2025-10-08"
+    }
+]
