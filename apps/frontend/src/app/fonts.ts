@@ -1,7 +1,7 @@
 
-import { Noto_Sans_Arabic } from "next/font/google";
+import { Cairo } from "next/font/google";
 
-export const notoSans = Noto_Sans_Arabic({
+export const cairo = Cairo({
   subsets: ["arabic"],
   style: ["normal"],
   display: 'swap',

@@ -1,8 +1,8 @@
 import Image from "next/image";
+
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-
 import {
     Select,
     SelectContent,
@@ -15,9 +15,9 @@ import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 export default function HeroSection() {
     return (
-        <section className="flex flex-col justify-center items-center mt-20">
-            <header className="text-center pb-8">
-                <div className="flex justify-center items-center gap-4 ">
+        <section className="flex flex-col justify-center items-center pb-20 pt-6">
+            <header className="text-center ">
+                <div className="flex justify-center items-center gap-4">
                     <SparklesText>
                         <Image
                             src="/logo-lg.png"
@@ -52,7 +52,7 @@ export default function HeroSection() {
                         </div>
 
                         <div className="w-full">
-                            <Label htmlFor="domain" className="text-muted-foreground pb-3">الدومين</Label>
+                            <Label htmlFor="domain" className="text-muted-foreground pb-3">النطاق</Label>
                             <Select name="domain">
                                 <SelectTrigger id="domain" className="w-full border-gray-300">
                                     <SelectValue placeholder="light" />

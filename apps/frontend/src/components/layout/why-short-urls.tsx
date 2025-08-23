@@ -1,4 +1,5 @@
 import { MessageCircleQuestionMark } from "lucide-react";
+
 import { Highlighter } from "@/components/ui/highlighter";
 
 export default function WhyShortUrls() {

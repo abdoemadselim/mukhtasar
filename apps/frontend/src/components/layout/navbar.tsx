@@ -1,3 +1,6 @@
+import Image from "next/image"
+import Link from "next/link"
+
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -10,13 +13,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import Image from "next/image"
-import Link from "next/link"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/pricing", label: "الأسعار", active: true },
-  { href: "/api/docs", label: "API" },
+  { href: "/api", label: "API" },
   { href: "/urls", label: "الروابط" },
 ]
 

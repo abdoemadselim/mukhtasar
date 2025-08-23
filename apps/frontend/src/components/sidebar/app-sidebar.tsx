@@ -1,22 +1,21 @@
 "use client"
 
-import * as React from "react"
-import { Link as LinkIcon, Lock } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+
+import { Globe, Link as LinkIcon, Lock } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
 
 const items = [
   {
@@ -25,9 +24,14 @@ const items = [
     icon: LinkIcon,
   },
   {
-    title: "API token",
+    title: "API (رمز الوصول)",
     url: "/tokens",
     icon: Lock,
+  },
+   {
+    title: "نطاق خاص",
+    url: "/domains",
+    icon: Globe,
   },
 ]
 
@@ -46,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Link href="/">
                 <Image
                   src="/logo.png"
-                  alt="مختصر"
+                  alt="مُختصِر"
                   width={90}
                   height={70}
                   priority
@@ -62,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} className="pb-2">
-                  <SidebarMenuButton asChild className={`${pathname === item.url && "bg-blue-200"} hover:bg-blue-200`}>
+                  <SidebarMenuButton asChild className={`${pathname === item.url && "bg-blue-50 text-blue-600"} hover:bg-blue-50 hover:text-blue-600`}>
                     <Link href={item.url} className="flex gap-4 items-center">
                       <item.icon />
                       <span className="text-lg">{item.title}</span>

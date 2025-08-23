@@ -6,7 +6,8 @@
     "original_url": "https://x.com/grok",
     "created_at": "2024-01-01",
     "description": "Grok profile",
-    "clicks": "100"
+    "clicks": "100",
+    "short_url": "https://x.ai/grok1"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "original_url": "https://x.ai",
     "created_at": "2024-02-01",
     "description": "xAI home",
-    "clicks": "200"
+    "clicks": "200",
+    "short_url": "https://short.x/xai"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "original_url": "https://x.com/elonmusk",
     "created_at": "2024-03-01",
     "description": "Elon Musk",
-    "clicks": "500"
+    "clicks": "500",
+    "short_url": "https://x.ai/elon"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "original_url": "https://tesla.com",
     "created_at": "2024-04-01",
     "description": "Tesla site",
-    "clicks": "300"
+    "clicks": "300",
+    "short_url": "https://short.ly/tesla"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "original_url": "https://spacex.com",
     "created_at": "2024-05-01",
     "description": "SpaceX",
-    "clicks": "400"
+    "clicks": "400",
+    "short_url": "https://short.ly/spacex"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "original_url": "https://boringcompany.com",
     "created_at": "2024-06-01",
     "description": "Boring Co",
-    "clicks": "150"
+    "clicks": "150",
+    "short_url": "https://x.ai/boring"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "original_url": "https://neuralink.com",
     "created_at": "2024-07-01",
     "description": "Neuralink",
-    "clicks": "250"
+    "clicks": "250",
+    "short_url": "https://short.x/neuralink"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "original_url": "https://openai.com",
     "created_at": "2024-08-01",
     "description": "OpenAI",
-    "clicks": "350"
+    "clicks": "350",
+    "short_url": "https://short.ly/openai"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "original_url": "https://google.com",
     "created_at": "2024-08-10",
     "description": "Google",
-    "clicks": "1000"
+    "clicks": "1000",
+    "short_url": "https://x.ai/google"
   },
   {
     "id": 10,
@@ -87,7 +96,8 @@
     "original_url": "https://apple.com",
     "created_at": "2024-08-15",
     "description": "Apple",
-    "clicks": "600"
+    "clicks": "600",
+    "short_url": "https://short.x/apple"
   },
   {
     "id": 11,
@@ -96,7 +106,8 @@
     "original_url": "https://amazon.com",
     "created_at": "2024-09-01",
     "description": "Amazon",
-    "clicks": "700"
+    "clicks": "700",
+    "short_url": "https://short.ly/amazon"
   },
   {
     "id": 12,
@@ -105,7 +116,8 @@
     "original_url": "https://microsoft.com",
     "created_at": "2024-09-05",
     "description": "Microsoft",
-    "clicks": "450"
+    "clicks": "450",
+    "short_url": "https://x.ai/microsoft"
   },
   {
     "id": 13,
@@ -114,7 +126,8 @@
     "original_url": "https://facebook.com",
     "created_at": "2024-09-10",
     "description": "Facebook",
-    "clicks": "800"
+    "clicks": "800",
+    "short_url": "https://short.x/facebook"
   },
   {
     "id": 14,
@@ -123,7 +136,8 @@
     "original_url": "https://x.com",
     "created_at": "2024-09-15",
     "description": "Twitter (X)",
-    "clicks": "900"
+    "clicks": "900",
+    "short_url": "https://short.ly/twitter"
   },
   {
     "id": 15,
@@ -132,7 +146,8 @@
     "original_url": "https://youtube.com",
     "created_at": "2024-09-20",
     "description": "YouTube",
-    "clicks": "1200"
+    "clicks": "1200",
+    "short_url": "https://x.ai/youtube"
   },
   {
     "id": 16,
@@ -141,7 +156,8 @@
     "original_url": "https://instagram.com",
     "created_at": "2024-09-25",
     "description": "Instagram",
-    "clicks": "550"
+    "clicks": "550",
+    "short_url": "https://short.x/instagram"
   },
   {
     "id": 17,
@@ -150,7 +166,8 @@
     "original_url": "https://linkedin.com",
     "created_at": "2024-10-01",
     "description": "LinkedIn",
-    "clicks": "650"
+    "clicks": "650",
+    "short_url": "https://short.ly/linkedin"
   },
   {
     "id": 18,
@@ -159,7 +176,8 @@
     "original_url": "https://reddit.com",
     "created_at": "2024-10-05",
     "description": "Reddit",
-    "clicks": "750"
+    "clicks": "750",
+    "short_url": "https://x.ai/reddit"
   },
   {
     "id": 19,
@@ -168,7 +186,8 @@
     "original_url": "https://wikipedia.org",
     "created_at": "2024-10-10",
     "description": "Wikipedia",
-    "clicks": "850"
+    "clicks": "850",
+    "short_url": "https://short.x/wikipedia"
   },
   {
     "id": 20,
@@ -177,6 +196,7 @@
     "original_url": "https://netflix.com",
     "created_at": "2024-10-15",
     "description": "Netflix",
-    "clicks": "950"
+    "clicks": "950",
+    "short_url": "https://short.ly/netflix"
   }
 ]

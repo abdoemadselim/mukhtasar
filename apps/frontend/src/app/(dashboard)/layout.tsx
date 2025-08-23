@@ -1,9 +1,10 @@
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
+import { SiteHeader } from "@/components/sidebar/site-header"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,10 +17,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
     >
       <AppSidebar variant="inset" side="right" className="pt-4" />
-      <SidebarInset>
+      <SidebarInset className="border-r-1">
         <SiteHeader />
         {children}
       </SidebarInset>
+      <Toaster  />
     </SidebarProvider>
   )
 }
