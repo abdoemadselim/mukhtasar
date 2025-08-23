@@ -1,11 +1,8 @@
-"use client";
-
-import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Check, Sparkles, Building2, Zap, Infinity as InfinityIcon } from "lucide-react";
+import { Check, Sparkles, Zap } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-
 
 // Plans data
 const PLANS = [
