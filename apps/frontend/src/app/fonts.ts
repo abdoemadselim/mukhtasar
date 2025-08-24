@@ -6,5 +6,4 @@ export const cairo = Cairo({
   style: ["normal"],
   display: 'swap',
   preload: true,
-  adjustFontFallback: true
 });

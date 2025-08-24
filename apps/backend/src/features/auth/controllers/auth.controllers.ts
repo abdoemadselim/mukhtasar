@@ -8,7 +8,7 @@ import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
 import * as authService from "#features/auth/domain/auth.service.js"
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
-import { NoException } from "#lib/error-handling/error-types.js";
+import { NoException } from "../../../lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // ---------------------- LOGIN ----------------------
@@ -213,3 +213,71 @@ export async function logout(req: Request, res: Response) {
 
     return res.status(200).json({ data: {}, errors: [], message: "Logged out successfully" });
 }
+
+// // ---------------------- FORGOT PASSWORD ----------------------
+// export async function forgotPassword(req: Request, res: Response) {
+//     const start = Date.now();
+//     const { email } = req.body as { email: string };
+
+//     const user = await authService.findUserByEmail(email);
+//     if (!user) {
+//         const durationMs = Date.now() - start;
+//         const store = asyncStore.getStore();
+
+//         log(LOG_TYPE.INFO, {
+//             message: "Forgot password attempt for non-existent user",
+//             requestId: store?.requestId,
+//             method: req.method,
+//             path: req.originalUrl,
+//             status: 200,
+//             durationMs,
+//             tokenId: store?.tokenId,
+//             userEmail: email
+//         });
+
+//         // Return generic response to avoid leaking user existence
+//         return res.json({
+//             errors: [],
+//             data: {
+//                 message: "If the email exists, a password reset link will be sent"
+//             }
+//         });
+//     }
+
+//     const resetToken = randomUUID();
+//     const RESET_TOKEN_DURATION = 1000 * 60 * 60; // 1 hour
+//     await redisClient.setEx(
+//         `reset:${resetToken}`,
+//         RESET_TOKEN_DURATION / 1000,
+//         JSON.stringify({
+//             email: user.email,
+//             userId: user.id
+//         })
+//     );
+
+//     await authService.sendPasswordResetEmail(user.email, resetToken);
+
+//     const response = {
+//         errors: [],
+//         data: {
+//             message: "If the email exists, a password reset link will be sent",
+//             resetToken // Included for testing; in production, this would be sent via email
+//         }
+//     };
+
+//     const durationMs = Date.now() - start;
+//     const store = asyncStore.getStore();
+
+//     log(LOG_TYPE.INFO, {
+//         message: "Password reset requested",
+//         requestId: store?.requestId,
+//         method: req.method,
+//         path: req.originalUrl,
+//         status: 200,
+//         durationMs,
+//         tokenId: store?.tokenId,
+//         userEmail: email
+//     });
+
+//     res.json(response);
+// }

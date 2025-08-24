@@ -3,7 +3,7 @@ import { asyncStore } from "#root/main.js";
 
 import * as urlService from "#features/url/domain/url.service.js";
 
-import { NoException } from "#lib/error-handling/error-types.js";
+import { NoException } from "../../../lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 export async function getShortUrlInfo(req: Request, res: Response) {

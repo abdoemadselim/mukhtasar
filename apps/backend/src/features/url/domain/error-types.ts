@@ -1,4 +1,4 @@
-import { NotFoundException } from "#lib/error-handling/error-types.js";
+import { NotFoundException } from "../../../lib/error-handling/error-types.js";
 
 export class URLNotFoundException extends NotFoundException {
     constructor() {

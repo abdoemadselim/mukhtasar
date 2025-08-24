@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import { asyncStore } from "#root/main.js";
 import * as tokenService from "#features/token/domain/token-service.js"
 
-import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
+import { NoException, UnAuthorizedException } from "../../../lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 export async function generateToken(req: Request, res: Response) {

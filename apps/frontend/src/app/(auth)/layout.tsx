@@ -11,12 +11,12 @@ export default function Layout({
             <div className="min-h-screen bg-zinc-50 px-4 py-16  dark:bg-transparent">
                 <Link href="/">
                     <Image
-                        src="/logo-lg.png"
+                        src="/logo-lg.webp"
                         alt="مُختصِر"
                         width="210"
                         height="84"
                         className="mx-auto"
-                        fetchPriority="high"
+                        priority
                     />
                 </Link>
                 <p className="text-center pb-8 text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>

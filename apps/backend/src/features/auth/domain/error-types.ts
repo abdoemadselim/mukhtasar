@@ -1,4 +1,4 @@
-import { HttpException } from "#lib/error-handling/error-types.js";
+import { HttpException } from "../../../lib/error-handling/error-types.js";
 
 export class LoginException extends HttpException {
     constructor() {

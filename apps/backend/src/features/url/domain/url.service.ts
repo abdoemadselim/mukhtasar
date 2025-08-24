@@ -4,7 +4,7 @@ import type { ParamsType } from "#features/url/domain/url-schemas.js";
 import { UrlInputType, UrlType } from "#features/url/types.js";
 import generate_id from "#features/url/domain/id-generator.js";
 
-import { ConflictException } from "#lib/error-handling/error-types.js";
+import { ConflictException } from "../../../lib/error-handling/error-types.js";
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 

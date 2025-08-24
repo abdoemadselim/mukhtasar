@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import * as zod from "zod";
 
-import { FieldErrorsType, ValidationException } from "#lib/error-handling/error-types.js"
+import { FieldErrorsType, ValidationException } from "../error-handling/error-types.js"
 
 type SchemaDataType = "body" | "query" | "params";
 

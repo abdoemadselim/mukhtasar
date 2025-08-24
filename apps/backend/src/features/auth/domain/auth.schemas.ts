@@ -11,6 +11,10 @@ const EmailSchema = zod.email({
     }
 })
 
+export const ForgotPasswordSchema = zod.object({
+    email: EmailSchema
+});
+
 const PasswordSchema = zod
     .string("Password is required and it should be string.")
     .trim()
@@ -40,6 +44,7 @@ const LoginSchema = zod.object({
 export const newUserSchema = schemaWrapper("body", NewUserSchema);
 export const userVerificationSchema = schemaWrapper("query", UserVerificationSchema);
 export const loginSchema = schemaWrapper("body", LoginSchema);
+export const forgotPasswordSchema = schemaWrapper("body", ForgotPasswordSchema);
 
 export type NewUserType = zod.infer<typeof NewUserSchema>;
 export type LoginType = zod.infer<typeof LoginSchema>;

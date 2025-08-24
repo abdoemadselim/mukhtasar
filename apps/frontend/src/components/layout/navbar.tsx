@@ -90,7 +90,7 @@ export default function Navbar() {
             {/* Main nav */}
             <Link href="/" className="text-primary hover:text-primary/90 flex gap-4 items-center">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="مختصر"
                 width={125}
                 height={50}

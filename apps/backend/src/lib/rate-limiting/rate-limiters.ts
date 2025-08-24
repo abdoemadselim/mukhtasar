@@ -1,7 +1,7 @@
 import { ipKeyGenerator, rateLimit } from 'express-rate-limit'
 import { RedisStore } from 'rate-limit-redis'
 
-import { RateLimitingException } from '#lib/error-handling/error-types.js';
+import { RateLimitingException } from '../error-handling/error-types.js';
 import { asyncStore } from '#root/main.js';
 import { client as redisClient } from '#lib/db/redis-connection.js';
 

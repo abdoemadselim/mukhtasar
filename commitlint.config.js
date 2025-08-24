@@ -23,6 +23,7 @@ export default {
       2,
       'always',
       [
+        'dashboard',
         'archi',
         'project',
         'url',
@@ -35,7 +36,10 @@ export default {
         'config',
         'test',
         'readme',
-        'lib'
+        'lib',
+        "doc",
+        "domain",
+        "subscription"
       ]
     ],
     'type-empty': [2, 'never'],
