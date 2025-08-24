@@ -4,8 +4,6 @@ export default {
       2,
       'always',
       [
-        'backend',
-        'frontend',
         'init',
         'feat',
         'fix',
@@ -23,9 +21,11 @@ export default {
       2,
       'always',
       [
+        'backend',
+        'frontend',
         'dashboard',
-        'archi',
         'project',
+        'archi',
         'url',
         'logging',
         'user',
