@@ -1,5 +1,5 @@
 {
-  "name": "@mokhtasar",
+  "name": "@mukhtasar",
   "version": "1.0.0",
   "type": "module",
   "author": {
@@ -12,12 +12,15 @@
     "node": ">= 14.0.0",
     "npm": ">= 6.0.0"
   },
+  "overrides": {
+    "tmp": "0.2.4"
+  },
   "main": "./dist/main.js",
   "scripts": {
-    "dev:backend": "pnpm --filter @mokhtasar/backend dev",
-    "dev:frontend": "pnpm --filter @mokhtasar/frontend dev",
+    "dev:backend": "pnpm --filter @mukhtasar/backend dev",
+    "dev:frontend": "pnpm --filter @mukhtasar/frontend dev",
     "dev": "pnpm dev:backend & pnpm dev:frontend",
-    "watch:backend": "pnpm --filter @mokhtasar/backend watch",
+    "watch:backend": "pnpm --filter @mukhtasar/backend watch",
     "build": "pnpm --parallel build",
     "prepare": "husky"
   },

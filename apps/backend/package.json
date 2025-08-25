@@ -16,9 +16,6 @@
     "email": "abdulrahman3mad@gmail.com",
     "url": ""
   },
-  "overrides": {
-    "tmp": "^0.2.4"
-  },
   "description": "Mokhtasar allows you to convert long unaccessible URL to short, neat URL",
   "engines": {
     "node": ">= 14.0.0",
@@ -72,7 +69,6 @@
     "@types/nodemailer": "^7.0.0",
     "@types/pg": "^8.15.5",
     "husky": "^9.1.7",
-    "pm2": "^6.0.8",
     "typescript": "^5.8.3"
   }
 }
