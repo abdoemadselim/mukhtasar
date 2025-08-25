@@ -1,6 +1,6 @@
 import urlRepository from "#features/url/data-access/url.repository.js";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
-import type { ParamsType } from "#features/url/domain/url-schemas.js";
+import type { ParamsType } from "@mukhtasar/shared";
 import { UrlInputType, UrlType } from "#features/url/types.js";
 import generate_id from "#features/url/domain/id-generator.js";
 

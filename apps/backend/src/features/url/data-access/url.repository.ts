@@ -1,5 +1,5 @@
 import type { UrlInputType, UrlType } from "#features/url/types.js";
-import type { ParamsType } from "#features/url/domain/url-schemas.js";
+import type { ParamsType } from "@mukhtasar/shared"; 
 
 import { query } from "#lib/db/db-connection.js";
 

@@ -3,8 +3,10 @@
   "name": "@mukhtasar/shared",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.ts",
+  "type": "module",
+  "main": "dist/main.js",
   "scripts": {
+    "watch": "tsc --watch"
   },
   "author": "Abdulrahman Emad"
 }

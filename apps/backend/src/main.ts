@@ -23,7 +23,13 @@ import errorHandlerMiddleware from "#middlewares/error-handler.js";
 import routesContext from "#middlewares/routes-context.js";
 const app = express()
 
-app.use(cors());
+// In your Express backend
+app.use(cors({
+  origin: 'http://localhost:3002',
+  credentials: true, // To allow setting the cookie to the frontend which works on another domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 
 // ------ App Configuration -------------
 app.set("trust proxy", true);

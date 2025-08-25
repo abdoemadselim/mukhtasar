@@ -1,8 +1,8 @@
-import { HttpException } from "../../../lib/error-handling/error-types.js";
+import { HttpException } from "#lib/error-handling/error-types.js";
 
 export class LoginException extends HttpException {
     constructor() {
-        super(401, 10, "Invalid Email or password.", "LOGIN_EXCEPTION");
+        super(401, 10, "عنوان البريد الإلكتروني أو كلمة المرور خاطئين.", "LOGIN_EXCEPTION");
 
         this.name = this.constructor.name;
         Error.captureStackTrace(this);

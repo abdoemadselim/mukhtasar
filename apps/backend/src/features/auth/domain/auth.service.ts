@@ -6,7 +6,7 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 // TODO: auth feature depends on user feature (Is this OK?)
 import userRepository from "#features/user/data-access/user.repository.js";
 import authRepository from "#features/auth/data-access/auth.repository.js";
-import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
+import type { NewUserType } from "@mukhtasar/shared";
 import { LoginException, UnVerifiedException } from "#features/auth/domain/error-types.js";
 
 import { ConflictException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "../../../lib/error-handling/error-types.js";
@@ -18,7 +18,11 @@ import { log, LOG_TYPE } from "#lib/logger/logger.js";
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
     const isPwned = await isPasswordPwned(password)
     if (isPwned) {
-        throw new ValidationException({ password: ["This password has appeared in known data breaches and may be unsafe to use. Please choose a different password."] })
+        throw new ValidationException({
+            password: {
+                message: "هذه كلمة المرور ظهرت في تسريبات بيانات معروفة وقد تكون غير آمنة للاستخدام. يُرجى اختيار كلمة مرور مختلفة."
+            }
+        })
     }
 
     const saltRounds = 10;
@@ -27,7 +31,7 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
 
     const existent_user = await userRepository.getUserByEmail(email)
     if (existent_user) {
-        throw new ConflictException("An account with this email already exists.")
+        throw new ValidationException({ email: { message: "يوجد حساب مسجَّل مسبقًا بهذا البريد الإلكتروني." } })
     }
 
     const user = await authRepository.createUser({ name, email, password: passwordHash })

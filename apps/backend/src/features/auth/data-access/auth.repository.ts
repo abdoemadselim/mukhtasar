@@ -1,4 +1,4 @@
-import { NewUserType } from "#features/auth/domain/auth.schemas.js";
+import { NewUserType } from "@mukhtasar/shared";
 
 // TODO: auth feature depends on user feature (is it OK?)
 import type { UserType } from "#features/user/type.js";

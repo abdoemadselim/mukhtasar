@@ -1,46 +1,6 @@
-import * as zod from "zod";
 import { schemaWrapper } from "#lib/validation/validator-middleware.js";
-
-const aliasSchema = zod
-    .string("Alias should be string.")
-    .trim()
-    .min(1, "Alias must be between 1 and 20 characters.")
-    .max(20, "Alias must be between 1 and 20 characters.")
-    .regex(
-        /^[^`~,<>;':"\/\[\]^{}()=+!*@&$?%#|]*$/,
-        "Alias format is invalid."
-    )
-
-const domainSchema = zod
-    .string("Domain is required")
-    .regex(zod.regexes.domain, "This domain is invalid.")
-
-const urlSchema = zod.url({
-    protocol: /^https?$/,
-    hostname: zod.regexes.domain,
-    error: (url) => url.input == undefined ? "URL is required" : "Invalid URL format"
-})
-
-const ParamsSchema = zod.object({
-    domain: domainSchema,
-    alias: aliasSchema
-})
-
-const ShortUrlSchema = zod.object({
-    original_url: urlSchema,
-    alias: zod.optional(aliasSchema),
-    domain: zod.optional(domainSchema),
-    description: zod.optional(zod.string().trim().max(300))
-})
-
-const ToUpdateUrlSchema = zod.object({
-    original_url: urlSchema
-})
+import { ParamsSchema, ShortUrlSchema, ToUpdateUrlSchema } from "@mukhtasar/shared";
 
 export const paramsSchema = schemaWrapper("params", ParamsSchema);
 export const shortUrlSchema = schemaWrapper("body", ShortUrlSchema);
 export const toUpdateUrlSchema = schemaWrapper("body", ToUpdateUrlSchema);
-
-export type ParamsType = zod.infer<typeof ParamsSchema>;
-export type ShortUrlType = zod.infer<typeof ShortUrlSchema>;
-export type ToUpdateUrlType = zod.infer<typeof ToUpdateUrlSchema>;

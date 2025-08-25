@@ -1,4 +1,4 @@
-export type FieldErrorsType = Record<string, string[]>
+export type FieldErrorsType = Record<string, { message: string }>
 export class HttpException extends Error {
     statusCode: number;
     responseCode: number;

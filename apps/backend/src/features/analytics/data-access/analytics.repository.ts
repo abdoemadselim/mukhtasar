@@ -1,5 +1,5 @@
 import { query } from "#lib/db/db-connection.js";
-import { AnalyticsEventInput } from "../types";
+import { AnalyticsEventInput } from "#features/analytics/types";
 
 const analyticsRepository = {
     async createEvent(analyticsEvent: AnalyticsEventInput): Promise<undefined> {

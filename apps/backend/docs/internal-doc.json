@@ -1,0 +1,1159 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Mukhtasar - URL Shortener API",
+    "description": "This is the specification for Mukhtasar API which allows you to programmatically access our service to shorten long URLs into short URLs\n\nFeatures:\n- Create short URLs (with or without custom aliases)\n- Update and delete short URLs\n- Redirect short URLs\n- Track basic analytics (clicks, referrer, etc.)\n",
+    "termsOfService": "https://mukhtasar.io/terms",
+    "contact": {
+      "email": "mukhtasar@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/ui",
+      "description": "Local development server"
+    },
+    {
+      "url": "http://127.0.0.1:3000/ui",
+      "description": "Local development server (alternative)"
+    },
+    {
+      "url": "https://mukhtasar.io/ui",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Url",
+      "description": "Short links that redirect to a longer link. These API endpoints allow you to shorten new links & modify how they function"
+    }
+  ],
+  "paths": {
+    "/url": {
+      "post": {
+        "tags": [
+          "Url"
+        ],
+        "summary": "Create a new short URL",
+        "description": "Shortens a long URL into a new short URL",
+        "operationId": "createUrl",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "original_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The original long URL to shorten",
+                    "example": "https://www.example.com/products/12354?utm_source=newsletter"
+                  },
+                  "alias": {
+                    "type": "string",
+                    "description": "Optional custom alias",
+                    "example": "myexamplelink"
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "The domain to use for the short URL",
+                    "example": "mukhtasar.io"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "A description for the short URL",
+                    "example": "Product page link"
+                  }
+                },
+                "required": [
+                  "original_url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "URL successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "short_url": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "https://mukhtasar.io/myexamplelink"
+                        },
+                        "alias": {
+                          "type": "string",
+                          "example": "myexamplelink"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "example": "mukhtasar.io"
+                        },
+                        "original_url": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "https://www.example.com/products/12354"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-24T19:41:23+00:00"
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/url/{domain}/{alias}": {
+      "get": {
+        "tags": [
+          "Url"
+        ],
+        "summary": "Retrieve shortened URL information",
+        "description": "Returns the details of a shortened URL, including original URL, domain, alias, and other metadata for the provided domain and alias.\n",
+        "operationId": "getShortUrlInfo",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "The alias of the short URL to lookup",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "description": "The domain of the short URL to lookup",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mukhtasar.io"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Short URL record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "original_url": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "https://www.example.com/blog/post?id=42"
+                        },
+                        "short_url": {
+                          "type": "string",
+                          "example": "https://mukhtasar.io/xYz123"
+                        },
+                        "alias": {
+                          "type": "string",
+                          "example": "xYz123"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "example": "mukhtasar.io"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-24T19:41:23+00:00"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Product page link"
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Url"
+        ],
+        "summary": "Update a short URL's original URL",
+        "description": "Allows updating the original URL (destination) for an existing shortened URL.",
+        "operationId": "updateUrl",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "The alias of the short URL to update",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "description": "The domain of the short URL to update",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mukhtasar.io"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "original_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The new original URL to redirect to",
+                    "example": "https://www.example.com/new-destination"
+                  }
+                },
+                "required": [
+                  "original_url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "https://www.example.com/new-destination"
+                        },
+                        "alias": {
+                          "type": "string",
+                          "example": "myalias123"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "example": "mukhtasar.io"
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Url"
+        ],
+        "summary": "Delete a Short URL",
+        "description": "Deletes a shortened URL based on the provided domain and alias.",
+        "operationId": "deleteUrl",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "The alias of the short URL to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "description": "The domain of the short URL to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mukhtasar.io"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted the URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "description": "Response data from the delete operation"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/url/{domain}/{alias}/count": {
+      "get": {
+        "tags": [
+          "Url"
+        ],
+        "summary": "Get click count for a short URL",
+        "description": "Returns the number of times a short URL has been clicked",
+        "operationId": "getUrlClickCounts",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "The alias of the short URL",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "description": "The domain of the short URL",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mukhtasar.io"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Click count retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "alias": {
+                          "type": "string",
+                          "example": "myalias123"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "example": "mukhtasar.io"
+                        },
+                        "clickCount": {
+                          "type": "integer",
+                          "example": 153
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User login",
+        "description": "Authenticates a user and creates a session",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "mypassword123"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Session cookie",
+                "schema": {
+                  "type": "string",
+                  "example": "muktasar-session=abc123; HttpOnly; Secure; SameSite=Lax"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "John Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email",
+                              "example": "user@example.com"
+                            },
+                            "verified": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User registration",
+        "description": "Creates a new user account",
+        "operationId": "register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "mypassword123"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successful",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Session cookie",
+                "schema": {
+                  "type": "string",
+                  "example": "muktasar-session=abc123; HttpOnly; Secure; SameSite=Lax"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "John Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email",
+                              "example": "user@example.com"
+                            },
+                            "isVerified": {
+                              "type": "boolean",
+                              "example": false
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/auth/verify": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify email address",
+        "description": "Verifies a user's email address using a verification token",
+        "operationId": "verify",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Email verification token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abc123def456"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verification successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "John Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email",
+                              "example": "user@example.com"
+                            },
+                            "verified": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ResourceExpiredError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User logout",
+        "description": "Logs out the current user and clears the session",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logged out successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "UnauthorizedError": {
+        "description": "You are not authorized to access this resource.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "You are not authorized to access this resource."
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "UNAUTHORIZED"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 2
+                }
+              }
+            }
+          }
+        }
+      },
+      "RateLimitExceeded": {
+        "description": "Too many requests — rate limit exceeded.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Rate limit exceeded. Please try again later."
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "RATE_LIMIT_EXCEEDED"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 5
+                }
+              }
+            }
+          }
+        }
+      },
+      "MethodNotAllowed": {
+        "description": "This HTTP method is not allowed on this endpoint.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "This HTTP method is not allowed on this endpoint."
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "METHOD_NOT_ALLOWED"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 2
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation failed on one of the properties, please check the errors in the response body.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Invalid URL",
+                    "Alias is too long"
+                  ]
+                },
+                "fieldErrors": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "original_url": [
+                      "Invalid URL format"
+                    ],
+                    "alias": [
+                      "Alias must be between 1 and 20 characters"
+                    ]
+                  }
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "VALIDATION_ERROR"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 3
+                }
+              }
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Something went wrong"
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "INTERNAL_SERVER_ERROR"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 4
+                }
+              }
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "The requested resource was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Short URL not found"
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "NOT_FOUND"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 6
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "The request conflicts with the current state of the resource.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "This alias is not available"
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "CONFLICT"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 7
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResourceExpiredError": {
+        "description": "The requested resource has expired.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {}
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Verification token has expired"
+                  ]
+                },
+                "errorCode": {
+                  "type": "string",
+                  "example": "RESOURCE_EXPIRED"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 8
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Bearer token for authentication"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import { Router } from "express"
 
 import urlRoutes from "#features/url/routes/api.routes.js"
 import swaggerUi from 'swagger-ui-express';
-import swaggerApiDoc from "../../docs/APIdoc.json" with {type: "json"}
+import swaggerApiDoc from "../../docs/internal-doc.json" with {type: "json"}
 
 const router = Router()
 

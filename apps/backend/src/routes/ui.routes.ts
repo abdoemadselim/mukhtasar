@@ -9,5 +9,5 @@ import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js"
 const router = Router()
 
 router.use("/token", authSession(), tokenRoutes)
-router.use("/auth", ipRateLimiter(1, 10), authRoutes)
+router.use("/auth", ipRateLimiter(1, 30), authRoutes)
 export default router;

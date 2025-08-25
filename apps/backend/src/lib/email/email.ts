@@ -16,7 +16,7 @@ type MailType = {
     userEmail: string,
     userName: string,
     token: string,
-    type: string
+    type?: string
 }
 
 const testAccount = await createTestAccount()

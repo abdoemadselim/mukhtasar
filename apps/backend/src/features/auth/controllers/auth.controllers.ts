@@ -4,11 +4,11 @@ import type { Request, Response } from "express";
 // TODO: a feature import from the main? (something's wrong here)
 import { asyncStore } from "#root/main.js";
 
-import type { NewUserType } from "#features/auth/domain/auth.schemas.js";
+import type { NewUserType } from "@mukhtasar/shared";
 import * as authService from "#features/auth/domain/auth.service.js"
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
-import { NoException } from "../../../lib/error-handling/error-types.js";
+import { NoException, UnAuthorizedException } from "../../../lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // ---------------------- LOGIN ----------------------
@@ -22,15 +22,16 @@ export async function login(req: Request, res: Response) {
     // @ts-ignore
     req.user = user;
 
-    const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
     const sessionId = randomUUID()
+    const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
     res.cookie("muktasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: true,
+        secure: process.env.PRODUCTION ? true : false,
         sameSite: "lax"
     });
 
+    console.log("hello world")
     redisClient.setEx(
         `sessions:${sessionId}`,
         SESSION_DURATION / 1000,
@@ -72,7 +73,7 @@ export async function login(req: Request, res: Response) {
 }
 
 // ---------------------- REGISTER ----------------------
-export async function register(req: Request, res: Response) {
+export async function signup(req: Request, res: Response) {
     const start = Date.now();
     const { email, password, name } = req.body as NewUserType;
     const user = await authService.createUser({ email, password, name })
@@ -88,13 +89,13 @@ export async function register(req: Request, res: Response) {
     res.cookie("muktasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: true,
+        secure: process.env.PRODUCTION ? true : false,
         sameSite: "lax"
     });
 
     redisClient.setEx(
         `sessions:${sessionId}`,
-        SESSION_DURATION / 1000,
+        SESSION_DURATION,
         JSON.stringify({
             id: user.id,
             name: user.name,
@@ -281,3 +282,31 @@ export async function logout(req: Request, res: Response) {
 
 //     res.json(response);
 // }
+
+export async function verifyUser(req: Request, res: Response) {
+    const sessionId = req.cookies["muktasar-session"];
+
+    const session = await redisClient.get(`sessions:${sessionId}`)
+
+    console.log(sessionId)
+
+    if (!session) {
+        throw new UnAuthorizedException()
+    }
+
+    const user = JSON.parse(session)
+    const response = {
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+        data: {
+            user: {
+                name: user.name,
+                email: user.email,
+                verified: user.verified
+            }
+        }
+    };
+
+    res.json(response);
+}

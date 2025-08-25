@@ -1,5 +1,5 @@
 {
-  "name": "@mokhtasar/backend",
+  "name": "@mukhtasar/backend",
   "version": "1.0.0",
   "type": "module",
   "homepage": "",
@@ -39,6 +39,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@mukhtasar/shared": "workspace:*",
     "@types/body-parser": "^1.19.6",
     "@types/cors": "^2.8.19",
     "@types/swagger-ui-express": "^4.1.8",

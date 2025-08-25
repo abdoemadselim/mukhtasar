@@ -15,11 +15,14 @@ function validateRequest(schemas: { schemaDataType: SchemaDataType, schemaObject
 
             // If there're ZOD validation errors
             if (!result.success) {
-                // The original form of result.error is array of objects
-                // Here we're only interested in the errors (array of them)
-                // So we flat them, but still ZOD returns object of two errors types (formErrors, fieldErrors) --> Only interested in fieldErrors
-                const { fieldErrors, formErrors } = zod.flattenError(result.error)
-                
+                const fieldErrors = result.error.issues.reduce((acc, issue) => {
+                    const field = issue.path[0] as string;
+                    acc[field] = { message: issue.message };
+                    return acc;
+                }, {} as Record<string, { message: string }>);
+
+
+                const { formErrors } = zod.flattenError(result.error);
                 throw new ValidationException(fieldErrors as FieldErrorsType, formErrors)
             }
         })
