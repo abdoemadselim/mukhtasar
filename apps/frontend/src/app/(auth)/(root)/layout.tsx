@@ -20,7 +20,7 @@ export default function Layout({
                     />
                 </Link>
                 <p className="text-center pb-8 text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>
-                <section className="flex">
+                <section className="flex justify-center">
                     {children}
                 </section>
             </div>

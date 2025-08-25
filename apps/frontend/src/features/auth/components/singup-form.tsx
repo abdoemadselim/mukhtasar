@@ -1,19 +1,53 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { NewUserSchema, NewUserType } from '@mukhtasar/shared'
+import { SubmitHandler, useForm } from "react-hook-form"
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { signup } from '@/features/auth/service/auth'
+import { useAuth } from '@/features/auth/context/auth-context';
+
 export default function SignUpForm() {
+    const {checkAuth} = useAuth()
+    const router = useRouter()
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<NewUserType>({
+        resolver: zodResolver(NewUserSchema)
+    })
+
+    const onSubmit: SubmitHandler<NewUserType> = async (data) => {
+        const errors = await signup(data);
+
+        // Displaying the server errors
+        for (let error in errors) {
+            return setError(error as keyof NewUserType, { message: errors[error].message })
+        }
+
+        // If everything is ok, redirect to the verification page
+        await checkAuth()
+        router.replace("/verification")
+    }
+
     return (
         <form
-            action=""
+            onSubmit={handleSubmit(onSubmit)}
             className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
             <div className="p-8 pt-2 pb-6 md:w-[500px] w-[350px] sm:w-[450px]">
                 <div>
                     <h1 className="mb-1 mt-4 text-xl text-center text-primary font-semibold">أنشىء حسابك المجاني</h1>
                 </div>
-
+                <div id="root-error" aria-live="polite" aria-atomic="true" className='text-center'>
+                    {errors?.root &&
+                        <p className="mt-2 text-sm text-red-500" role="alert">
+                            {errors?.root.message}
+                        </p>
+                    }
+                </div>
                 <hr className="my-4 border-dashed" />
 
                 <div className="space-y-6 ">
@@ -24,11 +58,20 @@ export default function SignUpForm() {
                             الإسم الكامل
                         </Label>
                         <Input
+                            {...register("name")}
                             type="text"
-                            required
                             name="name"
                             id="name"
+                            aria-invalid={errors.name ? "true" : "false"}
                         />
+
+                        <div id="name-error" aria-live="polite" aria-atomic="true">
+                            {errors?.name &&
+                                <p className="mt-2 text-sm text-red-500" role="alert">
+                                    {errors?.name.message}
+                                </p>
+                            }
+                        </div>
                     </div>
                     <div className="space-y-2">
                         <Label
@@ -37,31 +80,77 @@ export default function SignUpForm() {
                             البريد الإلكتروني
                         </Label>
                         <Input
-                            type="email"
-                            required
+                            {...register("email")}
+                            type="text"
                             name="email"
                             id="email"
+                            aria-invalid={errors.email ? "true" : "false"}
                         />
+
+                        <div id="email-error" aria-live="polite" aria-atomic="true">
+                            {errors?.email &&
+                                <p className="mt-2 text-sm text-red-500" role="alert">
+                                    {errors.email.message}
+                                </p>
+                            }
+                        </div>
                     </div>
 
                     <div className="space-y-0.5">
                         <div className="flex items-center justify-between">
                             <Label
-                                htmlFor="pwd"
-                                className=" text-md">
+                                htmlFor="password"
+                                className="text-md">
                                 كلمة السر
                             </Label>
                         </div>
                         <Input
+                            {...register("password")}
                             type="password"
-                            required
-                            name="pwd"
-                            id="pwd"
+                            name="password"
+                            id="password"
                             className="input sz-md variant-mixed"
+                            aria-invalid={errors.password ? "true" : "false"}
                         />
+
+                        <div id="password-error" aria-live="polite" aria-atomic="true">
+                            {errors?.password &&
+
+                                <p className="mt-2 text-sm text-red-500" role="alert">
+                                    {errors.password.message}
+                                </p>
+                            }
+                        </div>
                     </div>
 
-                    <Button className="w-full cursor-pointer mt-4 text-md">سجل الاَن</Button>
+                    <div className="space-y-0.5">
+                        <div className="flex items-center justify-between">
+                            <Label
+                                htmlFor="password-confirmation"
+                                className="text-md">
+                                تأكيد كلمة السر
+                            </Label>
+                        </div>
+                        <Input
+                            {...register("password_confirmation")}
+                            type="password"
+                            name="password_confirmation"
+                            id="password_confirmation"
+                            className="input sz-md variant-mixed"
+                            disabled={isSubmitting}
+                            aria-invalid={errors.password_confirmation ? "true" : "false"}
+                        />
+
+                        <div aria-live="polite" aria-atomic="true">
+                            {errors?.password_confirmation &&
+                                <p className="mt-2 text-sm text-red-500" role="alert">
+                                    {errors.password_confirmation.message}
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <Button className="w-full cursor-pointer mt-4 text-md" type="submit" disabled={isSubmitting}>سجل الاَن</Button>
                 </div>
             </div>
 

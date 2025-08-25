@@ -18,16 +18,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useAuth } from "@/features/auth/context/auth-context"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import UserActionsDropDown from "@/features/user/components/user-actions-drop-down"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/pricing", label: "خطط الأسعار", active: true },
   { href: "/api", label: "API" },
-  { href: "/urls", label: "الروابط" },
+  { href: "/dashboard/urls", label: "الروابط" },
 ]
 
 export default function Navbar() {
+  const { user, isLoading } = useAuth()
   const pathname = usePathname();
+
   return (
     <header className="px-4 md:px-6 pt-4">
       <div className="container mx-auto bg-white px-10 rounded-xl">
@@ -99,6 +104,7 @@ export default function Navbar() {
             </Link>
 
           </div>
+
           {/* Navigation menu */}
           <NavigationMenu className="max-md:hidden">
             <NavigationMenuList className="gap-2">
@@ -114,14 +120,38 @@ export default function Navbar() {
               ))}
             </NavigationMenuList>
           </NavigationMenu>
+
           {/* Right side */}
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="text-md">
-              <Link href="signup">سجل دخول</Link>
-            </Button>
-            <Button asChild size="sm" className="text-md">
-              <Link href="login">اشتراك</Link>
-            </Button>
+            {isLoading ? (
+              // Loading skeleton
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-16 bg-gray-200 animate-pulse rounded"></div>
+                <div className="h-8 w-8 bg-gray-200 animate-pulse rounded-full"></div>
+              </div>
+            ) : user ? (
+              <>
+
+                <UserActionsDropDown >
+                  <div className="flex gap-6 items-center">
+                    <span className="w-16">{user.name}</span>
+                    <Avatar className="w-8">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>{user.name}</AvatarFallback>
+                    </Avatar>
+                  </div>
+                </UserActionsDropDown>
+              </>
+            ) : (
+              <>
+                <Button asChild variant="ghost" size="sm" className="text-md">
+                  <Link href="login">سجل دخول</Link>
+                </Button>
+                <Button asChild size="sm" className="text-md">
+                  <Link href="signup">اشتراك</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

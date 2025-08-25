@@ -3,6 +3,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import "@/app/globals.css";
 import { cairo } from "@/app/fonts";
+import { AuthProvider } from "@/features/auth/context/auth-context";
+import { UrlProvider } from "@/features/urls/context/urls-context";
 
 export const metadata: Metadata = {
   title: "مُختصِر | أول منتج عربي متكامل لإختصار الروابط",
@@ -19,9 +21,13 @@ export default function RootLayout({
       <body
         className={`${cairo.className} antialiased `}
       >
-        {children}
-        <SpeedInsights />
-        <Analytics />
+        <AuthProvider>
+          <UrlProvider>
+            {children}
+            {/* <SpeedInsights /> */}
+            {/* <Analytics /> */}
+          </UrlProvider>
+        </AuthProvider>
       </body>
     </html>
   );

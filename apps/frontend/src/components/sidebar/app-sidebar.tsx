@@ -20,17 +20,17 @@ import {
 const items = [
   {
     title: "الروابط",
-    url: "/urls",
+    url: "/dashboard/urls",
     icon: LinkIcon,
   },
   {
     title: "API (رمز الوصول)",
-    url: "/tokens",
+    url: "/dashboard/tokens",
     icon: Lock,
   },
    {
     title: "نطاق خاص",
-    url: "/domains",
+    url: "/dashboard/domains",
     icon: Globe,
   },
 ]
