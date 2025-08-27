@@ -17,11 +17,11 @@
   },
   "main": "./dist/main.js",
   "scripts": {
+    "build": "pnpm --filter @mukhtasar/shared run tsc && pnpm --filter @mukhtasar/frontend build",
     "dev:backend": "pnpm --filter @mukhtasar/backend dev",
     "dev:frontend": "pnpm --filter @mukhtasar/frontend dev",
     "dev": "pnpm dev:backend & pnpm dev:frontend",
     "watch:backend": "pnpm --filter @mukhtasar/backend watch",
-    "build": "pnpm --parallel build",
     "prepare": "husky"
   },
   "keywords": [
