@@ -9,7 +9,7 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
+import { DeleteConfirmationDialog } from "../../../../delete-confirmation-dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,

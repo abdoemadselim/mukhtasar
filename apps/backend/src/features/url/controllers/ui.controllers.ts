@@ -138,3 +138,78 @@ export async function getUrlsPage(req: Request, res: Response) {
 
     res.json(response)
 }
+
+export async function deleteUrl(req: Request, res: Response) {
+    const start = Date.now();
+
+    // 1- prepare the data for the service
+    const { domain, alias } = req.params;
+
+    // 2- pass the prepared data to the service
+    const url = await urlService.deleteUrl({ alias, domain })
+
+    // 3- prepare the response
+    const response = {
+        data: url,
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    }
+
+    // TODO: Can't be abstracted?
+    const durationMs = Date.now() - start;
+    const store = asyncStore.getStore()
+
+    log(LOG_TYPE.INFO, {
+        message: "Delete URL",
+        requestId: store?.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        status: 200,
+        durationMs,
+        user_email: (req as any).user.email
+    })
+
+    // 4- send the response
+    res.json(response)
+}
+
+export async function updateUrl(req: Request, res: Response) {
+    const start = Date.now();
+
+    // 1- prepare the data for the service
+    const { alias, domain } = req.params;
+    const { original_url } = req.body;
+
+    // 2- pass the prepared data to the service
+    await urlService.updateUrl({ alias, domain }, original_url)
+
+    // 3- prepare the response
+    const response = {
+        data: {
+            url: original_url,
+            alias,
+            domain
+        },
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    }
+
+    // TODO: Can't be abstracted?
+    const durationMs = Date.now() - start;
+    const store = asyncStore.getStore()
+
+    log(LOG_TYPE.INFO, {
+        message: "Update URL",
+        requestId: store?.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        status: 200,
+        durationMs,
+        user_email: (req as any).user.email
+    })
+
+    // 4- send the response
+    res.json(response)
+}

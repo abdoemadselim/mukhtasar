@@ -1,4 +1,5 @@
-import { useState } from "react"
+'use client'
+import { useEffect, useState } from "react"
 import { AlertTriangle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,40 +15,44 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { openToaster } from "@/components/ui/sonner"
+
+import { useDeleteToken } from "@/features/token/hooks/tokens-query"
+import { TokenType } from "@mukhtasar/shared"
 
 
-interface DeleteConfirmationDialogProps {
+type DeleteConfirmationDialogProps<T> = {
     children: React.ReactNode
     title: string
     description: string
     confirmationText: string
-    confirmationLabel: string
-    onConfirm: () => void
+    confirmationLabel: string,
+    deleteResourceMutation: () => Promise<T>
 }
 
-export function DeleteConfirmationDialog({
+export function DeleteConfirmationDialog<T>({
     children,
+    deleteResourceMutation,
     title,
     description,
     confirmationText,
     confirmationLabel,
-    onConfirm
-}: DeleteConfirmationDialogProps) {
+}: DeleteConfirmationDialogProps<T>) {
     const [inputValue, setInputValue] = useState("")
     const [isOpen, setIsOpen] = useState(false)
-
-    const handleDeleteToken = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (inputValue === confirmationText) {
-            onConfirm()
-            setIsOpen(false)
-            setInputValue("")
-        }
-    }
 
     const handleClose = () => {
         setIsOpen(false)
         setInputValue("")
+    }
+
+    const handleDeleteToken = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (inputValue === confirmationText) {
+            deleteResourceMutation()
+            setIsOpen(false)
+            setInputValue("")
+        }
     }
 
     const isValid = inputValue === confirmationText
@@ -86,9 +91,11 @@ export function DeleteConfirmationDialog({
                             {confirmationLabel}
                         </Label>
                         <div className="text-right">
-                            <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
-                                {confirmationText}
-                            </code>
+                            <Input
+                                value={confirmationText}
+                                readOnly
+                                className="font-mono text-sm bg-gray-200"
+                            />
                         </div>
                         <Input
                             id="confirmation-input"
@@ -114,7 +121,6 @@ export function DeleteConfirmationDialog({
                         </Button>
                     </DialogClose>
                     <Button
-                        type="submit"
                         variant="destructive"
                         disabled={!isValid}
                         className="cursor-pointer"

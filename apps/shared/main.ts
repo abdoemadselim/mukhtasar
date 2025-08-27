@@ -55,12 +55,12 @@ const aliasSchema = zod
 
 const domainSchema = zod
     .string("يُرجى إدخال النطاق المناسب.")
-    .regex(zod.regexes.domain, "هذا النطاق غير صالح..")
+    .regex(zod.regexes.domain, "يُرجى إدخال نطاق صحيح.")
 
 const urlSchema = zod.url({
     protocol: /^https?$/,
     hostname: zod.regexes.domain,
-    error: (url) => url.input == undefined || url.input == "" ? "يرجى إدخال رابط صحيح." : "هذا الرابط غير صحيح."
+    error: "يُرجى إدخال رابط صحيح"
 })
 
 export const ParamsSchema = zod.object({
@@ -71,7 +71,7 @@ export const ParamsSchema = zod.object({
 export const ShortUrlSchema = zod.object({
     original_url: urlSchema,
     alias: aliasSchema.optional().or(zod.literal("")),
-    domain: zod.optional(domainSchema),
+    domain: domainSchema.optional().or(zod.literal("")),
     description: zod.optional(zod.string().trim().max(300, "يجب ألا يتجاوز الوصف 300 حرف.")),
 })
 
@@ -82,16 +82,22 @@ export const ToUpdateUrlSchema = zod.object({
 export type ParamsType = zod.infer<typeof ParamsSchema>;
 export type ShortUrlType = zod.infer<typeof ShortUrlSchema>;
 export type ToUpdateUrlType = zod.infer<typeof ToUpdateUrlSchema>;
+export type FullUrlType = ShortUrlType & {
+    id: number,
+    created_at: string,
+    click_count: number,
+    short_url: string
+}
 
 const labelSchema = zod
-    .string("Label is required.")
+    .string("يُرجى إدخال رمز مرور صحيح.")
     .trim()
-    .min(1, "Label must not be less than 1 character.")
-    .max(100, "Label must not be greater than 100 characters.");
+    .min(1, "يُرجى إدخال رمز مرور صحيح.")
+    .max(100, "يجب ألا يتجاوز الاسم 100 حرف.")
 
-const canUpdateSchema = zod.boolean("can_update permission is required.");
-const canCreateSchema = zod.boolean("can_create permission is required.");
-const canDeleteSchema = zod.boolean("can_delete permission is required.")
+const canUpdateSchema = zod.boolean("can_update مطلوب.");
+const canCreateSchema = zod.boolean("can_create مطلوب.");
+const canDeleteSchema = zod.boolean("can_delete مطلوب.")
 
 export const TokenSchema = zod.object({
     label: labelSchema,
@@ -102,20 +108,23 @@ export const TokenSchema = zod.object({
 
 export const TokenParams = zod.object({
     tokenId: zod
-        .string("Token Id is required.")
+        .string("مُعرّف الرمز(tokenId) مطلوب.")
         .trim()
-        .min(1, "Invalid Token Id.")
+        .min(1, "مُعرّف الرمز(tokenId) غير صالح.")
 })
 
 export const ToUpdateTokenSchema = zod.object({
-    label: zod.optional(labelSchema),
-    can_create: zod.optional(canCreateSchema),
-    can_update: zod.optional(canUpdateSchema),
-    can_delete: zod.optional(canDeleteSchema)
-}).refine((data) => !(data.label == undefined && data.can_create == undefined && data.can_update == undefined && data.can_delete == undefined), {
-    message: "At least one field must be provided to update the token."
+    label: labelSchema,
+    can_create: canCreateSchema,
+    can_update: canUpdateSchema,
+    can_delete: canDeleteSchema
 })
 
 export type TokenType = zod.infer<typeof TokenSchema>;
 export type TokenParamsType = zod.infer<typeof TokenParams>;
 export type ToUpdateTokenType = zod.infer<typeof ToUpdateTokenSchema>;
+export type FullTokenType = TokenType & {
+    id: number,
+    created_at: string,
+    last_used: string
+}

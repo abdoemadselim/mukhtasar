@@ -3,12 +3,15 @@
 import {
     MoreVertical,
     Check,
-    X
+    X,
+    Settings,
+    Delete
 } from "lucide-react"
 
 import {
     ColumnDef,
 } from "@tanstack/react-table"
+import { FullTokenType } from "@mukhtasar/shared"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,14 +20,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
+import { Badge } from "@/components/ui/badge"
 
 import UpdateTokenDialog from "@/features/token/components/update-token-dialog"
-import { Badge } from "@/components/ui/badge"
-import { deleteToken } from "@/features/token/service/tokens-service"
-import { TokenType } from "@mukhtasar/shared"
+import { DeleteTokenDialog } from "@/features/token/components/delete-token-dialog"
 
-export const columns: ColumnDef<TokenType>[] = [
+export const columns: ColumnDef<FullTokenType>[] = [
     {
         accessorKey: "label",
         header: () => <p className="lg:text-lg">التسمية</p>,
@@ -98,13 +99,6 @@ export const columns: ColumnDef<TokenType>[] = [
         id: "actions",
         header: () => <p className="lg:text-lg">إجراءات</p>,
         cell: ({ row }) => {
-            const handleDeleteToken = async () => {
-                // Your delete logic here
-                await deleteToken(Number(row.id));
-                
-                // redirect(`${pathname}`)
-            }
-
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -117,24 +111,30 @@ export const columns: ColumnDef<TokenType>[] = [
                             <span className="sr-only">Open menu</span>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-32">
-                        <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
+                    <DropdownMenuContent align="end" className="flex flex-col gap-2 py-2">
+                        <DropdownMenuItem asChild >
                             <UpdateTokenDialog
                                 currentToken={row.original}
                             >
-                                <span className="w-full block">تعديل الرمز</span>
+                                <Button variant="ghost" className="w-full text-end flex h-fit py-1 justify-end px-2 items-center text-sm">
+                                    تعديل الرمز
+                                    <Settings size={16} />
+                                </Button>
                             </UpdateTokenDialog>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
-                            <DeleteConfirmationDialog
+                        <DropdownMenuItem asChild>
+                            <DeleteTokenDialog
+                                resource_id={row.id}
                                 title="حذف رمز الوصول"
                                 description="هذا الإجراء سيحذف رمز الوصول نهائياً وسيتوقف عن العمل فوراً."
                                 confirmationText={row.original.label}
                                 confirmationLabel="اكتب تسمية الرمز لتأكيد الحذف:"
-                                onConfirm={handleDeleteToken}
                             >
-                                <span className="w-full block text-red-600">إزالة الرمز</span>
-                            </DeleteConfirmationDialog>
+                                <Button variant="ghost" className="w-full text-end h-fit py-1 flex gap-2 text-red-600 justify-end px-2 items-center text-sm hover:text-red-600">
+                                    حذف الرمز
+                                    <Delete size={16} />
+                                </Button>
+                            </DeleteTokenDialog>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

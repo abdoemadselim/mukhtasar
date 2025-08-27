@@ -76,7 +76,7 @@ export default function LandingUrlCreationForm() {
 
     const handleCopy = async () => {
         await navigator.clipboard.writeText(createdUrl?.short_url || "")
-        openToaster("تم نسخ الرابط إلى حافظتك بنجاح.")
+        openToaster("تم نسخ الرابط إلى حافظتك بنجاح.", "success")
     }
 
     return (

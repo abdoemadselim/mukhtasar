@@ -4,17 +4,19 @@ import Link from "next/link"
 import { toast } from "sonner"
 
 import {
+  ChartArea,
   Copy,
+  Delete,
   MoreVertical,
+  Settings,
 } from "lucide-react"
-
 import {
   ColumnDef,
 } from "@tanstack/react-table"
+import { FullUrlType } from "@mukhtasar/shared"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,10 +25,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { UpdateUrlDialog } from "@/features/url/components/update-url-dialog"
-import { UrlType } from "@/features/url/schemas/scheme"
+import { DeleteUrlDialog } from "@/features/url/components/delete-url-dialog"
 
 
-export const columns: ColumnDef<UrlType>[] = [
+export const columns: ColumnDef<FullUrlType>[] = [
   {
     accessorKey: "alias",
     header: () => <p className="lg:text-lg pr-2">الاسم المستعار</p>,
@@ -112,11 +114,6 @@ export const columns: ColumnDef<UrlType>[] = [
     id: "actions",
     header: () => <p className="lg:text-lg">إجراءات</p>,
     cell: ({ row }) => {
-      const handleDeleteUrl = () => {
-        // Your delete logic here
-        console.log("Deleting URL:", row.original.short_url)
-      }
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -129,32 +126,39 @@ export const columns: ColumnDef<UrlType>[] = [
               <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuContent align="end" >
             <DropdownMenuItem
-              className="block w-full text-right cursor-pointer"
+              className="flex gap-2 pr-3 justify-end items-center text-right cursor-pointer"
             >
-              <Link href={`/dashboard/urls/${row.original.id}`}>
+              <Link href={`/dashboard/urls/${row.original.id}`} className="text-sm font-semibold">
                 عرض التحليلات
               </Link>
+              <ChartArea size={16}/>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
-              <UpdateUrlDialog >
-                <span className="w-full block">تعديل الرابط</span>
+            <DropdownMenuItem asChild>
+              <UpdateUrlDialog currentUrl={row.original}>
+                <Button variant="ghost" className="w-full text-end flex h-fit py-1 justify-end px-2 items-center text-sm">
+                  تعديل الرابط
+                  <Settings size={16} />
+                </Button>
               </UpdateUrlDialog>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
-              <DeleteConfirmationDialog
-                title="حذف الرابط المختصر"
-                description="هذا الإجراء سيحذف الرابط المختصر نهائياً ولن يمكن التراجع عنه."
+            <DropdownMenuItem asChild>
+              <DeleteUrlDialog
+                resource={row.original}
+                title="حذف الرابط"
+                description="هذا الإجراء سيحذف الرابط نهائياً وسيتوقف عن العمل فوراً."
                 confirmationText={row.original.short_url}
                 confirmationLabel="اكتب الرابط المختصر لتأكيد الحذف:"
-                onConfirm={handleDeleteUrl}
               >
-                <span className="w-full block text-red-600">إزالة الرابط</span>
-              </DeleteConfirmationDialog>
+                <Button variant="ghost" className="w-full text-end h-fit py-1 flex gap-2 text-red-600 justify-end px-2 items-center text-sm hover:text-red-600">
+                  حذف الرابط
+                  <Delete size={16} />
+                </Button>
+              </DeleteUrlDialog>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
       )
     },
   }

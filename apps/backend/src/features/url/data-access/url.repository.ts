@@ -20,7 +20,7 @@ const urlRepository = {
             `SELECT id, alias, domain, original_url, short_url, click_count, created_at 
             FROM url 
             WHERE user_id = $1 
-            ORDER BY created_at
+            ORDER BY created_at DESC
             OFFSET $2 LIMIT $3
             
             `,
@@ -35,7 +35,7 @@ const urlRepository = {
         )
 
         const result = await Promise.all([urls_result, total_pages_result]);
-        return {urls: result[0].rows, total: Number(result[1].rows[0].total)};
+        return { urls: result[0].rows, total: Number(result[1].rows[0].total) };
     },
 
     async getUrlByAliasAndDomain({ alias, domain }: ParamsType): Promise<UrlType | undefined> {

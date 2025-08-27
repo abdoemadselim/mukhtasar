@@ -1,10 +1,12 @@
 import { Router } from "express"
 
 // TODO: we heavily depend on the token feature here
-import { shortUrlSchema } from "#features/url/domain/url-schemas.js";
+import { paramsSchema, shortUrlSchema, toUpdateUrlSchema } from "#features/url/domain/url-schemas.js";
 import {
     createUrl,
-    getUrlsPage
+    deleteUrl,
+    getUrlsPage,
+    updateUrl
 } from "#features/url/controllers/ui.controllers.js"
 import { authSession } from "#features/auth/domain/auth.service.js";
 
@@ -26,5 +28,22 @@ router.get(
     authSession(),
     getUrlsPage
 )
+
+router.delete(
+    "/:domain/:alias",
+    ipRateLimiter(1, 40),
+    validateRequest([paramsSchema]),
+    authSession(),
+    deleteUrl
+)
+
+// Change the long url (Update the attached destination)
+router.patch("/:domain/:alias",
+    ipRateLimiter(1, 50),
+    validateRequest([paramsSchema, toUpdateUrlSchema]),
+    authSession(),
+    updateUrl
+)
+
 
 export default router;

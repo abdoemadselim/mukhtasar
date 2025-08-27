@@ -1,4 +1,7 @@
 import { useState } from "react"
+import { Copy, CheckCircle, Eye, EyeOff, AlertTriangle } from "lucide-react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -10,18 +13,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Copy, CheckCircle, Eye, EyeOff, AlertTriangle } from "lucide-react"
-import { toast } from "sonner"
-import React from "react"
 
-interface TokenSuccessDialogProps {
+type TokenSuccessDialogProps = {
     isOpen: boolean
     onClose: () => void
     token: string
-    label: string
 }
 
-export function TokenSuccessDialog({ isOpen, onClose, token, label }: TokenSuccessDialogProps) {
+export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialogProps) {
     const [showToken, setShowToken] = useState(false)
     const [copied, setCopied] = useState(false)
 
@@ -54,7 +53,7 @@ export function TokenSuccessDialog({ isOpen, onClose, token, label }: TokenSucce
                     <Alert className="border-amber-200 bg-amber-50">
                         <AlertTriangle className="h-4 w-4 text-amber-600" />
                         <AlertDescription className="text-amber-800 text-right">
-                            <strong>تنبيه مهم:</strong> هذا الرمز سيظهر مرة واحدة فقط. تأكد من نسخه وحفظه في مكان آمن.
+                            <strong>تنبيه هام:</strong> هذا الرمز سيظهر مرة واحدة فقط. تأكد من نسخه وحفظه في مكان آمن.
                         </AlertDescription>
                     </Alert>
 

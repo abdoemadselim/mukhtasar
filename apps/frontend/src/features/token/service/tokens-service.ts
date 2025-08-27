@@ -30,3 +30,17 @@ export async function deleteToken(token_id: number) {
     throwOnError: true,
   });
 }
+
+export async function updateToken({ id, can_create, can_update, can_delete, label }: Partial<TokenType> & { id: number }) {
+  const toUpdateResource = {
+    can_create,
+    can_update,
+    can_delete,
+    label
+  }
+
+  return apiClient.patch(`/token/${id}`, toUpdateResource, {
+    cache: "no-store",
+    throwOnError: true,
+  });
+}
