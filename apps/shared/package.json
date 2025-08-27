@@ -1,12 +1,19 @@
 {
-  "private:": true,
+  "private": true,
   "name": "@mukhtasar/shared",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
-    "watch": "tsc --watch"
+    "build": "rm -rf dist && tsc"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/main.js",
+      "types": "./dist/main.d.ts"
+    }
   },
   "author": "Abdulrahman Emad"
 }

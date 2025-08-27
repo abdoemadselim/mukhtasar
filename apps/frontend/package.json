@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3002",
-    "build": "pnpm build:deps && next build",
-    "build:deps": "pnpm --filter @mukhtasar/shared run tsc",
+    "build": "next build",
     "start": "next start -p 3002",
     "lint": "next lint"
   },
