@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Highlighter } from "@/components/ui/highlighter";
@@ -21,7 +22,10 @@ export default async function TokensPage() {
                                     <span className="hidden lg:inline text-md">أنشىء رمز وصول</span>
                                 </Button>
                             </CreateTokenDialog>
-                            <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">رموز وصولك (APIs)</Highlighter></h1>
+                            <div className="flex gap-4 items-center">
+                                <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">رموز وصولك (APIs)</Highlighter></h1>
+                                <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg" href="/api/docs"> (API documentation) وثائق المطورين</Link>
+                            </div>
                         </div>
                         <Suspense fallback={<DataTableSkeleton />}>
                             <TokensTable />

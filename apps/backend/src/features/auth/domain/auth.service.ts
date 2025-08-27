@@ -9,7 +9,7 @@ import authRepository from "#features/auth/data-access/auth.repository.js";
 import type { NewUserType } from "@mukhtasar/shared";
 import { LoginException, UnVerifiedException } from "#features/auth/domain/error-types.js";
 
-import { ConflictException, NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "../../../lib/error-handling/error-types.js";
+import { NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
 import { sendVerificationMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { log, LOG_TYPE } from "#lib/logger/logger.js";

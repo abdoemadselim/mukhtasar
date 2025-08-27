@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { login, logout, signup, verify, verifyUser } from "#features/auth/controllers/auth.controllers.js";
+import { login, logout, signup, verify, verifyUser } from "#root/features/auth/controllers/ui.controllers.js";
 import { forgotPasswordSchema, loginSchema, newUserSchema, userVerificationSchema } from "#features/auth/domain/auth.schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";

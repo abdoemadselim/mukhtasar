@@ -8,7 +8,7 @@ import type { NewUserType } from "@mukhtasar/shared";
 import * as authService from "#features/auth/domain/auth.service.js"
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
-import { NoException, UnAuthorizedException } from "../../../lib/error-handling/error-types.js";
+import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // ---------------------- LOGIN ----------------------
