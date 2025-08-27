@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { TokenType } from "@mukhtasar/shared"
+import { FullTokenType, TokenType } from "@mukhtasar/shared"
 
 import { createToken, deleteToken, getTokens, updateToken } from "@/features/token/service/tokens-service"
 
 export function useGetTokens({ page, page_size }: { page: number, page_size: number }) {
-    return useQuery<{ tokens: TokenType[], total: number }>({
+    return useQuery<{ tokens: FullTokenType[], total: number }>({
         queryKey: ["tokens", { page, page_size }],
         queryFn: () => getTokens({ page, page_size }),
         staleTime: 5 * 60 * 1000, // 5 minutes,

@@ -2,7 +2,7 @@
 
 import { AlertCircleIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { TokenType } from "@mukhtasar/shared";
+import { FullTokenType, TokenType } from "@mukhtasar/shared";
 
 import { DataTable } from "@/components/data-table";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -41,7 +41,7 @@ export default function TokensTable() {
                     <AlertTitle>{error.message}</AlertTitle>
                 </Alert>
             }
-            <DataTable<TokenType> data={data?.tokens || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
+            <DataTable<FullTokenType> data={data?.tokens || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
         </>
     )
 }

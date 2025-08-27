@@ -7,7 +7,7 @@ import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 import { DataTable } from "@/components/data-table";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 
-import { UrlType } from "@/features/url/schemas/scheme";
+import { FullUrlType } from "@mukhtasar/shared"; 
 import { columns } from "@/features/url/components/data-table-cols-defs";
 import { useGetUrls } from "@/features/url/hooks/urls-query";
 
@@ -39,7 +39,7 @@ export default function UrlTable() {
                     <AlertTitle>{error.message}</AlertTitle>
                 </Alert>
             }
-            <DataTable<UrlType> data={data?.urls || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
+            <DataTable<FullUrlType> data={data?.urls || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
         </>
     )
 

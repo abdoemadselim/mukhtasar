@@ -9,7 +9,7 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DeleteConfirmationDialog } from "../../../../delete-confirmation-dialog"
+import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -77,15 +77,14 @@ export const columns: ColumnDef<DomainType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
             <DropdownMenuItem onClick={(e) => e.preventDefault()} className="block w-full text-right">
-              <DeleteConfirmationDialog
+              {/* <DeleteConfirmationDialog
                 title="حذف النطاق"
                 description="هذا الإجراء سيحذف النطاق نهائياً وسيتوقف عن العمل فوراً."
                 confirmationText={row.original.domain}
                 confirmationLabel="اكتب النطاق لتأكيد الحذف:"
-                onConfirm={handleDeleteDomain}
               >
                 <span className="w-full block text-red-600">إزالة النطاق</span>
-              </DeleteConfirmationDialog>
+              </DeleteConfirmationDialog> */}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
