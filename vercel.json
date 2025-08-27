@@ -1,8 +1,17 @@
 {
+  "version": 2,
+  "buildCommand": "cd apps/shared && npm run tsc && cd ../frontend && npm run build",
+  "installCommand": "pnpm install --frozen-lockfile",
   "builds": [
-    { "src": "apps/frontend/package.json", "use": "@vercel/next" }
+    {
+      "src": "apps/frontend/next.config.js",
+      "use": "@vercel/next"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "apps/frontend/$1" }
+    {
+      "src": "/(.*)",
+      "dest": "apps/frontend/$1"
+    }
   ]
 }
