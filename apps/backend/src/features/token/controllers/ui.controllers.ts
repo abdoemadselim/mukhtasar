@@ -13,7 +13,7 @@ export async function generateToken(req: Request, res: Response) {
 
     // @ts-ignore
     const user_id = req.user?.id;
-    
+
     if (!user_id) {
         throw new UnAuthorizedException()
     }
@@ -120,27 +120,34 @@ export async function deleteToken(req: Request, res: Response) {
     res.json(response);
 }
 
-export async function getTokens(req: Request, res: Response) {
+
+
+export async function getTokensPage(req: Request, res: Response) {
     const start = Date.now();
 
-    // @ts-ignore
-    const userId = req.user?.id;
-    if (!userId) throw new UnAuthorizedException();
+    //1- prepare the data for the service
+    const { id } = (req as any).user;
+    const { page = 0, pageSize = 10 } = req.query;
 
-    const tokens = await tokenService.getTokens(userId);
+    //2- pass the data to the service
+    const { tokens, total } = await tokenService.getTokensPage({ user_id: id, page: Number(page), page_size: Number(pageSize) })
 
+    //3- prepare the response
     const response = {
-        data: { tokens },
+        data: {
+            tokens,
+            total
+        },
         errors: [],
         code: NoException.NoErrorCode,
-        errorCode: NoException.NoErrorCodeString,
-    };
+        errorCode: NoException.NoErrorCodeString
+    }
 
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore();
 
     log(LOG_TYPE.INFO, {
-        message: "Get tokens",
+        message: "Get tokens page",
         requestId: store?.requestId,
         method: req.method,
         path: req.originalUrl,

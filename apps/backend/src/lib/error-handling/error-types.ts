@@ -19,18 +19,22 @@ export class HttpException extends Error {
 export class InternalServerException extends HttpException {
     static STATUS_CODE: number = 500;
     static RESPONSE_CODE: number = 4;
-    static MESSAGE: string = "Something went wrong";
+    static MESSAGE: string = "حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا.";
     static ERROR_CODE_STRING: string = "INTERNAL_SERVER_ERROR";
 
     constructor() {
-
-        super(InternalServerException.STATUS_CODE, InternalServerException.RESPONSE_CODE, InternalServerException.MESSAGE, "INTERNAL_SERVER_ERROR",);
+        super(
+            InternalServerException.STATUS_CODE,
+            InternalServerException.RESPONSE_CODE,
+            InternalServerException.MESSAGE,
+            "INTERNAL_SERVER_ERROR",
+        );
     }
 }
 
 export class RateLimitingException extends HttpException {
     constructor() {
-        super(429, 5, "Rate limit exceeded. Please try again later.", "RATE_LIMIT_EXCEEDED");
+        super(429, 5, "لقد قمت بعدد كبير من الطلبات في وقت قصير. الرجاء الانتظار قليلاً ثم المحاولة مجددًا.", "RATE_LIMIT_EXCEEDED");
         this.name = this.constructor.name;
         Error.captureStackTrace(this);
     }
@@ -38,15 +42,15 @@ export class RateLimitingException extends HttpException {
 
 export class MethodNotAllowedException extends HttpException {
     constructor() {
-        super(405, 2, "This HTTP method is not allowed on this endpoint.", "METHOD_NOT_ALLOWED");
+        super(405, 2, "طريقة الطلب (HTTP Method) غير مسموح بها على هذا المسار.", "METHOD_NOT_ALLOWED");
         this.name = this.constructor.name;
         Error.captureStackTrace(this);
     }
 }
 
 export class UnAuthorizedException extends HttpException {
-    constructor() {
-        super(401, 2, "You are not authorized to perform this action on this resource.", "UNAUTHORIZED");
+    constructor(message?: string) {
+        super(401, 2, message || "غير مسموح لك بتنفيذ هذا الإجراء على هذا المورد.", "UNAUTHORIZED");
         this.name = this.constructor.name;
         Error.captureStackTrace(this);
     }
@@ -64,7 +68,7 @@ export class ValidationException extends HttpException {
     FieldErrors: FieldErrorsType
     errors?: string[]
     constructor(FieldErrors: FieldErrorsType, errors?: string[]) {
-        super(422, 3, "Validation Exception", "VALIDATION_ERROR");
+        super(422, 3, "خطأ في التحقق من صحة البيانات.", "VALIDATION_ERROR");
         this.FieldErrors = FieldErrors;
         this.errors = errors;
 
@@ -80,7 +84,7 @@ export class NoException {
 
 export class ConflictException extends HttpException {
     constructor(message: string) {
-        super(409, 7, message, "CONFLICT")
+        super(409, 7, message || "هناك تعارض مع حالة المورد الحالية.", "CONFLICT")
 
         this.name = this.constructor.name;
         Error.captureStackTrace(this);
@@ -92,7 +96,7 @@ export class ResourceExpiredException extends HttpException {
     static RESPONSE_CODE: number = 8;
 
     constructor(message: string) {
-        super(401, 8, message, "RESOURCE_EXPIRED")
+        super(401, 8, message || "انتهت صلاحية الوصول إلى هذا المورد.", "RESOURCE_EXPIRED")
 
         this.name = this.constructor.name;
         Error.captureStackTrace(this);

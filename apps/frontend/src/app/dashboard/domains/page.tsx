@@ -5,9 +5,9 @@ import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 
-import data from "@/features/domains/data.json"
-import { DomainType } from "@/features/domains/schemas/schema";
-import { columns } from "@/features/domains/components/data-table-cols-defs"
+// import data from "@/features/domains/data.json"
+import { DomainType } from "@/features/domain/schemas/schema";
+import { columns } from "@/features/domain/components/data-table-cols-defs"
 
 export default function DomainsPage() {
     return (
@@ -22,7 +22,7 @@ export default function DomainsPage() {
                     </div>
 
                     <Suspense fallback={<DataTableSkeleton />}>
-                        <DataTable<DomainType> data={data} columns={columns} />
+                        {/* <DataTable<DomainType> data={data} columns={columns} /> */}
                     </Suspense>
                 </div>
             </div>

@@ -12,9 +12,11 @@ import { Label } from '@/components/ui/label'
 
 import { signup } from '@/features/auth/service/auth'
 import { useAuth } from '@/features/auth/context/auth-context';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { AlertCircleIcon } from 'lucide-react';
 
 export default function SignUpForm() {
-    const {checkAuth} = useAuth()
+    const { checkAuth } = useAuth()
     const router = useRouter()
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<NewUserType>({
         resolver: zodResolver(NewUserSchema)
@@ -43,9 +45,10 @@ export default function SignUpForm() {
                 </div>
                 <div id="root-error" aria-live="polite" aria-atomic="true" className='text-center'>
                     {errors?.root &&
-                        <p className="mt-2 text-sm text-red-500" role="alert">
-                            {errors?.root.message}
-                        </p>
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertCircleIcon />
+                            <AlertTitle> {errors.root?.message}</AlertTitle>
+                        </Alert>
                     }
                 </div>
                 <hr className="my-4 border-dashed" />

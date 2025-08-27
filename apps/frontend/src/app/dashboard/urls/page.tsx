@@ -1,15 +1,12 @@
-import { Suspense } from "react";
 import { Plus } from "lucide-react";
+import { Suspense } from "react";
 
-import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Highlighter } from "@/components/ui/highlighter";
-
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { columns } from "@/features/urls/components/data-table-cols-defs";
-import { CreateUrlDialog } from "@/features/urls/components/create-url-dialog";
-import { UrlType } from "@/features/urls/schemas/scheme";
-import data from "@/features/urls/data.json"
+
+import { CreateUrlDialog } from "@/features/url/components/create-url-dialog";
+import UrlTable from "@/features/url/components/url-table";
 
 export default function UrlPage() {
     return (
@@ -26,8 +23,9 @@ export default function UrlPage() {
                             </CreateUrlDialog>
                             <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">روابطك</Highlighter></h1>
                         </div>
+
                         <Suspense fallback={<DataTableSkeleton />}>
-                            <DataTable<UrlType> data={data} columns={columns} />
+                            <UrlTable />
                         </Suspense>
                     </div>
                 </div>

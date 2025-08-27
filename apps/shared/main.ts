@@ -60,7 +60,7 @@ const domainSchema = zod
 const urlSchema = zod.url({
     protocol: /^https?$/,
     hostname: zod.regexes.domain,
-    error: (url) => url.input == undefined ? " يرجى إدخال رابط صحيح." : "هذا الرابط غير صحيح."
+    error: (url) => url.input == undefined || url.input == "" ? "يرجى إدخال رابط صحيح." : "هذا الرابط غير صحيح."
 })
 
 export const ParamsSchema = zod.object({
@@ -72,7 +72,7 @@ export const ShortUrlSchema = zod.object({
     original_url: urlSchema,
     alias: aliasSchema.optional().or(zod.literal("")),
     domain: zod.optional(domainSchema),
-    description: zod.optional(zod.string().trim().max(300, "يجب ألا يتجاوز الوصف 300 حرف."))
+    description: zod.optional(zod.string().trim().max(300, "يجب ألا يتجاوز الوصف 300 حرف.")),
 })
 
 export const ToUpdateUrlSchema = zod.object({
@@ -82,3 +82,40 @@ export const ToUpdateUrlSchema = zod.object({
 export type ParamsType = zod.infer<typeof ParamsSchema>;
 export type ShortUrlType = zod.infer<typeof ShortUrlSchema>;
 export type ToUpdateUrlType = zod.infer<typeof ToUpdateUrlSchema>;
+
+const labelSchema = zod
+    .string("Label is required.")
+    .trim()
+    .min(1, "Label must not be less than 1 character.")
+    .max(100, "Label must not be greater than 100 characters.");
+
+const canUpdateSchema = zod.boolean("can_update permission is required.");
+const canCreateSchema = zod.boolean("can_create permission is required.");
+const canDeleteSchema = zod.boolean("can_delete permission is required.")
+
+export const TokenSchema = zod.object({
+    label: labelSchema,
+    can_create: canCreateSchema,
+    can_update: canUpdateSchema,
+    can_delete: canDeleteSchema
+})
+
+export const TokenParams = zod.object({
+    tokenId: zod
+        .string("Token Id is required.")
+        .trim()
+        .min(1, "Invalid Token Id.")
+})
+
+export const ToUpdateTokenSchema = zod.object({
+    label: zod.optional(labelSchema),
+    can_create: zod.optional(canCreateSchema),
+    can_update: zod.optional(canUpdateSchema),
+    can_delete: zod.optional(canDeleteSchema)
+}).refine((data) => !(data.label == undefined && data.can_create == undefined && data.can_update == undefined && data.can_delete == undefined), {
+    message: "At least one field must be provided to update the token."
+})
+
+export type TokenType = zod.infer<typeof TokenSchema>;
+export type TokenParamsType = zod.infer<typeof TokenParams>;
+export type ToUpdateTokenType = zod.infer<typeof ToUpdateTokenSchema>;

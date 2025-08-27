@@ -24,10 +24,10 @@ export async function login(req: Request, res: Response) {
 
     const sessionId = randomUUID()
     const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
-    res.cookie("muktasar-session", sessionId, {
+    res.cookie("mukhtasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: process.env.PRODUCTION ? true : false,
+        secure: false,
         sameSite: "lax"
     });
 
@@ -86,10 +86,10 @@ export async function signup(req: Request, res: Response) {
     // secure: so the session is only sent over HTTPS (anyway, the server runs only over HTTPS)
     // sameSite: lax (default value): to prevent CSRF attacks (attackers do something on behalf of users because the user's cookie is sent with the malicious request)
     const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
-    res.cookie("muktasar-session", sessionId, {
+    res.cookie("mukhtasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: process.env.PRODUCTION ? true : false,
+        secure: false,
         sameSite: "lax"
     });
 
@@ -139,7 +139,7 @@ export async function verify(req: Request, res: Response) {
     const start = Date.now();
 
     const { token } = req.query as { token: string };
-    const sessionId = req.cookies["muktasar-session"];
+    const sessionId = req.cookies["mukhtasar-session"];
     const session = await redisClient.get(`sessions:${sessionId}`)
 
     // User Email is already verified
@@ -173,6 +173,8 @@ export async function verify(req: Request, res: Response) {
 
     const response = {
         errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
         data: {
             user: {
                 name: user?.name,
@@ -200,19 +202,26 @@ export async function verify(req: Request, res: Response) {
 }
 
 export async function logout(req: Request, res: Response) {
-    const { sessionId } = req.cookies["muktasar-session"];
+    const { sessionId } = req.cookies["mukhtasar-session"];
     if (sessionId) {
         redisClient.del(`session:${sessionId}`);
     }
 
     // Clear cookie on client
-    res.clearCookie("muktasar-session", {
+    res.clearCookie("mukhtasar-session", {
         httpOnly: true,
-        secure: true,
-        sameSite: "lax",
+        secure: false,
+        sameSite: "lax"
     });
 
-    return res.status(200).json({ data: {}, errors: [], message: "Logged out successfully" });
+    const response = {
+        errors: [],
+        data: {},
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    };
+
+    return res.status(200).json(response);
 }
 
 // // ---------------------- FORGOT PASSWORD ----------------------
@@ -284,13 +293,21 @@ export async function logout(req: Request, res: Response) {
 // }
 
 export async function verifyUser(req: Request, res: Response) {
-    const sessionId = req.cookies["muktasar-session"];
+    const sessionId = req.cookies["mukhtasar-session"];
+
+    if (!sessionId) {
+        throw new UnAuthorizedException()
+    }
 
     const session = await redisClient.get(`sessions:${sessionId}`)
 
-    console.log(sessionId)
-
     if (!session) {
+        res.clearCookie("mukhtasar-session", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        });
+
         throw new UnAuthorizedException()
     }
 

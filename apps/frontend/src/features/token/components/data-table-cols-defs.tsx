@@ -17,45 +17,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Checkbox } from "@/components/ui/checkbox"
-import DragHandle from "@/components/data-table/drag-handle"
 import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
 
-import UpdateTokenDialog from "@/features/tokens/components/update-token-dialog"
-import { TokenType } from "@/features/tokens/schemas/schema"
+import UpdateTokenDialog from "@/features/token/components/update-token-dialog"
+import { Badge } from "@/components/ui/badge"
+import { deleteToken } from "@/features/token/service/tokens-service"
+import { TokenType } from "@mukhtasar/shared"
 
 export const columns: ColumnDef<TokenType>[] = [
-    {
-        id: "drag",
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
-    {
-        id: "select",
-        header: ({ table }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            </div>
-        ),
-        cell: ({ row }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            </div>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "label",
         header: () => <p className="lg:text-lg">التسمية</p>,
@@ -70,9 +39,9 @@ export const columns: ColumnDef<TokenType>[] = [
         cell: ({ row }) => (
             <div className="flex justify-center">
                 {row.original.can_create ? (
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Check className="h-6 w-6 text-green-600" />
                 ) : (
-                    <X className="h-4 w-4 text-red-500" />
+                    <X className="h-6 w-6 text-red-500" />
                 )}
             </div>
         ),
@@ -83,9 +52,9 @@ export const columns: ColumnDef<TokenType>[] = [
         cell: ({ row }) => (
             <div className="flex justify-center">
                 {row.original.can_update ? (
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Check className="h-6 w-6 text-green-600" />
                 ) : (
-                    <X className="h-4 w-4 text-red-500" />
+                    <X className="h-6 w-6 text-red-500" />
                 )}
             </div>
         ),
@@ -96,9 +65,9 @@ export const columns: ColumnDef<TokenType>[] = [
         cell: ({ row }) => (
             <div className="flex justify-center">
                 {row.original.can_delete ? (
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Check className="h-6 w-6 text-green-600" />
                 ) : (
-                    <X className="h-4 w-4 text-red-500" />
+                    <X className="h-6 w-6 text-red-500" />
                 )}
             </div>
         ),
@@ -107,8 +76,8 @@ export const columns: ColumnDef<TokenType>[] = [
         accessorKey: "created_at",
         header: () => <p className="lg:text-lg">تاريخ الإنشاء</p>,
         cell: ({ row }) => (
-            <div className="lg:text-lg">
-                {row.original.created_at}
+            <div className="lg:text-lg text-gray-600">
+                {new Date(row.original.created_at).toLocaleDateString('ar-EG')}
             </div>
         ),
     },
@@ -116,8 +85,12 @@ export const columns: ColumnDef<TokenType>[] = [
         accessorKey: "last_used",
         header: () => <p className="lg:text-lg">آخر استخدام</p>,
         cell: ({ row }) => (
-            <div className="lg:text-lg text-muted-foreground">
-                {row.original.last_used}
+            <div className="lg:text-md text-muted-foreground">
+                {row.original.last_used ? new Date(row.original.last_used)?.toLocaleDateString('ar-EG') :
+                    (
+                        <Badge variant={"outline"}>غير محدد</Badge>
+                    )
+                }
             </div>
         ),
     },
@@ -125,9 +98,11 @@ export const columns: ColumnDef<TokenType>[] = [
         id: "actions",
         header: () => <p className="lg:text-lg">إجراءات</p>,
         cell: ({ row }) => {
-            const handleDeleteToken = () => {
+            const handleDeleteToken = async () => {
                 // Your delete logic here
-                console.log("Deleting token:", row.original.label)
+                await deleteToken(Number(row.id));
+                
+                // redirect(`${pathname}`)
             }
 
             return (

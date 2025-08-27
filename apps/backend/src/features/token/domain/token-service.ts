@@ -136,7 +136,7 @@ export async function deleteToken({ userId, tokenId }: { userId: string, tokenId
     return deleted
 }
 
-export async function getTokens(userId: string) {
-    const tokens = await tokenRepository.getTokensByUserId(userId)
-    return tokens;
+export async function getTokensPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
+    const { tokens, total } = await tokenRepository.getTokensPage({ user_id, page, page_size })
+    return { tokens, total };
 }

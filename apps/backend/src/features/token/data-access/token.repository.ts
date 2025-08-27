@@ -39,15 +39,38 @@ const tokenRepository = {
         return result.rows[0];
     },
 
-    async getTokensByUserId(userId: string): Promise<Token[] | undefined> {
+    async getTokensByUserId(user_id: string): Promise<Token[] | undefined> {
         const result = await query(
             `SELECT id, user_id, label, can_create, can_update, can_delete, created_at
              FROM api_token
             WHERE user_id = $1`,
-            [userId]
+            [user_id]
         );
 
         return result.rows;
+    },
+
+    async getTokensPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
+        const offset = page * page_size;
+
+        const tokens = query(
+            `SELECT id, user_id, label, can_create, can_update, can_delete, created_at
+             FROM api_token
+             WHERE user_id = $1
+             ORDER BY created_at DESC
+             OFFSET $2 LIMIT $3`,
+            //@ts-ignore
+            [user_id, offset, page_size]
+        );
+
+        const total_pages_result = query(
+            "SELECT COUNT(*) AS total FROM api_token WHERE user_id = $1",
+            // @ts-ignore
+            [user_id]
+        )
+
+        const result = await Promise.all([tokens, total_pages_result]);
+        return { tokens: result[0].rows, total: Number(result[1].rows[0].total) };
     },
 
     async getTokenById(tokenId: string): Promise<Token | undefined> {

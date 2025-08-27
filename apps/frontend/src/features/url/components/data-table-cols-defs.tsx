@@ -21,59 +21,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Checkbox } from "@/components/ui/checkbox"
-import DragHandle from "@/components/data-table/drag-handle"
 
-import { UpdateUrlDialog } from "@/features/urls/components/update-url-dialog"
-import { UrlType } from "@/features/urls/schemas/scheme"
+import { UpdateUrlDialog } from "@/features/url/components/update-url-dialog"
+import { UrlType } from "@/features/url/schemas/scheme"
 
 
 export const columns: ColumnDef<UrlType>[] = [
   {
-    id: "drag",
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
-  },
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "alias",
-    header: () => <p className="lg:text-lg">الاسم المستعار</p>,
+    header: () => <p className="lg:text-lg pr-2">الاسم المستعار</p>,
     enableHiding: false,
     cell: (({ row }) => (
-      <p className="lg:text-lg">{row.original.alias}</p>
+      <p className="lg:text-lg pr-2">{row.original.alias}</p>
     ))
   },
   {
     accessorKey: "domain",
-    header: () => <p className="lg:text-lg">النطاق</p>,
+    header: () => <p className="lg:text-lg pr-8">النطاق</p>,
     cell: ({ row }) => (
-      <div className="w-32 lg:text-lg">
-        <Badge variant="outline" className="text-muted-foreground px-1.5 lg:text-lg">
+      <div className="lg:text-lg pr-8">
+        <Badge variant="outline" className="text-muted-foreground px-1.5 lg:text-md">
           {row.original.domain}
         </Badge>
       </div>
@@ -88,12 +55,12 @@ export const columns: ColumnDef<UrlType>[] = [
         toast("تم نسخ الرابط إلى حافظة جهازك.")
       }
       return (
-        <div className="w-50 flex items-center gap-2" >
-          <div className="truncate max-w-xs text-primary cursor-pointer underline lg:text-lg">
+        <div className="w-70 flex items-center gap-2" >
+          <div className="text-primary cursor-pointer underline lg:text-md" dir="ltr">
+            {row.original.short_url}
             <Button variant="ghost" className="cursor-pointer" onClick={handleCopy}>
               <Copy size={20} className="text-red-400" />
             </Button>
-            {row.original.short_url}
           </div>
         </div >
       )
@@ -103,8 +70,10 @@ export const columns: ColumnDef<UrlType>[] = [
     accessorKey: "original_url",
     header: () => <p className="lg:text-lg">الرابط الأصلي</p>,
     cell: ({ row }) => (
-      <div className="truncate max-w-xs text-gray-500 cursor-pointer underline lg:text-lg">
-        {row.original.original_url}
+      <div className="flex items-center w-70">
+        <div className="truncate px-4 text-gray-500 cursor-pointer underline lg:text-md" dir="ltr">
+          {row.original.original_url}
+        </div>
       </div>
     ),
   },
@@ -112,8 +81,8 @@ export const columns: ColumnDef<UrlType>[] = [
     accessorKey: "created_at",
     header: () => <p className="lg:text-lg">تاريخ الإنشاء</p>,
     cell: ({ row }) => (
-      <div className="lg:text-lg">
-        {row.original.created_at}
+      <div className="lg:text-lg text-gray-600">
+        {new Date(row.original.created_at).toLocaleDateString('ar-EG')}
       </div>
     ),
   },
@@ -121,8 +90,12 @@ export const columns: ColumnDef<UrlType>[] = [
     accessorKey: "description",
     header: () => <p className="lg:text-lg">الوصف</p>,
     cell: ({ row }) => (
-      <div className="lg:text-lg">
-        {row.original.description}
+      <div className="lg:text-md">
+        {row.original.description ||
+          (
+            <Badge variant={"outline"}>غير محدد</Badge>
+          )
+        }
       </div>
     ),
   },
@@ -131,7 +104,7 @@ export const columns: ColumnDef<UrlType>[] = [
     header: () => <div className="w-full text-right lg:text-lg">عدد النقرات </div>,
     cell: ({ row }) => (
       <div className="text-right lg:text-lg">
-        {row.original.clicks}
+        {row.original.click_count}
       </div>
     ),
   },
@@ -160,7 +133,7 @@ export const columns: ColumnDef<UrlType>[] = [
             <DropdownMenuItem
               className="block w-full text-right cursor-pointer"
             >
-              <Link href={`/urls/${row.original.id}`}>
+              <Link href={`/dashboard/urls/${row.original.id}`}>
                 عرض التحليلات
               </Link>
             </DropdownMenuItem>

@@ -1,7 +1,8 @@
 "use client"
 
+import { CheckCircle2 } from "lucide-react"
 import { useTheme } from "next-themes"
-import { Toaster as Sonner, ToasterProps } from "sonner"
+import { Toaster as Sonner, toast, ToasterProps } from "sonner"
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme()
@@ -22,4 +23,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
-export { Toaster }
+
+const openToaster = (text: string) => {
+  return toast.custom((t) => (
+    <div className="bg-primary text-white rounded-md w-fit px-7 py-2 flex gap-4">
+      <CheckCircle2 />
+      <p>{text}</p>
+    </div>
+  ));
+}
+
+export { Toaster, openToaster }

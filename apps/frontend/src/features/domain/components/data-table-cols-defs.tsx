@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { DomainType } from "@/features/domains/schemas/schema"
+import { DomainType } from "@/features/domain/schemas/schema"
 
 export const columns: ColumnDef<DomainType>[] = [
   {

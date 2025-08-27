@@ -25,7 +25,7 @@ import UserActionsDropDown from "@/features/user/components/user-actions-drop-do
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/pricing", label: "خطط الأسعار", active: true },
-  { href: "/api", label: "API" },
+  { href: "/api/docs", label: "API" },
   { href: "/dashboard/urls", label: "الروابط" },
 ]
 
@@ -79,13 +79,15 @@ export default function Navbar() {
                   <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                     {navigationLinks.map((link, index) => (
                       <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink
+                        <Link
                           href={link.href}
-                          className="py-1.5"
-                          active={link.active}
+                          className={clsx(
+                            "py-1.5 w-full text-md font-medium text-muted-foreground hover:text-primary px-2 rounded-lg block",
+                            pathname === link.href && "bg-accent text-primary"
+                          )}
                         >
                           {link.label}
-                        </NavigationMenuLink>
+                        </Link>
                       </NavigationMenuItem>
                     ))}
                   </NavigationMenuList>
@@ -110,12 +112,12 @@ export default function Navbar() {
             <NavigationMenuList className="gap-2">
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
-                  <NavigationMenuLink
+                  <Link
                     href={link.href}
-                    className={clsx("py-1.5 text-md font-medium text-muted-foreground hover:text-primary", pathname == link.href && "bg-accent text-primary")}
+                    className={clsx("py-1.5 text-md font-medium text-muted-foreground hover:text-primary px-2 rounded-lg", pathname == link.href && "bg-accent text-primary")}
                   >
                     {link.label}
-                  </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -133,7 +135,7 @@ export default function Navbar() {
               <>
 
                 <UserActionsDropDown >
-                  <div className="flex gap-6 items-center">
+                  <div className="flex gap-10 items-center">
                     <span className="w-16">{user.name}</span>
                     <Avatar className="w-8">
                       <AvatarImage src="https://github.com/shadcn.png" />

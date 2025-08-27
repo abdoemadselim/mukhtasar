@@ -1,40 +1,12 @@
 'use client'
 
-import { useState, useId, useMemo } from "react"
-import {
-  closestCenter,
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from "@dnd-kit/core"
-
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import {
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react"
-
+import { useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
   ColumnDef,
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
@@ -58,88 +30,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination"
 
-import DraggableRow from "@/components/data-table/draggable-row"
+import Link from "next/link"
 
-export function DataTable<T>({
-  data: initialData,
-  columns
-}: {
-  data: T[],
-  columns: ColumnDef<T>[]
-}) {
-  const [data, setData] = useState(() => initialData)
+export function DataTable<T>({ data, total, pagination, columns }: { data: T[], total: number, pagination: { pageIndex: number, pageSize: number }, columns: ColumnDef<T>[] }) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-  const sortableId = useId()
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
-  )
+  const searchParams = useSearchParams()
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const pathname = usePathname();
+  const router = useRouter()
 
-  const dataIds = useMemo<UniqueIdentifier[]>(
-    () => data?.map((item: any) => item.id) || [],
-    [data]
-  )
+  const createPageUrl = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  }
+
+  const setPageIndexUrl = (value: string) => {
+    const newPageSize = Number(value)
+
+    // Update the pageSize in table
+    table.setPageSize(newPageSize)
+
+    // Update the URL
+    const params = new URLSearchParams(searchParams)
+    params.set("pageSize", value)
+    params.set("page", "1") // reset to page 1 when page size changes
+
+    router.push(`${pathname}?${params.toString()}`)
+  }
 
   // Tanstack starts here
   const table = useReactTable({
     data,
     columns: columns,
+    rowCount: total,
     state: {
-      sorting,
       columnVisibility,
       rowSelection,
-      columnFilters,
       pagination,
+      columnFilters,
     },
     getRowId: (row: any) => row.id.toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id)
-        const newIndex = dataIds.indexOf(over.id)
-        return arrayMove(data, oldIndex, newIndex)
-      })
-    }
-  }
 
   return (
     <div
-      className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 b"
+      className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
     >
       <div className="overflow-hidden rounded-lg border">
-        <DndContext
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-          id={sortableId}
+        <div
         >
           <Table className="bg-white">
             <TableHeader className="bg-primary-foreground sticky top-0 z-10">
@@ -162,19 +113,23 @@ export function DataTable<T>({
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
               {table.getRowModel().rows?.length ? (
-                <SortableContext
-                  items={dataIds}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {table.getRowModel().rows.map((row) => (
-                    <DraggableRow key={row.id} row={row} />
-                  ))}
-                </SortableContext>
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
               ) : (
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-24 text-center text-xl"
                   >
                     لا نتائج
                   </TableCell>
@@ -182,7 +137,7 @@ export function DataTable<T>({
               )}
             </TableBody>
           </Table>
-        </DndContext>
+        </div>
       </div>
       <div className="flex items-center justify-between px-4 flex-row-reverse">
         <div className="text-muted-foreground hidden flex-1 text-sm lg:flex justify-end">
@@ -196,9 +151,7 @@ export function DataTable<T>({
             </Label>
             <Select
               value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(value) => {
-                table.setPageSize(Number(value))
-              }}
+              onValueChange={setPageIndexUrl}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
                 <SelectValue
@@ -215,30 +168,46 @@ export function DataTable<T>({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium ">
-            صفحة  {table.getState().pagination.pageIndex + 1} من أصل{" "}
-            {table.getPageCount()}
+            صفحة  {table.getState().pagination.pageIndex + 1} من أصل
+            <span className="px-1">{table.getPageCount()} </span>
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0 flex-row-reverse">
-            <Button
-              variant="outline"
-              className="size-8"
-              size="icon"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="sr-only">اذهب إلى الصفحة السابقة</span>
-              <ChevronsLeft />
-            </Button>
-            <Button
-              variant="outline"
-              className="size-8"
-              size="icon"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="sr-only">اذهب إلى الصفحة التالية</span>
-              <ChevronsRight />
-            </Button>
+            <Pagination>
+              <PaginationContent dir="ltr">
+                {table.getCanPreviousPage() &&
+                  <PaginationItem>
+                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                      <Link href={createPageUrl(1)}>{'<<'}</Link>
+                    </Button>
+                  </PaginationItem>
+                }
+                {table.getCanPreviousPage() &&
+                  <PaginationItem>
+                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                      <Link href={createPageUrl(currentPage - 1)} className="w-full block p-0">{'<'}</Link>
+                    </Button>
+                    <span className="sr-only">الصفحة السابقة</span>
+                  </PaginationItem>
+                }
+                {
+                  [pagination.pageIndex, pagination.pageIndex + 1, pagination.pageIndex + 2].map((pageIndex) => {
+                    return pageIndex <= table.getPageCount() && (
+                      <PaginationItem key={pageIndex}>
+                        <Link href={createPageUrl(pageIndex + 1)} className={`px-3 ${pageIndex == pagination.pageIndex ? 'bg-primary text-white' : 'text-primary border-2'} rounded-sm text-lg cursor-pointer`}>{pageIndex + 1}</Link>
+                      </PaginationItem>
+                    )
+                  })
+                }
+                {table.getCanNextPage() &&
+                  <PaginationItem>
+                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                      <Link href={createPageUrl(currentPage + 1)}>{'>'}</Link>
+                    </Button>
+                    <span className="sr-only">الصفحة التالية</span>
+                  </PaginationItem>
+                }
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </div>

@@ -1,17 +1,14 @@
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
 
-import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Highlighter } from "@/components/ui/highlighter";
+import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 
-import { columns } from "@/features/tokens/components/data-table-cols-defs";
-import data from "@/features/tokens/data.json"
-import CreateTokenDialog from "@/features/tokens/components/create-token-dialog";
-import TokensDataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { TokenType } from "@/features/tokens/schemas/schema";
+import CreateTokenDialog from "@/features/token/components/create-token-dialog";
+import TokensTable from "@/features/token/components/tokens-table";
 
-export default function TokensPage() {
+export default async function TokensPage() {
     return (
         <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
@@ -26,8 +23,8 @@ export default function TokensPage() {
                             </CreateTokenDialog>
                             <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">رموز وصولك (APIs)</Highlighter></h1>
                         </div>
-                        <Suspense fallback={<TokensDataTableSkeleton />}>
-                            <DataTable<TokenType> data={data} columns={columns} />
+                        <Suspense fallback={<DataTableSkeleton />}>
+                            <TokensTable />
                         </Suspense>
                     </div>
                 </div>

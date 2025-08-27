@@ -3,7 +3,7 @@ import Image from "next/image";
 import HeroSection from "@/components/layout/hero-section";
 import dynamic from "next/dynamic";
 
-const Highlighter  = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
+const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
 
 export default function HomePage() {
   return (

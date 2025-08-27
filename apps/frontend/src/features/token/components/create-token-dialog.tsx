@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { TokenSuccessDialog } from "@/features/tokens/components/token-success-dialog"
+import { TokenSuccessDialog } from "@/features/token/components/token-success-dialog"
 
 export default function CreateTokenDialog({ children }: { children: React.ReactNode }) {
     const [isCreateOpen, setIsCreateOpen] = useState(false)

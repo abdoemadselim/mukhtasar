@@ -1,10 +1,11 @@
-import urlRepository from "#features/url/data-access/url.repository.js";
-import { URLNotFoundException } from "#features/url/domain/error-types.js";
+import urlRepository from "#root/features/url/data-access/url.repository.js";
 import type { ParamsType } from "@mukhtasar/shared";
+
+import { URLNotFoundException } from "#features/url/domain/error-types.js";
 import { UrlInputType, UrlType } from "#features/url/types.js";
 import generate_id from "#features/url/domain/id-generator.js";
 
-import { ConflictException } from "../../../lib/error-handling/error-types.js";
+import { ConflictException } from "#lib/error-handling/error-types.js";
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
@@ -32,7 +33,7 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlTy
     if (alias) {
         const aliasExists = await urlRepository.getUrlByAlias(alias);
         if (aliasExists) {
-            throw new ConflictException("This alias is not available.");
+            throw new ConflictException("هذا الاسم المستعار غير متوفر.");
         }
         return saveUrl({ alias, resolvedDomain, original_url, user_id, description });
     }
@@ -164,4 +165,9 @@ async function updateAnalytics(alias: string) {
 
     // Limit the top URLs set to 1000 URLs (remove the last url in the sorted set (1001))
     await redisClient.zRemRangeByRank('top_urls', 1000, -1);
+}
+
+export async function getUrlsPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
+    const {urls, total} = await urlRepository.getUrlsPage({ user_id, page, page_size });
+    return { urls, total };
 }

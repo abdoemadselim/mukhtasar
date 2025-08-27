@@ -1,7 +1,7 @@
 // Imports
 import dotenv from "dotenv"
 dotenv.config()
-import { Pool, QueryConfigValues } from 'pg'
+import { Pool, QueryArrayConfig, QueryConfigValues } from 'pg'
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { asyncStore } from "#root/main.js";
 
@@ -33,23 +33,31 @@ pool.on("error", (err) => log(LOG_TYPE.ERROR, { message: 'Unexpected error on id
 /*
     All queries go from here, so it's easy to log them
 */
-export const query = async (text: string, params?: QueryConfigValues<string[]>) => {
+
+export const query = async (queryData: string | QueryArrayConfig, params?: QueryConfigValues<string[]>) => {
     const start = Date.now();
 
     log(LOG_TYPE.DEBUG, {
         message: "Executing SQL query",
-        query: text,
+        query: queryData,
         params
     });
 
-    const result = await pool.query(text, params);
+    let result;
+    if (typeof queryData == "object") {
+        result = await pool.query(queryData);
+    } else if (typeof queryData == "string") {
+        result = await pool.query(queryData, params)
+    } else {
+        throw new Error("Invalid query data type given to the query function")
+    }
 
     const duration = Date.now() - start;
     const store = asyncStore.getStore()
 
     log(LOG_TYPE.INFO, {
         message: "SQL query executed successfully",
-        query: text,
+        query: queryData,
         durationMs: duration,
         rowCount: result.rowCount,
         requestId: store?.requestId

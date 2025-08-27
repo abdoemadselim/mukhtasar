@@ -16,7 +16,7 @@ import {
     getShortUrlInfo,
     getUrlClickCounts,
     updateUrl
-} from "#features/url/controllers/url.controllers.js"
+} from "#features/url/controllers/api.controllers.js"
 
 import validateRequest from "#lib/validation/validator-middleware.js";
 import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";

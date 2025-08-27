@@ -1,7 +1,7 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import LandingUrlCreationForm from "@/features/urls/components/landing-url-creation-form";
+import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
 
 const SparklesText = dynamic(() => import("@/components/ui/sparkles-text").then((comp) => comp.SparklesText))
 const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-gradient-text"))
@@ -30,7 +30,7 @@ export default function HeroSection() {
                     </p>
                 </div>
             </header>
-            <LandingUrlCreationForm />       
+            <LandingUrlCreationForm />
         </section>
     )
 }

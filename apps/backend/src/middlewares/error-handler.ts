@@ -31,6 +31,7 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
             errors: err.errors,
             fieldErrors: err.FieldErrors,
             errorCode: err.errorCodeString,
+            message: "",
             code: err.responseCode
         })
     }
@@ -48,7 +49,8 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
             data: {},
             errors: [err.message],
             errorCode: err.errorCodeString,
-            code: err.responseCode
+            code: err.responseCode,
+            message: err.message
         })
     }
 

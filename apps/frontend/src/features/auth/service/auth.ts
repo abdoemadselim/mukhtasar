@@ -20,9 +20,8 @@ export async function signup(data: NewUserType) {
 
         return {}; // No errors
     } catch (error) {
-        console.error(error)
         return {
-            root: { message: "حدث خطأ غير متوقع. تأكد من اتصالك بالإنترنت وحاول مرة أخرى." }
+            root: { message: "حدث خطأ غير متوقع. حاول مرة أخرى." }
         }
     }
 }

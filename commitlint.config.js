@@ -39,7 +39,8 @@ export default {
         'lib',
         "doc",
         "domain",
-        "subscription"
+        "subscription",
+        "security"
       ]
     ],
     'type-empty': [2, 'never'],
