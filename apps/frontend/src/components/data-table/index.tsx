@@ -167,44 +167,42 @@ export function DataTable<T>({ data, total, pagination, columns }: { data: T[], 
             صفحة  {table.getState().pagination.pageIndex + 1} من أصل
             <span className="px-1">{table.getPageCount()} </span>
           </div>
-          <div className="ml-auto flex items-center gap-2 lg:ml-0 flex-row-reverse">
-            <Pagination>
-              <PaginationContent dir="ltr">
-                {table.getCanPreviousPage() &&
-                  <PaginationItem>
-                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
-                      <Link href={createPageUrl(1)}>{'<<'}</Link>
-                    </Button>
-                  </PaginationItem>
-                }
-                {table.getCanPreviousPage() &&
-                  <PaginationItem>
-                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
-                      <Link href={createPageUrl(currentPage - 1)} className="w-full block p-0">{'<'}</Link>
-                    </Button>
-                    <span className="sr-only">الصفحة السابقة</span>
-                  </PaginationItem>
-                }
-                {
-                  [pagination.pageIndex, pagination.pageIndex + 1, pagination.pageIndex + 2].map((pageIndex) => {
-                    return pageIndex < table.getPageCount() && (
-                      <PaginationItem key={pageIndex}>
-                        <Link href={createPageUrl(pageIndex + 1)} className={`px-3 ${pageIndex == pagination.pageIndex ? 'bg-primary text-white' : 'text-primary border-2'} rounded-sm text-lg cursor-pointer`}>{pageIndex + 1}</Link>
-                      </PaginationItem>
-                    )
-                  })
-                }
-                {table.getCanNextPage() &&
-                  <PaginationItem>
-                    <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
-                      <Link href={createPageUrl(currentPage + 1)}>{'>'}</Link>
-                    </Button>
-                    <span className="sr-only">الصفحة التالية</span>
-                  </PaginationItem>
-                }
-              </PaginationContent>
-            </Pagination>
-          </div>
+          <Pagination>
+            <PaginationContent dir="ltr">
+              {table.getCanPreviousPage() &&
+                <PaginationItem>
+                  <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                    <Link href={createPageUrl(1)}>{'<<'}</Link>
+                  </Button>
+                </PaginationItem>
+              }
+              {table.getCanPreviousPage() &&
+                <PaginationItem>
+                  <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                    <Link href={createPageUrl(currentPage - 1)} className="w-full block p-0">{'<'}</Link>
+                  </Button>
+                  <span className="sr-only">الصفحة السابقة</span>
+                </PaginationItem>
+              }
+              {
+                [pagination.pageIndex, pagination.pageIndex + 1, pagination.pageIndex + 2].map((pageIndex) => {
+                  return pageIndex < table.getPageCount() && (
+                    <PaginationItem key={pageIndex}>
+                      <Link href={createPageUrl(pageIndex + 1)} className={`px-3 ${pageIndex == pagination.pageIndex ? 'bg-primary text-white' : 'text-primary border-2'} rounded-sm text-lg cursor-pointer`}>{pageIndex + 1}</Link>
+                    </PaginationItem>
+                  )
+                })
+              }
+              {table.getCanNextPage() &&
+                <PaginationItem>
+                  <Button asChild className="cursor-pointer px-3 text-sm border-gray-300" variant="outline">
+                    <Link href={createPageUrl(currentPage + 1)}>{'>'}</Link>
+                  </Button>
+                  <span className="sr-only">الصفحة التالية</span>
+                </PaginationItem>
+              }
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>
