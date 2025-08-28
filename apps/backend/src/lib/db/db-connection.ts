@@ -9,10 +9,11 @@ import { asyncStore } from "#root/main.js";
   database connection
 */
 export const pool = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER_NAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE_NAME,
+    // host: process.env.DB_HOST,
+    // user: process.env.DB_USER_NAME,
+    // password: process.env.DB_PASSWORD,
+    // database: process.env.DB_DATABASE_NAME,
+    connectionString: process.env.DB_CONNECTION_STRING,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
@@ -33,7 +34,6 @@ pool.on("error", (err) => log(LOG_TYPE.ERROR, { message: 'Unexpected error on id
 /*
     All queries go from here, so it's easy to log them
 */
-
 export const query = async (queryData: string | QueryArrayConfig, params?: QueryConfigValues<string[]>) => {
     const start = Date.now();
 

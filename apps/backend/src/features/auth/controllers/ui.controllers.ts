@@ -27,7 +27,7 @@ export async function login(req: Request, res: Response) {
     res.cookie("mukhtasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "lax"
     });
 
@@ -89,7 +89,7 @@ export async function signup(req: Request, res: Response) {
     res.cookie("mukhtasar-session", sessionId, {
         maxAge: SESSION_DURATION,
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "lax"
     });
 
@@ -210,7 +210,7 @@ export async function logout(req: Request, res: Response) {
     // Clear cookie on client
     res.clearCookie("mukhtasar-session", {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "lax"
     });
 
@@ -304,7 +304,7 @@ export async function verifyUser(req: Request, res: Response) {
     if (!session) {
         res.clearCookie("mukhtasar-session", {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax"
         });
 

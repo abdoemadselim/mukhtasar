@@ -25,7 +25,7 @@ const app = express()
 
 // In your Express backend
 app.use(cors({
-  origin: 'http://localhost:3002',
+  origin: process.env.NODE_ENV === "production" ? "http://mukhtasar.pro": "http://localhost:3002",
   credentials: true, // To allow setting the cookie to the frontend which works on another domain
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']

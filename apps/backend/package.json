@@ -37,6 +37,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@faker-js/faker": "^10.0.0",
     "@mukhtasar/shared": "workspace:*",
     "@types/body-parser": "^1.19.6",
     "@types/cors": "^2.8.19",
