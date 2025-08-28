@@ -1,66 +1,273 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Email Verification</title>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد البريد الإلكتروني - مُختصِر</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
-      }
-      .container {
-        max-width: 600px;
-        margin: 40px auto;
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        padding: 20px;
-      }
-      h1 {
-        font-size: 20px;
-        color: #333333;
-      }
-      p {
-        font-size: 14px;
-        color: #555555;
-        line-height: 1.6;
-      }
-      .button {
-        display: inline-block;
-        margin: 20px 0;
-        padding: 12px 24px;
-        font-size: 16px;
-        color: #ffffff;
-        background-color: #007bff;
-        text-decoration: none;
-        border-radius: 6px;
-      }
-      .footer {
-        margin-top: 20px;
-        font-size: 12px;
-        color: #888888;
-        text-align: center;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Cairo", Tahoma, Arial, sans-serif;         
+            line-height: 1.7;
+            color: #333333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px 0;
+            direction: rtl;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .main-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: white !important
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .welcome-text {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .description {
+            font-size: 17px;
+            color: #555555;
+            margin-bottom: 35px;
+            line-height: 1.8;
+            text-align: right;
+        }
+        
+        .verify-button {
+            display: inline-block;
+            background: #764ba2;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .verify-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .alternative-link {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+        
+        .alternative-text {
+            font-size: 15px;
+            color: #777777;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        .link-text {
+            font-size: 14px;
+            color: #667eea;
+            word-break: break-all;
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+            font-family: monospace;
+            text-align: left;
+            direction: ltr;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 35px 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-text {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .security-note {
+            font-size: 14px;
+            color: #888888;
+            font-style: italic;
+        }
+        
+        .support-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #777777;
+        }
+        
+        .unsubscribe {
+            background: #f1f3f4;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #666666;
+        }
+        
+        .unsubscribe a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .unsubscribe a:hover {
+            text-decoration: underline;
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0 15px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .main-title {
+                font-size: 17px;
+            }
+            
+            .subtitle {
+               font-size: 14px    
+            }
+            
+            .welcome-text {
+                font-size: 20px;
+            }
+            
+            .description {
+                font-size: 17px;
+                text-align: center;
+            }
+            
+            .verify-button {
+                padding: 12px 40px;
+                font-size: 14px;
+            }
+            header
+            .alternative-text {
+                text-align: center;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .link-text {
+                background: #2a2a2a;
+                color: #88a4f7;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Verify Your Email</h1>
-      <p>Hello {{name}},</p>
-      <p>
-        Thanks for signing up! Please confirm your email address by clicking the button below. 
-        This link will expire in 24 hours.
-      </p>
-      <a href="{{verificationLink}}" class="button">Verify Email</a>
-      <p>
-        If the button above doesn’t work, copy and paste the link below into your browser:
-      </p>
-      <p style="word-break: break-all; color: #007bff;">{{verificationLink}}</p>
-      <div class="footer">
-        <p>If you didn’t create an account, you can safely ignore this email.</p>
-      </div>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="cid:logo_cid" alt="مُختصِر Logo"/>
+            </div>
+            <h1 class="main-title">أهلاً وسهلاً بك {{username}} في مُختصِر</h1>
+            <p class="subtitle">أول مُنتج عربى متكامل لاخنصار الروابط</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h2 class="welcome-text">تأكيد عنوان بريدك الإلكتروني</h2>
+            
+            <div class="description">
+                شكراً لك على التسجيل في منصة <strong>مُختصِر</strong> 
+                <br><br>
+                لإكمال عملية التسجيل والبدء في استخدام خدمة اختصار الروابط بشكل كامل 
+                يرجى تأكيد عنوان بريدك الإلكتروني بالنقر على الزر أدناه.
+                <br><br>
+                <p class="note">
+                  <span class="highlight">ملاحظة هامة:</span> هذا الرابط صالح لمدة 24 ساعة فقط من وقت إرسال هذه الرسالة.
+                </p>
+            </div>
+            
+            <a href="{{verificationLink}}" class="verify-button">تأكيد البريد الإلكتروني</a>
+            
+            <div class="alternative-link">
+                <p class="alternative-text">
+                    في حال لم يعمل الزر أعلاه، يمكنك نسخ الرابط التالي ولصقه في متصفحك:
+                </p>
+                <div class="link-text">{{verificationLink}}</div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                إذا لم تقم بإنشاء حساب في منصة <strong>مُختصِر</strong>، 
+                يمكنك تجاهل هذه الرسالة بأمان.
+            </p>
+            <p class="security-note">
+                لحماية حسابك، ستنتهي صلاحية هذا الرابط خلال 24 ساعة.
+            </p>
+            
+            <div class="support-info">
+                <strong>تحتاج مساعدة؟</strong><br>
+                لا تتردد في التواصل معنا عبر البريد الإلكتروني
+            </div>
+        </div>
+        
     </div>
-  </body>
+</body>
 </html>

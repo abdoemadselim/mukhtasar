@@ -160,29 +160,11 @@ export async function verify(req: Request, res: Response) {
                 userEmail: user.email
             });
 
-            return res.json({
-                errors: [],
-                data: {
-                    user
-                }
-            })
+            res.redirect("http://localhost:3002/")
         }
     }
 
     const user = await authService.verifyEmail({ token, sessionId })
-
-    const response = {
-        errors: [],
-        code: NoException.NoErrorCode,
-        errorCode: NoException.NoErrorCodeString,
-        data: {
-            user: {
-                name: user?.name,
-                email: user?.email,
-                verified: true
-            }
-        }
-    };
 
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore();
@@ -198,7 +180,7 @@ export async function verify(req: Request, res: Response) {
         userEmail: user?.email
     });
 
-    res.json(response)
+    res.redirect("http://localhost:3002/")
 }
 
 export async function logout(req: Request, res: Response) {

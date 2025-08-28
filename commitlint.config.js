@@ -41,7 +41,8 @@ export default {
         "domain",
         "subscription",
         "security",
-        "deploy"
+        "deploy",
+        "email"
       ]
     ],
     'type-empty': [2, 'never'],

@@ -42,7 +42,7 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
     }, process.env.EMAIL_VERIFICATION_SECRET_KEY as string, { expiresIn: "24h" })
 
     // TODO: create a redis queue, and a worker that consumes the jobs from the queue 
-    sendVerificationMail({ userEmail: user.email, userName: user.name, token: verificationToken })
+    sendVerificationMail({ userEmail: user.email, userName: user.name, verificationToken })
         .catch((error) => {
             log(LOG_TYPE.ERROR, { message: "Verification Email sending failed", stack: error.stack });
         })
@@ -105,6 +105,7 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
 
     if (sessionId) {
         const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
+        console.log("hello")
         redisClient.setEx(
             `sessions:${sessionId}`,
             SESSION_DURATION / 1000,
@@ -164,9 +165,9 @@ export function authSession() {
 
         const user = JSON.parse(session);
 
-        // if (!user.verified) {
-        //     throw new UnVerifiedException()
-        // }
+        if (!user.verified) {
+            throw new UnVerifiedException()
+        }
 
         // @ts-ignore
         req.user = {

@@ -39,6 +39,7 @@
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "@mukhtasar/shared": "workspace:*",
+    "@sendgrid/mail": "^8.1.5",
     "@types/body-parser": "^1.19.6",
     "@types/cors": "^2.8.19",
     "@types/swagger-ui-express": "^4.1.8",

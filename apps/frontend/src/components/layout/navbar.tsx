@@ -135,7 +135,7 @@ export default function Navbar() {
               <>
 
                 <UserActionsDropDown >
-                  <div className="flex gap-10 items-center">
+                  <div className="flex gap-3 items-center">
                     <span className="w-16">{user.name}</span>
                     <Avatar className="w-8">
                       <AvatarImage src="https://github.com/shadcn.png" />
