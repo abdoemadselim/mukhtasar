@@ -94,11 +94,11 @@ export function ProtectedAuthRoute({ children }: { children: React.ReactNode }) 
 
     useEffect(() => {
         setIsRedirecting(true)
-        if (!user) {
+        if (!user && !isLoading) {
             router.replace("/login")
             setIsRedirecting(false)
         }
-    }, [user, router])
+    }, [user, router, isLoading])
 
     // Show loading spinner while checking authentication
     if (isLoading || !isRedirecting) {

@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       // Proxy UI routes (public stuff)
       {
         source: "/api/:path*",
-        destination: "http://api.mukhtasar.pro/ui/:path*"
+        destination: process.env.NODE_ENV === "production" ? "http://api.mukhtasar.pro/ui/:path*": "http://localhost:3000/ui/:path*"
       },
     ]
   },

@@ -29,7 +29,6 @@ const allowedOrigins = [
   "http://localhost:3002",
 ];
 
-// In your Express backend
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -54,6 +53,7 @@ app.use("/ui", helmet())
 app.use(bodyParser.json())
 app.use(routesContext)
 app.use(cookieParser())
+app.use(express.static("public"))
 app.disable("x-powered-by")
 
 export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
