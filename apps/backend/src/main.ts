@@ -23,14 +23,30 @@ import errorHandlerMiddleware from "#middlewares/error-handler.js";
 import routesContext from "#middlewares/routes-context.js";
 const app = express()
 
-// In your Express backend
-app.use(cors({
-  origin: process.env.NODE_ENV === "production" ? "http://mukhtasar.pro": "http://localhost:3002",
-  credentials: true, // To allow setting the cookie to the frontend which works on another domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}))
+const allowedOrigins = [
+  "https://mukhtasar.pro",
+  "https://www.mukhtasar.pro",
+  "http://localhost:3002"
+];
 
+// In your Express backend
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps, curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 // ------ App Configuration -------------
 app.set("trust proxy", true);
 app.use(compression());
@@ -49,7 +65,7 @@ app.use("/", publicRoutes)
 
 // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
 app.use("*splash", (req, res, next) => {
-    throw new NotFoundException("Endpoint not found.")
+  throw new NotFoundException("Endpoint not found.")
 })
 
 // ----- Error Handler Middleware ----------
@@ -58,5 +74,5 @@ app.use(errorHandlerMiddleware)
 // ----- Server Activation -----------------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
-    logger.info(`Server started at port ${PORT} in ${process.env.NODE_ENV} mode`)
+  logger.info(`Server started at port ${PORT} in ${process.env.NODE_ENV} mode`)
 )
