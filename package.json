@@ -17,7 +17,7 @@
   },
   "main": "./dist/main.js",
   "scripts": {
-    "build": "which pnpm && pnpm --version && pnpm -r build",
+    "build": "pnpm install --frozen-lockfile && pnpm -r install && pnpm -r build",
     "dev:backend": "pnpm --filter @mukhtasar/backend dev",
     "dev:frontend": "pnpm --filter @mukhtasar/frontend dev",
     "dev": "pnpm dev:backend & pnpm dev:frontend",
