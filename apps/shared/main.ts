@@ -43,6 +43,31 @@ export type NewUserType = zod.infer<typeof NewUserSchema>;
 export type LoginType = zod.infer<typeof LoginSchema>;
 export type UserVerificationType = zod.infer<typeof UserVerificationSchema>;
 
+const BLOCKED_ALIAS = [
+    // app reserved routes
+    "pages", "api", "admin", "dashboard", "login", "logout",
+    "signup", "register", "user", "profile", "settings",
+
+    // ─── Common web files / infra ───
+    "www", "pages", "static", "public", "assets", "images",
+    "css", "js", "scripts", "fonts", "uploads", "files",
+    "favicon.ico", "robots.txt", "sitemap.xml",
+
+    // brand protection
+    "mukhtasar", "mukhtasar.pro",
+
+    // ─── Sensitive / phishing prone ───
+    "paypal", "stripe", "checkout", "payment", "billing",
+    "bank", "account", "secure", "security", "update",
+    "google", "facebook", "apple", "twitter", "github",
+    "linkedin", "microsoft", "instagram", "whatsapp",
+
+    // ─── Technical unsafe / confusing ───
+    "null", "undefined", "true", "false", "nan",
+    "test", "example", "sample", "demo", "default",
+    "new", "old", "temp"
+];
+
 const aliasSchema = zod
     .string("يجب أن يكون الاسم المستعار نصاً.")
     .trim()
@@ -52,6 +77,10 @@ const aliasSchema = zod
         /^[^`~,<>;':"\/\[\]^{}()=+!*@&$?%#|]*$/,
         "Alias format is invalid."
     )
+    .refine(
+        (val) => !BLOCKED_ALIAS.includes(val.toLowerCase()),
+        { message: "هذا الاسم المستعار غير متاح." }
+    );
 
 const domainSchema = zod
     .string("يُرجى إدخال النطاق المناسب.")

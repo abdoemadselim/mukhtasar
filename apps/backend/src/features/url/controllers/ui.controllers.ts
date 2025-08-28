@@ -9,10 +9,6 @@ import { NoException, ValidationException } from "#lib/error-handling/error-type
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
-
-// apps/backend/src/features/url/controllers/url.controllers.ts
-// Add this updated createUrl function to replace the existing one
-
 export async function createUrl(req: Request, res: Response) {
     const start = Date.now();
 
