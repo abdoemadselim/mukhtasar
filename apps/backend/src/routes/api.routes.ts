@@ -18,7 +18,7 @@ const customCss = `
     }
 
 `
-// Swagger UI setup with options    
+// Swagger UI setup with options
 const swaggerOptions = {
     swaggerOptions: {
         showRequestDuration: true

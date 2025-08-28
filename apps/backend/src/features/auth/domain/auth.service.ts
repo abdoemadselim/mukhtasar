@@ -142,7 +142,7 @@ export async function login({ email, password }: { email: string, password: stri
 // TODO: the service shouldn't depend on the req, res objects of express
 export function authSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const sessionId = req.cookies["mukhtasar-session"];
+        const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
 
         // No cookie? Not authenticated
         if (!sessionId) {
@@ -153,7 +153,7 @@ export function authSession() {
 
         // No session in Redis (expired or invalidated)?
         if (!session) {
-            res.clearCookie("mukhtasar-session", {
+            res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
                 httpOnly: true,
                 secure: false,
                 sameSite: "lax"

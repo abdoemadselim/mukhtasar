@@ -20,7 +20,7 @@ export async function createUrl(req: Request, res: Response) {
     const { original_url, alias, domain, description = "" } = req.body;
 
     // Get user info if available (from session-based auth, not token-based)
-    const sessionId = req.cookies["mukhtasar-session"];
+    const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
     let user = null;
 
     if (sessionId) {

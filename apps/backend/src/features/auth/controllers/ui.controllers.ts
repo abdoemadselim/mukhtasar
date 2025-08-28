@@ -23,7 +23,7 @@ export async function login(req: Request, res: Response) {
     req.user = user;
 
     const sessionId = randomUUID()
-    res.cookie("mukhtasar-session", sessionId, {
+    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
         maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
@@ -83,7 +83,7 @@ export async function signup(req: Request, res: Response) {
     // httpOnly: so even if a malicious script managed to land on our server, it can't access the cookie
     // secure: so the session is only sent over HTTPS (anyway, the server runs only over HTTPS)
     // sameSite: lax (default value): to prevent CSRF attacks (attackers do something on behalf of users because the user's cookie is sent with the malicious request)
-    res.cookie("mukhtasar-session", sessionId, {
+    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
         maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
@@ -136,7 +136,7 @@ export async function verify(req: Request, res: Response) {
     const start = Date.now();
 
     const { token } = req.query as { token: string };
-    const sessionId = req.cookies["mukhtasar-session"];
+    const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
     const session = await redisClient.get(`sessions:${sessionId}`)
 
     // User Email is already verified
@@ -157,7 +157,7 @@ export async function verify(req: Request, res: Response) {
                 userEmail: user.email
             });
 
-            res.redirect("http://localhost:3002/")
+            res.redirect("http://mukhtasar.pro")
         }
     }
 
@@ -177,17 +177,17 @@ export async function verify(req: Request, res: Response) {
         userEmail: user?.email
     });
 
-    res.redirect("http://localhost:3002/")
+    res.redirect("http://mukhtasar.pro")
 }
 
 export async function logout(req: Request, res: Response) {
-    const { sessionId } = req.cookies["mukhtasar-session"];
+    const { sessionId } = req.cookies[process.env.AUTH_SESSION_NAME as string];
     if (sessionId) {
         redisClient.del(`session:${sessionId}`);
     }
 
     // Clear cookie on client
-    res.clearCookie("mukhtasar-session", {
+    res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
         httpOnly: true,
         secure: true,
         sameSite: "lax"
@@ -272,7 +272,7 @@ export async function logout(req: Request, res: Response) {
 // }
 
 export async function verifyUser(req: Request, res: Response) {
-    const sessionId = req.cookies["mukhtasar-session"];
+    const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
 
     if (!sessionId) {
         throw new UnAuthorizedException()
@@ -281,7 +281,7 @@ export async function verifyUser(req: Request, res: Response) {
     const session = await redisClient.get(`sessions:${sessionId}`)
 
     if (!session) {
-        res.clearCookie("mukhtasar-session", {
+        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
             httpOnly: true,
             secure: true,
             sameSite: "lax"
