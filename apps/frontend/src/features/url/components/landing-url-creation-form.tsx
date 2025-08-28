@@ -35,7 +35,7 @@ export default function LandingUrlCreationForm() {
     const form = useForm<ShortUrlType>({
         resolver: zodResolver(ShortUrlSchema),
         defaultValues: {
-            domain: "localhost.com",
+            domain: "mukhtasar.pro",
             alias: "",
             original_url: ""
         }
@@ -164,11 +164,11 @@ export default function LandingUrlCreationForm() {
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger className="w-full border-gray-300">
-                                                    <SelectValue placeholder="localhost.com" />
+                                                    <SelectValue placeholder="mukhtasar.pro" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="localhost.com">localhost.com</SelectItem>
+                                                <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <div className="min-h-[20px]" >
