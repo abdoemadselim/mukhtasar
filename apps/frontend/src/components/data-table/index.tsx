@@ -140,10 +140,6 @@ export function DataTable<T>({ data, total, pagination, columns }: { data: T[], 
         </div>
       </div>
       <div className="flex items-center justify-between px-4 flex-row-reverse">
-        <div className="text-muted-foreground hidden flex-1 text-sm lg:flex justify-end">
-          {table.getFilteredSelectedRowModel().rows.length} من أصل{" "}
-          {table.getFilteredRowModel().rows.length} صف محددة.
-        </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">
@@ -191,7 +187,7 @@ export function DataTable<T>({ data, total, pagination, columns }: { data: T[], 
                 }
                 {
                   [pagination.pageIndex, pagination.pageIndex + 1, pagination.pageIndex + 2].map((pageIndex) => {
-                    return pageIndex <= table.getPageCount() && (
+                    return pageIndex < table.getPageCount() && (
                       <PaginationItem key={pageIndex}>
                         <Link href={createPageUrl(pageIndex + 1)} className={`px-3 ${pageIndex == pagination.pageIndex ? 'bg-primary text-white' : 'text-primary border-2'} rounded-sm text-lg cursor-pointer`}>{pageIndex + 1}</Link>
                       </PaginationItem>

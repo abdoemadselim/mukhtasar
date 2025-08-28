@@ -17,7 +17,7 @@ export default function UserActionsDropDown({ children }: { children: React.Reac
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <Link href="/dashboard/urls" className="flex items-center gap-4 cursor-pointer w-full">
+                    <Link href="/dashboard/tokens" className="flex items-center gap-4 cursor-pointer w-full">
                         <Lock />
                         رموز الوصول
                     </Link>

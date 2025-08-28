@@ -51,7 +51,6 @@ export default function UpdateTokenDialog({ children, currentToken }: UpdateToke
             can_update: data.can_update
         });
         setIsOpen(false);
-        openToaster("تم تحديث الرمز بنجاح.", "success");
         reset();
     };
 

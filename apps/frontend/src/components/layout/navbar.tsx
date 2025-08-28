@@ -95,16 +95,18 @@ export default function Navbar() {
               </PopoverContent>
             </Popover>
             {/* Main nav */}
-            <Link href="/" className="text-primary hover:text-primary/90 flex gap-4 items-center">
-              <Image
-                src="/logo.webp"
-                alt="مختصر"
-                width={125}
-                height={50}
-                priority
-              />
-            </Link>
-
+            <div className="relative">
+              <Link href="/">
+                <Image
+                  src="/logo.webp"
+                  alt="مختصر"
+                  width={125}
+                  height={50}
+                  priority
+                />
+              </Link>
+              <span className="bg-amber-500 px-3 text-white text-[13px] font-bold py-[2px] drop-shadow-lg rounded-lg absolute top-11 left-[-15px]">تجريبي</span>
+            </div>
           </div>
 
           {/* Navigation menu */}
@@ -135,7 +137,7 @@ export default function Navbar() {
               <>
 
                 <UserActionsDropDown >
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-4 items-center">
                     <span>{user.name}</span>
                     <Avatar>
                       <AvatarImage src="/avatar.webp" />
