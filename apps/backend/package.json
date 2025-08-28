@@ -26,7 +26,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
     "prepare": "husky",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "build": "rm -rf dist && tsc"
   },
   "keywords": [
     "URL",
