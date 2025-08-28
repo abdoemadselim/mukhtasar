@@ -42,7 +42,8 @@ export default {
         "subscription",
         "security",
         "deploy",
-        "email"
+        "email",
+        "navbar"
       ]
     ],
     'type-empty': [2, 'never'],

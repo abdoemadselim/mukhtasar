@@ -2,7 +2,7 @@ import { Router } from "express"
 
 import urlRoutes from "#features/url/routes/api.routes.js"
 import swaggerUi from 'swagger-ui-express';
-import swaggerApiDoc from "../../docs/internal-doc.json" with {type: "json"}
+import swaggerApiDoc from "../../docs/api-doc.json" with {type: "json"}
 
 const router = Router()
 
@@ -11,7 +11,7 @@ const swaggerOptions = {
     swaggerOptions: {
         showRequestDuration: true
     },
-    customSiteTitle: "مُختصِر | API Doc"
+    customSiteTitle: "مُختصِر | وثائق المبرمجين"
 };
 
 // The API Doc

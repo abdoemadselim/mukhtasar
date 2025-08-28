@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import {
@@ -18,14 +17,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useAuth } from "@/features/auth/context/auth-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+import { useAuth } from "@/features/auth/context/auth-context"
 import UserActionsDropDown from "@/features/user/components/user-actions-drop-down"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/pricing", label: "خطط الأسعار", active: true },
-  { href: "/api/docs", label: "API" },
+  { href: "http://api.mukhtasar.pro/api/docs", label: "API" },
   { href: "/dashboard/urls", label: "الروابط" },
 ]
 
