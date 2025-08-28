@@ -22,7 +22,7 @@ class ApiClient {
     private defaultErrorMessage: string;
 
     constructor(
-        baseUrl: string = process.env.NEXT_PUBLIC_API_URL || '',
+        baseUrl: string = "api",
         defaultErrorMessage: string = "حدث خطأ غير متوقع. حاول مرة أخرى."
     ) {
         this.baseUrl = baseUrl;

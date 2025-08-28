@@ -3,7 +3,7 @@ import { type LoginType } from "@mukhtasar/shared"
 
 export async function signup(data: NewUserType) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
+        const res = await fetch(`/api/auth/signup`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -28,7 +28,7 @@ export async function signup(data: NewUserType) {
 
 export async function login(data: LoginType) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        const res = await fetch(`/api/auth/login`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -63,7 +63,7 @@ export async function login(data: LoginType) {
 
 export async function logout() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+        const res = await fetch(`/api/auth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
