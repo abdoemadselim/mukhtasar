@@ -1,32 +1,22 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "Mukhtasar - URL Shortener API",
-    "description": "This is the specification for Mukhtasar API which allows you to programmatically access our service to shorten long URLs into short URLs\n\nFeatures:\n- Create short URLs (with or without custom aliases)\n- Update and delete short URLs\n- Track basic analytics (clicks, referrer, etc.)\n",
-    "termsOfService": "https://mukhtasar.io/terms",
+    "title": "مُختصِر - واجهة برمجة التطبيقات الخاصة بمُختصِر",
+    "description": "هذه هي مواصفات واجهة برمجة التطبيقات لمُختصِر التي تتيح لك الوصول برمجياً إلى خدمتنا لتحويل الروابط الطويلة إلى روابط مختصرة\n\nالميزات:\n- إنشاء روابط مختصرة (مع أو بدون أسماء مستعارة مخصصة)\n- تحديث وحذف الروابط المختصرة\n- تتبع الإحصائيات الأساسية (النقرات، المرجع، إلخ)\n",
     "contact": {
-      "email": "mukhtasar@gmail.com"
+      "email": "support@mukhtasar.pro"
     },
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api",
-      "description": "Local development server"
-    },
-    {
-      "url": "http://127.0.0.1:3000/api",
-      "description": "Local development server (alternative)"
-    },
-    {
-      "url": "https://mukhtasar.io/api",
-      "description": "Production server"
+      "url": "https://api.mukhtasar.pro/api"
     }
   ],
   "tags": [
     {
       "name": "Url",
-      "description": "Short links that redirect to a longer link. These API endpoints allow you to shorten new links & modify how they function"
+      "description": "الروابط المختصرة التي تعيد التوجيه إلى رابط أطول. تتيح لك نقاط النهاية هذه اختصار روابط جديدة وتعديل كيفية عملها"
     }
   ],
   "paths": {
@@ -35,8 +25,8 @@
         "tags": [
           "Url"
         ],
-        "summary": "Create a new short URL",
-        "description": "Shortens a long URL into a new short URL",
+        "summary": "إنشاء رابط مختصر جديد",
+        "description": "تحويل رابط طويل إلى رابط مختصر جديد",
         "operationId": "createUrl",
         "requestBody": {
           "required": true,
@@ -48,23 +38,23 @@
                   "original_url": {
                     "type": "string",
                     "format": "uri",
-                    "description": "The original long URL to shorten",
+                    "description": "الرابط الأصلي الطويل المراد اختصاره",
                     "example": "https://www.example.com/products/12354?utm_source=newsletter"
                   },
                   "alias": {
                     "type": "string",
-                    "description": "Optional custom alias",
+                    "description": "اسم مستعار مخصص اختياري",
                     "example": "myexamplelink"
                   },
                   "domain": {
                     "type": "string",
-                    "description": "The domain to use for the short URL",
+                    "description": "النطاق المراد استخدامه للرابط المختصر",
                     "example": "mukhtasar.io"
                   },
                   "description": {
                     "type": "string",
-                    "description": "A description for the short URL",
-                    "example": "Product page link"
+                    "description": "وصف للرابط المختصر",
+                    "example": "رابط صفحة المنتج"
                   }
                 },
                 "required": [
@@ -76,7 +66,7 @@
         },
         "responses": {
           "201": {
-            "description": "URL successfully created",
+            "description": "تم إنشاء الرابط بنجاح",
             "content": {
               "application/json": {
                 "schema": {
@@ -151,14 +141,14 @@
         "tags": [
           "Url"
         ],
-        "summary": "Retrieve shortened URL information",
-        "description": "Returns the details of a shortened URL, including original URL, domain, alias, and other metadata for the provided domain and alias.\n",
+        "summary": "استرداد معلومات الرابط المختصر",
+        "description": "إرجاع تفاصيل الرابط المختصر، بما في ذلك الرابط الأصلي والنطاق والاسم المستعار والبيانات الوصفية الأخرى للنطاق والاسم المستعار المقدمين.\n",
         "operationId": "getShortUrlInfo",
         "parameters": [
           {
             "name": "alias",
             "in": "path",
-            "description": "The alias of the short URL to lookup",
+            "description": "الاسم المستعار للرابط المختصر المراد البحث عنه",
             "required": true,
             "schema": {
               "type": "string",
@@ -168,7 +158,7 @@
           {
             "name": "domain",
             "in": "path",
-            "description": "The domain of the short URL to lookup",
+            "description": "نطاق الرابط المختصر المراد البحث عنه",
             "required": true,
             "schema": {
               "type": "string",
@@ -178,7 +168,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Short URL record found",
+            "description": "تم العثور على سجل الرابط المختصر",
             "content": {
               "application/json": {
                 "schema": {
@@ -211,7 +201,7 @@
                         },
                         "description": {
                           "type": "string",
-                          "example": "Product page link"
+                          "example": "رابط صفحة المنتج"
                         }
                       }
                     },
@@ -257,14 +247,14 @@
         "tags": [
           "Url"
         ],
-        "summary": "Update a short URL's original URL",
-        "description": "Allows updating the original URL (destination) for an existing shortened URL.",
+        "summary": "تحديث الرابط الأصلي للرابط المختصر",
+        "description": "يتيح تحديث الرابط الأصلي (الوجهة) لرابط مختصر موجود.",
         "operationId": "updateUrl",
         "parameters": [
           {
             "name": "alias",
             "in": "path",
-            "description": "The alias of the short URL to update",
+            "description": "الاسم المستعار للرابط المختصر المراد تحديثه",
             "required": true,
             "schema": {
               "type": "string",
@@ -274,7 +264,7 @@
           {
             "name": "domain",
             "in": "path",
-            "description": "The domain of the short URL to update",
+            "description": "نطاق الرابط المختصر المراد تحديثه",
             "required": true,
             "schema": {
               "type": "string",
@@ -292,7 +282,7 @@
                   "original_url": {
                     "type": "string",
                     "format": "uri",
-                    "description": "The new original URL to redirect to",
+                    "description": "الرابط الأصلي الجديد للتوجيه إليه",
                     "example": "https://www.example.com/new-destination"
                   }
                 },
@@ -305,7 +295,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully updated URL",
+            "description": "تم تحديث الرابط بنجاح",
             "content": {
               "application/json": {
                 "schema": {
@@ -368,14 +358,14 @@
         "tags": [
           "Url"
         ],
-        "summary": "Delete a Short URL",
-        "description": "Deletes a shortened URL based on the provided domain and alias.",
+        "summary": "حذف الرابط المختصر",
+        "description": "حذف رابط مختصر بناءً على النطاق والاسم المستعار المقدمين.",
         "operationId": "deleteUrl",
         "parameters": [
           {
             "name": "alias",
             "in": "path",
-            "description": "The alias of the short URL to delete",
+            "description": "الاسم المستعار للرابط المختصر المراد حذفه",
             "required": true,
             "schema": {
               "type": "string",
@@ -385,7 +375,7 @@
           {
             "name": "domain",
             "in": "path",
-            "description": "The domain of the short URL to delete",
+            "description": "نطاق الرابط المختصر المراد حذفه",
             "required": true,
             "schema": {
               "type": "string",
@@ -395,7 +385,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted the URL",
+            "description": "تم حذف الرابط بنجاح",
             "content": {
               "application/json": {
                 "schema": {
@@ -403,7 +393,7 @@
                   "properties": {
                     "data": {
                       "type": "object",
-                      "description": "Response data from the delete operation"
+                      "description": "بيانات الاستجابة من عملية الحذف"
                     },
                     "errors": {
                       "type": "array",
@@ -446,14 +436,14 @@
         "tags": [
           "Url"
         ],
-        "summary": "Get click count for a short URL",
-        "description": "Returns the number of times a short URL has been clicked",
+        "summary": "الحصول على عدد النقرات للرابط المختصر",
+        "description": "إرجاع عدد المرات التي تم النقر فيها على الرابط المختصر",
         "operationId": "getUrlClickCounts",
         "parameters": [
           {
             "name": "alias",
             "in": "path",
-            "description": "The alias of the short URL",
+            "description": "الاسم المستعار للرابط المختصر",
             "required": true,
             "schema": {
               "type": "string",
@@ -463,7 +453,7 @@
           {
             "name": "domain",
             "in": "path",
-            "description": "The domain of the short URL",
+            "description": "نطاق الرابط المختصر",
             "required": true,
             "schema": {
               "type": "string",
@@ -473,7 +463,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Click count retrieved successfully",
+            "description": "تم استرداد عدد النقرات بنجاح",
             "content": {
               "application/json": {
                 "schema": {
@@ -536,7 +526,7 @@
   "components": {
     "responses": {
       "UnauthorizedError": {
-        "description": "You are not authorized to access this resource.",
+        "description": "غير مسموح لك بالوصول إلى هذا المورد.",
         "content": {
           "application/json": {
             "schema": {
@@ -552,7 +542,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "You are not authorized to access this resource."
+                    "غير مسموح لك بتنفيذ هذا الإجراء على هذا المورد."
                   ]
                 },
                 "errorCode": {
@@ -569,7 +559,7 @@
         }
       },
       "RateLimitExceeded": {
-        "description": "Too many requests — rate limit exceeded.",
+        "description": "عدد كبير من الطلبات — تم تجاوز الحد المسموح.",
         "content": {
           "application/json": {
             "schema": {
@@ -585,7 +575,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "Rate limit exceeded. Please try again later."
+                    "لقد قمت بعدد كبير من الطلبات في وقت قصير. الرجاء الانتظار قليلاً ثم المحاولة مجددًا."
                   ]
                 },
                 "errorCode": {
@@ -602,7 +592,7 @@
         }
       },
       "MethodNotAllowed": {
-        "description": "This HTTP method is not allowed on this endpoint.",
+        "description": "طريقة HTTP هذه غير مسموحة على نقطة النهاية هذه.",
         "content": {
           "application/json": {
             "schema": {
@@ -618,7 +608,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "This HTTP method is not allowed on this endpoint."
+                    "طريقة الطلب (HTTP Method) غير مسموح بها على هذا المسار."
                   ]
                 },
                 "errorCode": {
@@ -635,7 +625,7 @@
         }
       },
       "ValidationError": {
-        "description": "Validation failed on one of the properties, please check the errors in the response body.",
+        "description": "فشل في التحقق من إحدى الخصائص، يرجى التحقق من الأخطاء في نص الاستجابة.",
         "content": {
           "application/json": {
             "schema": {
@@ -651,8 +641,8 @@
                     "type": "string"
                   },
                   "example": [
-                    "Invalid URL",
-                    "Alias is too long"
+                    "رابط غير صحيح",
+                    "الاسم المستعار طويل جداً"
                   ]
                 },
                 "fieldErrors": {
@@ -665,10 +655,10 @@
                   },
                   "example": {
                     "original_url": [
-                      "Invalid URL format"
+                      "تنسيق الرابط غير صحيح"
                     ],
                     "alias": [
-                      "Alias must be between 1 and 20 characters"
+                      "يجب أن يكون الاسم المستعار بين 1 و 20 حرف"
                     ]
                   }
                 },
@@ -686,7 +676,7 @@
         }
       },
       "InternalServerError": {
-        "description": "Internal server error.",
+        "description": "خطأ داخلي في الخادم.",
         "content": {
           "application/json": {
             "schema": {
@@ -702,7 +692,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "Something went wrong"
+                    "حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا."
                   ]
                 },
                 "errorCode": {
@@ -719,7 +709,7 @@
         }
       },
       "NotFoundError": {
-        "description": "The requested resource was not found.",
+        "description": "المورد المطلوب غير موجود.",
         "content": {
           "application/json": {
             "schema": {
@@ -735,7 +725,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "Short URL not found"
+                    "الرابط المختصر غير موجود"
                   ]
                 },
                 "errorCode": {
@@ -752,7 +742,7 @@
         }
       },
       "ConflictError": {
-        "description": "The request conflicts with the current state of the resource.",
+        "description": "الطلب يتعارض مع الحالة الحالية للمورد.",
         "content": {
           "application/json": {
             "schema": {
@@ -768,7 +758,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "This alias is not available"
+                    "هذا الاسم المستعار غير متاح"
                   ]
                 },
                 "errorCode": {
@@ -785,7 +775,7 @@
         }
       },
       "ResourceExpiredError": {
-        "description": "The requested resource has expired.",
+        "description": "المورد المطلوب منتهي الصلاحية.",
         "content": {
           "application/json": {
             "schema": {
@@ -801,7 +791,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "Verification token has expired"
+                    "انتهت صلاحية رمز التحقق"
                   ]
                 },
                 "errorCode": {
@@ -823,7 +813,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "Bearer token for authentication"
+        "description": "رمز Bearer للمصادقة"
       }
     }
   },

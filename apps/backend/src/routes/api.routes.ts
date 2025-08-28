@@ -6,12 +6,25 @@ import swaggerApiDoc from "../../docs/api-doc.json" with {type: "json"}
 
 const router = Router()
 
+const customCss = `
+    .info {
+        text-align:right;
+    }
+    ul li {
+        padding-top: 15px;
+    }
+    ul li::marker {
+      content: "";
+    }
+
+`
 // Swagger UI setup with options    
 const swaggerOptions = {
     swaggerOptions: {
         showRequestDuration: true
     },
-    customSiteTitle: "مُختصِر | وثائق المبرمجين"
+    customSiteTitle: "مُختصِر | وثائق المبرمجين",
+    customCss: customCss,
 };
 
 // The API Doc
