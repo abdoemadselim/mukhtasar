@@ -59,7 +59,7 @@ async function createTables() {
       ADD COLUMN IF NOT EXISTS url_hash BYTEA GENERATED ALWAYS AS (DECODE(MD5(original_url), 'hex')) STORED;
 
     CREATE INDEX IF NOT EXISTS unique_url_hash ON url USING HASH (url_hash);
-    CREATE INDEX IF NOT EXISTS idx_url_user_id ON url(user_id);
+    CREATE INDEX IF NOT EXISTS idx_url_user_id_created_at ON url(user_id, created_at);
 
     -- URL ANALYTICS
     CREATE TABLE IF NOT EXISTS url_analytics (
@@ -72,6 +72,11 @@ async function createTables() {
       device_type VARCHAR(20),
       referer VARCHAR(2000)
     );
+
+    CREATE SEQUENCE url_unique_id
+      START 1
+      INCREMENT 1
+      CACHE 1000;
 
     -- DOMAIN
     CREATE TABLE IF NOT EXISTS domain (
