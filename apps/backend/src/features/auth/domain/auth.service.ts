@@ -104,11 +104,10 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
     authRepository.setUserVerified(user.id);
 
     if (sessionId) {
-        const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
         console.log("hello")
         redisClient.setEx(
             `sessions:${sessionId}`,
-            SESSION_DURATION / 1000,
+            Number(process.env.SESSION_DURATION) / 1000,
             JSON.stringify({
                 id: user.id,
                 name: user.name,

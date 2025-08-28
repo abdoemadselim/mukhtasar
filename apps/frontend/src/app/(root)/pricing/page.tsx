@@ -11,7 +11,7 @@ const PLANS = [
         name: "مجاني",
         headline: "ابدأ دون تكلفة",
         badge: null as string | null,
-        price:0,
+        price: 0,
         limits: {
             links: "50",
             clicks: "10ألف/شهر",
@@ -22,7 +22,7 @@ const PLANS = [
             "نطاق مختصر افتراضي فقط",
             "تاريخ صلاحية مخصص لكل رابط",
         ],
-        cta: { label: "ابدأ الآن", href: "/signup" },
+        cta: { label: "ابدأ الآن", href: "/signup", disabled: false },
         highlight: false,
     },
     {
@@ -44,7 +44,7 @@ const PLANS = [
             "روابط مجمّعة (CSV) حتى 5K/دفعة",
         ],
         footnote: "* تتبع غير محدود لنقرات 500 رابط. حتى 9.5K روابط إضافية يمكن تتبع حتى 9.5K نقرة لكلٍ منها.",
-        cta: { label: "اشترك في مميز", href: "/checkout?plan=pro" },
+        cta: { label: "قريبًا", href: "/checkout?plan=pro", disabled: true },
         highlight: true,
     },
     {
@@ -65,7 +65,7 @@ const PLANS = [
             "واجهة برمجية API مع حدود أعلى",
         ],
         footnote: "مصمم للحملات قصيرة الأجل والعمليات الضخمة ذات العلامات التجارية.",
-        cta: { label: "اشترك في Bulk 100K", href: "/checkout?plan=bulk-100k" },
+        cta: { label: "قريبًا", disabled: true, href: "/checkout?plan=bulk-100k" },
         highlight: false,
     },
 ] as const;
@@ -126,15 +126,22 @@ export default function PricingPlans() {
                                 </CardContent>
 
                                 <CardFooter className="mt-auto">
-                                    <Button asChild className="w-full">
-                                        <Link href={plan.cta.href}>{plan.cta.label}</Link>
-                                    </Button>
+                                    {!plan.cta.disabled ?
+                                        <Button asChild className="w-full" disabled={plan.cta.disabled}>
+                                            <Link href={plan.cta.href}>{plan.cta.label}</Link>
+                                        </Button>
+                                        : (
+                                            <Button className="w-full" disabled={plan.cta.disabled}>
+                                                <span>{plan.cta.label}</span>
+                                            </Button>
+                                        )
+                                    }
                                 </CardFooter>
                             </div>
                         </Card>
                     ))}
                 </div>
             </div>
-        </section>
+        </section >
     );
 }

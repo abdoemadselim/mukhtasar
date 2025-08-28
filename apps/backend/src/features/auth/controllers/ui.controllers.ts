@@ -23,18 +23,16 @@ export async function login(req: Request, res: Response) {
     req.user = user;
 
     const sessionId = randomUUID()
-    const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
     res.cookie("mukhtasar-session", sessionId, {
-        maxAge: SESSION_DURATION,
+        maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
         sameSite: "lax"
     });
 
-    console.log("hello world")
     redisClient.setEx(
         `sessions:${sessionId}`,
-        SESSION_DURATION / 1000,
+        Number(process.env.SESSION_DURATION) / 1000,
         JSON.stringify({
             id: user.id,
             name: user.name,
@@ -85,9 +83,8 @@ export async function signup(req: Request, res: Response) {
     // httpOnly: so even if a malicious script managed to land on our server, it can't access the cookie
     // secure: so the session is only sent over HTTPS (anyway, the server runs only over HTTPS)
     // sameSite: lax (default value): to prevent CSRF attacks (attackers do something on behalf of users because the user's cookie is sent with the malicious request)
-    const SESSION_DURATION = 1000 * 60 * 60 * 2 * 24  // (2 days)
     res.cookie("mukhtasar-session", sessionId, {
-        maxAge: SESSION_DURATION,
+        maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
         sameSite: "lax"
@@ -95,7 +92,7 @@ export async function signup(req: Request, res: Response) {
 
     redisClient.setEx(
         `sessions:${sessionId}`,
-        SESSION_DURATION,
+        Number(process.env.SESSION_DURATION) / 1000,
         JSON.stringify({
             id: user.id,
             name: user.name,

@@ -5,7 +5,6 @@ import { query } from "#lib/db/db-connection.js";
 
 const urlRepository = {
     async getUrlsByUserId(user_id: number) {
-        console.log(user_id)
         const result = await query(
             "SELECT id, alias, domain, original_url, short_url, click_count, created_at FROM url WHERE user_id = $1",
             [String(user_id)]

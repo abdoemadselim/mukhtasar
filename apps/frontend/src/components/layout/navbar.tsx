@@ -138,7 +138,7 @@ export default function Navbar() {
                   <div className="flex gap-3 items-center">
                     <span className="w-16">{user.name}</span>
                     <Avatar className="w-8">
-                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarImage src="/avatar.webp" />
                       <AvatarFallback>{user.name}</AvatarFallback>
                     </Avatar>
                   </div>

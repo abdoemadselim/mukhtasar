@@ -206,8 +206,6 @@ export async function getUrlClickCounts(req: Request, res: Response) {
 }
 
 export async function getOriginalUrl(req: Request, res: Response) {
-
-    console.log("hello")
     // 1- prepare the data for the service
     const { alias } = req.params;
 
