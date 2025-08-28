@@ -40,7 +40,8 @@ export default {
         "doc",
         "domain",
         "subscription",
-        "security"
+        "security",
+        "deploy"
       ]
     ],
     'type-empty': [2, 'never'],
