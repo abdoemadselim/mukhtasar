@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { LinkIcon, Lock, LogOut } from "lucide-react";
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/context/auth-context";
-import { LogOut, Settings } from "lucide-react";
 
 export default function UserActionsDropDown({ children }: { children: React.ReactNode }) {
     const { logout, isLoading } = useAuth()
@@ -9,14 +10,22 @@ export default function UserActionsDropDown({ children }: { children: React.Reac
         <DropdownMenu dir="rtl">
             <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem className="flex items-center justify-between cursor-pointer">
-                    إعدادات الحساب
-                    <Settings />
+                <DropdownMenuItem >
+                    <Link href="/dashboard/urls" className="flex items-center gap-4 cursor-pointer w-full">
+                        <LinkIcon />
+                        الروابط
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link href="/dashboard/urls" className="flex items-center gap-4 cursor-pointer w-full">
+                        <Lock />
+                        رموز الوصول
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem variant="destructive" className="flex justify-between items-center cursor-pointer" onClick={logout} disabled={isLoading}
                 >
-                    {isLoading ? 'جارٍ الخروج...' : 'تسجيل الخروج'}
                     <LogOut />
+                    {isLoading ? 'جارٍ الخروج...' : 'تسجيل الخروج'}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
