@@ -2,12 +2,11 @@ import { Plus } from "lucide-react";
 import { Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
-const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
+import { Highlighter } from "@/components/ui/highlighter";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 
 import { CreateUrlDialog } from "@/features/url/components/create-url-dialog";
 import UrlTable from "@/features/url/components/url-table";
-import dynamic from "next/dynamic";
 
 export default function UrlPage() {
     return (

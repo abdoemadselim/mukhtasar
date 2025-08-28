@@ -22,15 +22,13 @@ import { openToaster } from "@/components/ui/sonner";
 
 import { useAuth } from "@/features/auth/context/auth-context";
 import { useUrl } from "@/features/url/context/urls-context";
-import { createUrl } from "@/features/url/service/urls-service";
 import { useCreateUrl } from "@/features/url/hooks/urls-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { getUrls } from "../service/urls-service";
 
 export default function LandingUrlCreationForm() {
     const { user } = useAuth();
     const { canCreateUrl, incrementUrlCount } = useUrl();
-    type UrlOutput = ShortUrlType & {
-        short_url: string
-    }
     const form = useForm<ShortUrlType>({
         resolver: zodResolver(ShortUrlSchema),
         defaultValues: {
@@ -42,7 +40,16 @@ export default function LandingUrlCreationForm() {
     })
 
     const { mutateAsync, data, isSuccess, isError } = useCreateUrl()
-
+    const queryClient = useQueryClient()
+    useEffect(() => {
+        queryClient.prefetchQuery({
+            queryKey: ["urls", 1, 10],
+            queryFn: () => getUrls({ page: 0, page_size: 10 }),
+            staleTime: 5 * 60 * 1000, // 5 minutes,
+            gcTime: 10 * 60 * 1000,
+            retry: false,
+        })
+    }, [queryClient])
 
     const onSubmit: SubmitHandler<ShortUrlType> = async (data) => {
         // Check guest user limits
@@ -69,7 +76,6 @@ export default function LandingUrlCreationForm() {
         }
     }, [isError, isSuccess, form])
 
-    console.log(data)
     const handleCopy = async () => {
         await navigator.clipboard.writeText(data?.short_url || "")
         openToaster("تم نسخ الرابط إلى حافظتك بنجاح.", "success")
