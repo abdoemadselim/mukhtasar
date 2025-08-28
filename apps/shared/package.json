@@ -15,5 +15,8 @@
       "types": "./dist/main.d.ts"
     }
   },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
   "author": "Abdulrahman Emad"
 }

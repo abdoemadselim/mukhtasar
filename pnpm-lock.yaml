@@ -300,7 +300,11 @@ importers:
         specifier: ^5
         version: 5.9.2
 
-  apps/shared: {}
+  apps/shared:
+    devDependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.2
 
 packages:
 
