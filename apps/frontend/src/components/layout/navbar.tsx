@@ -136,8 +136,8 @@ export default function Navbar() {
 
                 <UserActionsDropDown >
                   <div className="flex gap-2 items-center">
-                    <span className="w-16">{user.name}</span>
-                    <Avatar className="w-8">
+                    <span>{user.name}</span>
+                    <Avatar>
                       <AvatarImage src="/avatar.webp" />
                       <AvatarFallback>{user.name}</AvatarFallback>
                     </Avatar>
