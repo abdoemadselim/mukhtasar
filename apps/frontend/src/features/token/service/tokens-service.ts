@@ -3,7 +3,7 @@ import { TokenType } from "@mukhtasar/shared";
 
 export async function createToken(data: TokenType) {
   return apiClient.post("/token", data, {
-    includeCredentials: true, // يرسل الكوكيز تلقائيًا
+    includeCredentials: true,
     throwOnError: true, // يرمي errors بدل ما يرجع object
   });
 }
@@ -21,6 +21,7 @@ export async function getTokens({
   return apiClient.get(endpoint, {
     cache: "no-store",
     throwOnError: true,
+    includeCredentials: true
   });
 }
 
@@ -28,6 +29,7 @@ export async function deleteToken(token_id: number) {
   return apiClient.delete(`/token/${token_id}`, {
     cache: "no-store",
     throwOnError: true,
+    includeCredentials: true
   });
 }
 
@@ -42,5 +44,6 @@ export async function updateToken({ id, can_create, can_update, can_delete, labe
   return apiClient.patch(`/token/${id}`, toUpdateResource, {
     cache: "no-store",
     throwOnError: true,
+    includeCredentials: true
   });
 }
