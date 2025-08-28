@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <link rel="dns-prefetch" href="https://api.mukhtasar.pro/" />
+        <link rel="preconnect" href="https://api.mukhtasar.pro" />
       </head>
       <body
         className={`${cairo.className} antialiased `}
