@@ -26,7 +26,7 @@ const app = express()
 const allowedOrigins = [
   "https://mukhtasar.pro",
   "https://www.mukhtasar.pro",
-  "http://localhost:3002"
+  "http://localhost:3002",
 ];
 
 // In your Express backend

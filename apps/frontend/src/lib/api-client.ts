@@ -22,7 +22,7 @@ class ApiClient {
     private defaultErrorMessage: string;
 
     constructor(
-        baseUrl: string = "api",
+        baseUrl: string = "/api",
         defaultErrorMessage: string = "حدث خطأ غير متوقع. حاول مرة أخرى."
     ) {
         this.baseUrl = baseUrl;
