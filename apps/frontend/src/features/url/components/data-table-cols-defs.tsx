@@ -57,7 +57,7 @@ export const columns: ColumnDef<FullUrlType>[] = [
         toast("تم نسخ الرابط إلى حافظة جهازك.")
       }
       return (
-        <div className="w-70 flex items-center gap-2" >
+        <div className="flex items-center gap-2" >
           <div className="text-primary cursor-pointer underline lg:text-md" dir="ltr">
             {row.original.short_url}
             <Button variant="ghost" className="cursor-pointer" onClick={handleCopy}>
@@ -71,13 +71,18 @@ export const columns: ColumnDef<FullUrlType>[] = [
   {
     accessorKey: "original_url",
     header: () => <p className="lg:text-lg">الرابط الأصلي</p>,
-    cell: ({ row }) => (
-      <div className="flex items-center w-70">
-        <div className="truncate px-4 text-gray-500 cursor-pointer underline lg:text-md" dir="ltr">
-          {row.original.original_url}
+    cell: ({ row }) => {
+      // Why (to stop the browser from rendering the whole long url)
+      const url = row.original.original_url;
+      const truncated_original_url = url.length > 50 ? url.slice(0, 50) + "…" : url;
+      return (
+        <div className="flex items-center w-70">
+          <div className="truncate px-4 text-gray-500 cursor-pointer underline lg:text-md" dir="ltr" title={url}>
+            {truncated_original_url}
+          </div>
         </div>
-      </div>
-    ),
+      )
+    },
   },
   {
     accessorKey: "created_at",
@@ -133,7 +138,7 @@ export const columns: ColumnDef<FullUrlType>[] = [
               <Link href={`/dashboard/urls/${row.original.id}`} className="text-sm font-semibold">
                 عرض التحليلات
               </Link>
-              <ChartArea size={16}/>
+              <ChartArea size={16} />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <UpdateUrlDialog currentUrl={row.original}>
