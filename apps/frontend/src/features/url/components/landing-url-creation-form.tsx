@@ -23,6 +23,7 @@ import { openToaster } from "@/components/ui/sonner";
 import { useAuth } from "@/features/auth/context/auth-context";
 import { useUrl } from "@/features/url/context/urls-context";
 import { createUrl } from "@/features/url/service/urls-service";
+import { useCreateUrl } from "@/features/url/hooks/urls-query";
 
 export default function LandingUrlCreationForm() {
     const { user } = useAuth();
@@ -30,16 +31,18 @@ export default function LandingUrlCreationForm() {
     type UrlOutput = ShortUrlType & {
         short_url: string
     }
-
-    const [createdUrl, setCreatedUrl] = useState<UrlOutput | null>(null);
     const form = useForm<ShortUrlType>({
         resolver: zodResolver(ShortUrlSchema),
         defaultValues: {
             domain: "mukhtasar.pro",
             alias: "",
-            original_url: ""
+            original_url: "",
+            description: "",
         }
     })
+
+    const { mutateAsync, data, isSuccess, isError } = useCreateUrl()
+
 
     const onSubmit: SubmitHandler<ShortUrlType> = async (data) => {
         // Check guest user limits
@@ -48,34 +51,27 @@ export default function LandingUrlCreationForm() {
             return;
         }
 
-        setCreatedUrl(null);
+        await mutateAsync(data)
 
-        const result = await createUrl(data);
-
-        if (result.data) {
-            setCreatedUrl(result.data);
-
-            // Increment URL count for guest users
-            if (!user) {
-                incrementUrlCount();
-            }
-            // Reset form
-        } else {
-            // Displaying the server errors
-            for (let error in result) {
-                form.setError(error as keyof ShortUrlType || "root", { message: result[error].message })
-            }
+        if (!user) {
+            incrementUrlCount()
         }
     }
 
     useEffect(() => {
-        if (form.formState.isSubmitSuccessful) {
-            form.reset();
+        if (isError) {
+            openToaster("حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا.", "error")
         }
-    }, [form, form.reset]);
 
+        if (isSuccess) {
+            openToaster("تم إنشاء الرابط بنجاح.", "success")
+            form.reset()
+        }
+    }, [isError, isSuccess, form])
+
+    console.log(data)
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(createdUrl?.short_url || "")
+        await navigator.clipboard.writeText(data?.short_url || "")
         openToaster("تم نسخ الرابط إلى حافظتك بنجاح.", "success")
     }
 
@@ -91,7 +87,7 @@ export default function LandingUrlCreationForm() {
             </div>
             {/* Success result */}
             {
-                createdUrl && (
+                data && (
                     <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
                         <div className="flex items-center gap-2 mb-4">
                             <CheckCircle className="h-5 w-5 text-accent-foreground" />
@@ -103,7 +99,7 @@ export default function LandingUrlCreationForm() {
                                 <label className="text-sm font-medium text-gray-700">الرابط المختصر:</label>
                                 <div className="flex items-center gap-2 mt-1">
                                     <Input
-                                        value={createdUrl.short_url}
+                                        value={data.short_url}
                                         readOnly
                                         className="bg-white"
                                     />

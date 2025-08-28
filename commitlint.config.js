@@ -43,7 +43,8 @@ export default {
         "security",
         "deploy",
         "email",
-        "navbar"
+        "navbar",
+        "bugs"
       ]
     ],
     'type-empty': [2, 'never'],
