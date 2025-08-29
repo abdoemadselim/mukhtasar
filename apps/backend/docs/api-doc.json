@@ -49,7 +49,7 @@
                   "domain": {
                     "type": "string",
                     "description": "النطاق المراد استخدامه للرابط المختصر",
-                    "example": "mukhtasar.io"
+                    "example": "mukhtasar.pro"
                   },
                   "description": {
                     "type": "string",
@@ -78,7 +78,7 @@
                         "short_url": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://mukhtasar.io/myexamplelink"
+                          "example": "https://mukhtasar.pro/myexamplelink"
                         },
                         "alias": {
                           "type": "string",
@@ -86,7 +86,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.io"
+                          "example": "mukhtasar.pro"
                         },
                         "original_url": {
                           "type": "string",
@@ -141,8 +141,8 @@
         "tags": [
           "Url"
         ],
-        "summary": "استرداد معلومات الرابط المختصر",
-        "description": "إرجاع تفاصيل الرابط المختصر، بما في ذلك الرابط الأصلي والنطاق والاسم المستعار والبيانات الوصفية الأخرى للنطاق والاسم المستعار المقدمين.\n",
+        "summary": "معلومات الرابط المختصر",
+        "description": "تفاصيل الرابط المختصر، بما في ذلك الرابط الأصلي والنطاق والاسم المستعار والبيانات الوصفية الأخرى .\n",
         "operationId": "getShortUrlInfo",
         "parameters": [
           {
@@ -162,7 +162,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.io"
+              "example": "mukhtasar.pro"
             }
           }
         ],
@@ -184,7 +184,7 @@
                         },
                         "short_url": {
                           "type": "string",
-                          "example": "https://mukhtasar.io/xYz123"
+                          "example": "https://mukhtasar.pro/xYz123"
                         },
                         "alias": {
                           "type": "string",
@@ -192,7 +192,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.io"
+                          "example": "mukhtasar.pro"
                         },
                         "created_at": {
                           "type": "string",
@@ -201,7 +201,7 @@
                         },
                         "description": {
                           "type": "string",
-                          "example": "رابط صفحة المنتج"
+                          "example": "رابط أهم 10 منتجات لهذا الشهر."
                         }
                       }
                     },
@@ -247,8 +247,8 @@
         "tags": [
           "Url"
         ],
-        "summary": "تحديث الرابط الأصلي للرابط المختصر",
-        "description": "يتيح تحديث الرابط الأصلي (الوجهة) لرابط مختصر موجود.",
+        "summary": "تحديث الرابط الأصلي المرتبط بالرابط المختصر",
+        "description": "يتيح تحديث الرابط الأصلي المرتبط برابط مختصر موجود.",
         "operationId": "updateUrl",
         "parameters": [
           {
@@ -268,7 +268,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.io"
+              "example": "mukhtasar.pro"
             }
           }
         ],
@@ -315,7 +315,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.io"
+                          "example": "mukhtasar.pro"
                         }
                       }
                     },
@@ -379,7 +379,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.io"
+              "example": "mukhtasar.pro"
             }
           }
         ],
@@ -457,7 +457,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.io"
+              "example": "mukhtasar.pro"
             }
           }
         ],
@@ -478,7 +478,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.io"
+                          "example": "mukhtasar.pro"
                         },
                         "clickCount": {
                           "type": "integer",
