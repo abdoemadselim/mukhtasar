@@ -5,7 +5,7 @@ import tokenRepository from "#features/token/data-access/token.repository.js"
 import type { Token, TokenInput, TokenPermission, TokenWithUrlType } from "#features/token/types.js";
 import { CREATE_URL_PERMISSION, READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
-import { NotFoundException, UnAuthorizedException } from "#lib/error-handling/error-types.js"
+import { NotFoundException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js"
 
 // TODO: The service shouldn't depend on the request, response objects of express
 export function authToken(requiredPermission: TokenPermission) {
@@ -73,7 +73,7 @@ function validateTokenOwnership(token: TokenWithUrlType, domain: string) {
     }
 
     if (token.domain !== domain) {
-        throw new UnAuthorizedException();
+        throw new ValidationException({ "domain": { message: "النطاق غير مسموح به. تحقق من النطاقات المضافة إلى حسابك." } });
     }
 }
 

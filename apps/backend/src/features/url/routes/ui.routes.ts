@@ -17,21 +17,21 @@ const router = Router();
 
 // Create a short URL
 router.post("/",
-    ipRateLimiter(1, 50),
+    ipRateLimiter(60, 100),
     validateRequest([shortUrlSchema]),
     createUrl
 )
 
 router.get(
     "/",
-    ipRateLimiter(1, 40),
+    ipRateLimiter(15, 300), // 300 requests per 15 minutes
     authSession(),
     getUrlsPage
 )
 
 router.delete(
     "/:domain/:alias",
-    ipRateLimiter(1, 40),
+    ipRateLimiter(60, 100), // 100 delete per hour
     validateRequest([paramsSchema]),
     authSession(),
     deleteUrl
@@ -39,7 +39,7 @@ router.delete(
 
 // Change the long url (Update the attached destination)
 router.patch("/:domain/:alias",
-    ipRateLimiter(1, 50),
+    ipRateLimiter(60, 100), // 100 updates per hour
     validateRequest([paramsSchema, toUpdateUrlSchema]),
     authSession(),
     updateUrl
