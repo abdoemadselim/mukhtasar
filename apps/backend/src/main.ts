@@ -65,7 +65,7 @@ app.use("/", publicRoutes)
 
 // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
 app.use("*splash", (req, res, next) => {
-  throw new NotFoundException("Endpoint not found.")
+  throw new NotFoundException("طلب غير صحيح.")
 })
 
 // ----- Error Handler Middleware ----------

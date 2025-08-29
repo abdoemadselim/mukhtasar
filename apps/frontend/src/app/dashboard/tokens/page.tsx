@@ -24,7 +24,7 @@ export default async function TokensPage() {
                             </CreateTokenDialog>
                             <div className="flex gap-4 items-center">
                                 <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">رموز وصولك (APIs)</Highlighter></h1>
-                                <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg" href="https://api.mukhtasar.pro/api/docs"> (API documentation) وثائق المطورين</Link>
+                                <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg hidden sm:block" href="https://api.mukhtasar.pro/api/docs"> (API documentation) وثائق المطورين</Link>
                             </div>
                         </div>
                         <Suspense fallback={<DataTableSkeleton />}>

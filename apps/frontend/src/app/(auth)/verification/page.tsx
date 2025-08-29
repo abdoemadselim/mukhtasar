@@ -1,13 +1,15 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/features/auth/context/auth-context";
 import { Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/features/auth/context/auth-context";
 
 export default function EmailVerificationPage() {
     const { user, isLoading } = useAuth()
+    const router = useRouter();
 
     const component = (
         user?.verified ?
@@ -23,6 +25,10 @@ export default function EmailVerificationPage() {
 
     )
 
+    if (!user && !isLoading) {
+        router.replace("/login")
+    }
+
     if (isLoading) {
         // Show loading spinner while checking authentication
         return (
@@ -31,7 +37,6 @@ export default function EmailVerificationPage() {
             </div>
         );
     }
-
 
     return (
         <>
@@ -47,11 +52,11 @@ export default function EmailVerificationPage() {
             <main className="flex flex-col justify-center items-center min-h-[80vh]">
                 <Mail className="text-primary" size={100} />
 
-                <p className="text-5xl font-medium pb-4">تأكيد بريدك الإلكتروني</p>
-                <div className="text-xl text-center">
+                <p className="sm:text-4xl text-3xl text-center font-medium pb-4">تأكيد بريدك الإلكتروني</p>
+                <div className="sm:text-xl text-center">
                     {component}
-                    <Button asChild className="bg-primary px-6 py-5 text-white mt-8 ">
-                        <Link className="text-xl" href="/">الصفحة الرئيسية</Link>
+                    <Button asChild className="bg-primary px-6 sm:py-5 text-white mt-8">
+                        <Link className="sm:text-xl" href="/">الصفحة الرئيسية</Link>
                     </Button>
                 </div>
             </main>
