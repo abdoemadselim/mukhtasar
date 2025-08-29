@@ -1,5 +1,5 @@
 // Imports
-// import 'newrelic';
+import 'newrelic';
 import "dotenv/config"
 import { AsyncLocalStorage } from 'node:async_hooks';
 import "#lib/db/redis-connection.js";
