@@ -24,8 +24,9 @@ import routesContext from "#middlewares/routes-context.js";
 const app = express()
 
 const allowedOrigins = [
-  "https://mukhtasar.pro",
-  "https://www.mukhtasar.pro",
+  "https://mukhtasar.pro", // For Frontend
+  "https://www.mukhtasar.pro", // For Frontend
+  "https://api.mukhtasar.pro", // For swagger
   "http://localhost:3002",
 ];
 
