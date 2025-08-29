@@ -3,7 +3,7 @@ import { login, logout, signup, verify, verifyUser } from "#root/features/auth/c
 import { forgotPasswordSchema, loginSchema, newUserSchema, userVerificationSchema } from "#features/auth/domain/auth.schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
-import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters";
+import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()
 

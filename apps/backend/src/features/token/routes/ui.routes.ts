@@ -4,7 +4,7 @@ import { deleteToken, generateToken, getTokensPage, updateToken } from "#feature
 import { tokenParams, tokenSchema, toUpdateTokenSchema } from "#features/token/data-access/token-schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
-import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters";
+import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()
 
