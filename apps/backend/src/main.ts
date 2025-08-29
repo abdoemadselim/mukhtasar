@@ -4,7 +4,6 @@ import "dotenv/config"
 import { AsyncLocalStorage } from 'node:async_hooks';
 import "#lib/db/redis-connection.js";
 
-import compression from "compression"
 import helmet from "helmet";
 import cors from "cors"
 
@@ -50,7 +49,6 @@ app.use(
 );
 // ------ App Configuration -------------
 app.set("trust proxy", true);
-app.use(compression());
 app.use("/ui", helmet())
 app.use(bodyParser.json())
 app.use(routesContext)

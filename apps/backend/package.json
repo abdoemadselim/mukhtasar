@@ -37,7 +37,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@faker-js/faker": "^10.0.0",
     "@mukhtasar/shared": "workspace:*",
     "@sendgrid/mail": "^8.1.5",
     "@types/body-parser": "^1.19.6",
@@ -45,7 +44,6 @@
     "@types/swagger-ui-express": "^4.1.8",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
-    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -54,7 +52,6 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "newrelic": "^13.1.0",
-    "nodemailer": "^7.0.5",
     "pg": "^8.16.3",
     "rate-limit-redis": "^4.2.2",
     "redis": "^5.8.1",
@@ -64,12 +61,11 @@
     "zod": "^4.0.15"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.0.0",
     "@types/bcrypt": "^6.0.0",
-    "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/nodemailer": "^7.0.0",
     "@types/pg": "^8.15.5",
     "husky": "^9.1.7",
     "typescript": "^5.8.3"

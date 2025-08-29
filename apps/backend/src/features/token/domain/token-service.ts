@@ -14,7 +14,7 @@ export function authToken(requiredPermission: TokenPermission) {
         const header_token = validateAndExtractToken(req);
 
         // there is token attached to the authorization header, but the token doesn't exist in db
-        const db_token = await validateTokenExistenceInDB(header_token, requiredPermission)
+        const db_token = await validateTokenExistenceInDB(header_token, (req as any).params.alias || "", requiredPermission)
 
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
@@ -47,7 +47,7 @@ function validateAndExtractToken(req: Request): string {
 
 
 
-async function validateTokenExistenceInDB(header_token: string, requiredPermission: TokenPermission): Promise<TokenWithUrlType> {
+async function validateTokenExistenceInDB(header_token: string, alias: string, requiredPermission: TokenPermission): Promise<TokenWithUrlType> {
     // Hash the token (The token is shown to the user only once, while stored hashed in db)
     const token_hash = createHash("sha256").update(header_token).digest("hex");
     let db_token = null;
@@ -57,7 +57,7 @@ async function validateTokenExistenceInDB(header_token: string, requiredPermissi
     if (requiredPermission == CREATE_URL_PERMISSION) {
         db_token = await tokenRepository.getTokenByTokenHash(token_hash);
     } else {
-        db_token = await tokenRepository.getTokenWithUrl(token_hash);
+        db_token = await tokenRepository.getTokenWithUrl({ token_hash, alias });
     }
 
     if (!db_token) {
