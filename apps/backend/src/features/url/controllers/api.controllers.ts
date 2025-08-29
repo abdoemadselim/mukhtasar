@@ -212,6 +212,16 @@ export async function getOriginalUrl(req: Request, res: Response) {
     // 2- pass the prepared data to the service
     const original_url = await urlService.getOriginalUrl(alias);
 
+     // 3- prepare the response
+    const response = {
+        data: {
+            url: original_url,
+        },
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    }
+
     // 3- redirect users (Why 302, so the request always goes through us, and browser doesn't cache the original URL with our shortened URL)
-    res.status(302).redirect(original_url)
+    res.json(response)
 }
