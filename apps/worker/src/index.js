@@ -9,12 +9,12 @@ async function handleRequest(request) {
   
   console.log('Worker intercepted:', path)
   
-  // // Route to frontend for specific paths
-  // if (shouldRouteToFrontend(path)) {
-  //   console.log('Routing to frontend:', path)
-  //   // Let the request pass through to your frontend (no modification needed)
-  //   return fetch(request)
-  // }
+  // Route to frontend for specific paths
+  if (shouldRouteToFrontend(path)) {
+    console.log('Routing to frontend:', path)
+    // Let the request pass through to your frontend (no modification needed)
+    return fetch(request)
+  }
   
   // Handle short URL redirection
   console.log('Handling redirect for:', path)
@@ -25,9 +25,8 @@ function shouldRouteToFrontend(path) {
   // Frontend routes - be very specific here
   const frontendPaths = [
     '/pages/',     // Your frontend pages
+    '/auth/'
     '/dashboard',  // If you have this route
-    '/login',      // If you have this route
-    '/signup',     // If you have this route
     '/_next/',     // Next.js assets
     '/favicon.ico',
     '/robots.txt',

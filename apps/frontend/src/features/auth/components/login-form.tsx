@@ -113,7 +113,7 @@ export default function LoginForm() {
                         asChild
                         variant="link"
                         className="px-2">
-                        <Link href="/signup">أنشئ حسابك المجاني</Link>
+                        <Link href="/auth/signup">أنشئ حسابك المجاني</Link>
                     </Button>
                 </p>
             </div>

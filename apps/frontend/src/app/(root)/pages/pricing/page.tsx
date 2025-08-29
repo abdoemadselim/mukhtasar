@@ -22,7 +22,7 @@ const PLANS = [
             "نطاق مختصر افتراضي فقط",
             "تاريخ صلاحية مخصص لكل رابط",
         ],
-        cta: { label: "ابدأ الآن", href: "/signup", disabled: false },
+        cta: { label: "ابدأ الآن", href: "/auth/signup", disabled: false },
         highlight: false,
     },
     {

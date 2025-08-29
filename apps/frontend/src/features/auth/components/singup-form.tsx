@@ -32,7 +32,7 @@ export default function SignUpForm() {
 
         // If everything is ok, redirect to the verification page
         await checkAuth()
-        router.replace("/verification")
+        router.replace("/auth/verification")
     }
 
     return (
@@ -164,7 +164,7 @@ export default function SignUpForm() {
                         asChild
                         variant="link"
                         className="px-2">
-                        <Link href="/login">تسجيل الدخول</Link>
+                        <Link href="/auth/login">تسجيل الدخول</Link>
                     </Button>
                 </p>
             </div>

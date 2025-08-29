@@ -95,12 +95,12 @@ export function ProtectedAuthRoute({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         setIsRedirecting(true)
         if (!user && !isLoading) {
-            router.replace("/login")
+            router.replace("/auth/login")
             setIsRedirecting(false)
         }
 
         if (!user?.verified && !isLoading) {
-            router.replace("/verification")
+            router.replace("/auth/verification")
             setIsRedirecting(false)
         }
     }, [user, router, isLoading])

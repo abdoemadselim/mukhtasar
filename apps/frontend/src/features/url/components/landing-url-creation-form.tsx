@@ -191,7 +191,7 @@ export default function LandingUrlCreationForm() {
                                 <AlertDescription className="text-amber-800">
                                     كزائر، يمكنك إنشاء {5 - (form.formState.isSubmitting ? 0 : 0)} روابط مجانية.
                                     <div className="flex gap-2 items-center">
-                                        <Link href="/signup" className="underline font-medium mr-1">أنشئ حساباً</Link>
+                                        <Link href="/auth/signup" className="underline font-medium mr-1">أنشئ حساباً</Link>
                                         لإنشاء روابط أكثر
                                     </div>
                                 </AlertDescription>

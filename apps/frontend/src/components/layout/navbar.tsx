@@ -24,7 +24,7 @@ import UserActionsDropDown from "@/features/user/components/user-actions-drop-do
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/pricing", label: "خطط الأسعار", active: true },
+  { href: "/pages/pricing", label: "خطط الأسعار", active: true },
   { href: "http://api.mukhtasar.pro/api/docs", label: "API" },
   { href: "/dashboard/urls", label: "الروابط" },
 ]
@@ -149,10 +149,10 @@ export default function Navbar() {
             ) : (
               <>
                 <Button asChild variant="ghost" size="sm" className="text-md">
-                  <Link href="login">سجل دخول</Link>
+                  <Link href="/auth/login">سجل دخول</Link>
                 </Button>
                 <Button asChild size="sm" className="text-md">
-                  <Link href="signup">اشتراك</Link>
+                  <Link href="/auth/signup">اشتراك</Link>
                 </Button>
               </>
             )}

@@ -26,7 +26,7 @@ export default function EmailVerificationPage() {
     )
 
     if (!user && !isLoading) {
-        router.replace("/login")
+        router.replace("/auth/login")
     }
 
     if (isLoading) {
