@@ -24,7 +24,6 @@ async function handleRequest(request) {
 function shouldRouteToFrontend(path) {
   // Frontend routes - be very specific here
   const frontendPaths = [
-    '/',           // Homepage
     '/pages/',     // Your frontend pages
     '/dashboard',  // If you have this route
     '/login',      // If you have this route
