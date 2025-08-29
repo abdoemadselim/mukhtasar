@@ -8,6 +8,7 @@ import generate_id from "#features/url/domain/id-generator.js";
 import { ConflictException } from "#lib/error-handling/error-types.js";
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
+import { log, LOG_TYPE } from "#root/lib/logger/logger";
 
 // Returns the details of a shortened URL
 export async function getUrlInfo({ domain, alias }: ParamsType) {
@@ -130,23 +131,24 @@ async function saveUrl({
 
 export async function getOriginalUrl(alias: string) {
     // First, check if the alias URL is in Redis
-    const url = await redisClient.get(`url:${alias}`);
+    let url = await redisClient.get(`url:${alias}`);
 
     // If not found in Redis, fetch from the database and store in Redis
     if (!url) {
         // @ts-ignore
-        const url = await urlRepository.getUrlByAlias(alias);
+        let record = await urlRepository.getUrlByAlias(alias);
 
-        if (!url) throw new URLNotFoundException();
-        redisClient.setEx(`url:${alias}`, 86400, url.original_url); // Cache in Redis for future requests
-        updateAnalytics(alias)
+        if (!record) throw new URLNotFoundException();
 
-        return url.original_url
-        // @ts-ignore
+        url = record.original_url;
 
+        // Cache in redis for (3 days)
+        redisClient.setEx(`url:${alias}`, 86400 * 3, url);
     }
 
-    updateAnalytics(alias)
+    updateAnalytics(alias).catch((error) => {
+        log(LOG_TYPE.ERROR, { message: "Url click counts update failed", stack: error.stack });
+    });
 
     return url;
 }
@@ -155,19 +157,18 @@ async function updateAnalytics(alias: string) {
     // Increment the click count in Redis (use a counter for clicks)
     await redisClient.incr(`clicks:${alias}`);
 
-    // Store this URL in a sorted set of most used URLs (sorted by click count)
-    // TODO: a cron job should be added to sync db with redis
-    const clicks = await redisClient.get(`clicks:${alias}`);
-    await redisClient.zAdd('top_urls', {
-        score: Number(clicks), // Click count as score
-        value: alias
-    });
+    // // Store this URL in a sorted set of most used URLs (sorted by click count)
+    // // TODO: a cron job should be added to sync db with redis
+    // await redisClient.zAdd('top_urls', {
+    //     score: clicks, // Click count as score
+    //     value: alias,
+    // });
 
-    // Limit the top URLs set to 1000 URLs (remove the last url in the sorted set (1001))
-    await redisClient.zRemRangeByRank('top_urls', 1000, -1);
+    // // Limit the top URLs set to 10000 URLs (remove the last url in the sorted set (1001))
+    // await redisClient.zRemRangeByRank('top_urls', 10000, -1);
 }
 
 export async function getUrlsPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
-    const {urls, total} = await urlRepository.getUrlsPage({ user_id, page, page_size });
+    const { urls, total } = await urlRepository.getUrlsPage({ user_id, page, page_size });
     return { urls, total };
 }

@@ -25,7 +25,7 @@ function shouldRouteToFrontend(path) {
   // Frontend routes - be very specific here
   const frontendPaths = [
     '/pages/',     // Your frontend pages
-    '/auth/'
+    '/auth/',
     '/dashboard',  // If you have this route
     '/_next/',     // Next.js assets
     '/favicon.ico',
@@ -34,7 +34,7 @@ function shouldRouteToFrontend(path) {
   ]
   
   // Static file extensions
-  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.map']
+  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.map', '.webp']
   
   // Check exact matches first
   if (path === '/') {

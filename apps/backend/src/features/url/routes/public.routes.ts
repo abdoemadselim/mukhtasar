@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getOriginalUrl } from "#features/url/controllers/api.controllers.js";
+import { getOriginalUrl } from "#features/url/controllers/public.controllers.js";
 import { trackUrl } from "#features/analytics/middlewares/track-url.js";
 
 const router = Router();
