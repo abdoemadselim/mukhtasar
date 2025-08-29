@@ -24,7 +24,7 @@ export default function HeroSection() {
                 <AnimatedGradientText text="أول منتج عربي متكامل لإختصار الروابط" />
 
                 <div className="pt-4 min-h-[100px] md:min-h-[120px] flex items-start justify-center">
-                    <p className="text-base md:text-lg lg:text-xl md:max-w-[770px] max-w-[500px] text-muted-foreground leading-relaxed">
+                    <p className="text-base md:text-lg lg:text-xl md:max-w-[770px] max-w-[500px] text-muted-foreground leading-relaxed px-4">
                         حوّل روابطك الطويلة إلى روابط قصيرة
                         تمنح مستخدميك تجربة أسهل وأجمل، مع إحصائيات دقيقة تساعدك على فهم تفاعلهم بشكل أفضل.
                     </p>

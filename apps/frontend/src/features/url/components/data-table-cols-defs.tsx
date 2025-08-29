@@ -74,10 +74,10 @@ export const columns: ColumnDef<FullUrlType>[] = [
     cell: ({ row }) => {
       // Why (to stop the browser from rendering the whole long url)
       const url = row.original.original_url;
-      const truncated_original_url = url.length > 50 ? url.slice(0, 50) + "…" : url;
+      const truncated_original_url = url.length > 50 ? url.slice(0, 30) + "…" : url;
       return (
-        <div className="flex items-center w-70">
-          <div className="truncate px-4 text-gray-500 cursor-pointer underline lg:text-md" dir="ltr" title={url}>
+        <div className="flex items-center">
+          <div className="px-4 text-gray-500 cursor-pointer underline lg:text-md" dir="ltr" title={url}>
             {truncated_original_url}
           </div>
         </div>

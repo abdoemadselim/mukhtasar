@@ -4,11 +4,9 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { ProtectedAuthRoute } from "@/features/auth/context/auth-context"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ProtectedAuthRoute>
       <SidebarProvider
         style={
           {
@@ -23,6 +21,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </SidebarInset>
       </SidebarProvider>
-    </ProtectedAuthRoute>
   )
 }

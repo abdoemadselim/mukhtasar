@@ -143,7 +143,7 @@ export default function LandingUrlCreationForm() {
 
                     <div>
                         <p className="pb-3 text-lg">خصص رابطك</p>
-                        <div className="flex items-center gap-4 md:w-[80%] w-full">
+                        <div className="flex items-center sm:gap-4 md:w-[80%] w-full sm:flex-row flex-col">
                             <div className="w-full">
                                 <FormField control={form.control} name="alias" render={({ field }) => (
                                     <FormItem>

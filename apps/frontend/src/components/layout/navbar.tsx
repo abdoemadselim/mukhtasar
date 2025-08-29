@@ -95,7 +95,7 @@ export default function Navbar() {
               </PopoverContent>
             </Popover>
             {/* Main nav */}
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <Link href="/">
                 <Image
                   src="/logo.webp"
