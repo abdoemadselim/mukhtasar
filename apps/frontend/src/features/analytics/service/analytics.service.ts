@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { apiClient, ApiError } from "@/lib/api-client";
 
 export type AnalyticsOverview = {
     total_clicks: number;
@@ -52,13 +52,13 @@ export type ClicksOverTimeParams = AnalyticsParams & {
     groupBy?: 'hour' | 'day' | 'week' | 'month';
 }
 
-export interface RefererStatsParams extends AnalyticsParams {
+export type RefererStatsParams = AnalyticsParams & {
     limit?: number;
 }
 
 
 // Get analytics overview (summary stats)
-export async function getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams): Promise<AnalyticsOverview> {
+export async function getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams){
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),
@@ -73,7 +73,7 @@ export async function getAnalyticsOverview({ alias, startDate, endDate }: Analyt
 }
 
 // Get browser statistics
-export async function getBrowserStats({ alias, startDate, endDate }: AnalyticsParams): Promise<BrowserStat[]> {
+export async function getBrowserStats({ alias, startDate, endDate }: AnalyticsParams) {
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),
@@ -88,7 +88,7 @@ export async function getBrowserStats({ alias, startDate, endDate }: AnalyticsPa
 }
 
 // Get device statistics
-export async function getDeviceStats({ alias, startDate, endDate }: AnalyticsParams): Promise<DeviceStat[]> {
+export async function getDeviceStats({ alias, startDate, endDate }: AnalyticsParams) {
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),
@@ -103,7 +103,7 @@ export async function getDeviceStats({ alias, startDate, endDate }: AnalyticsPar
 }
 
 // Get clicks over time
-export async function getClicksOverTime({ alias, startDate, endDate, groupBy = 'day' }: ClicksOverTimeParams): Promise<ClickOverTime[]> {
+export async function getClicksOverTime({ alias, startDate, endDate, groupBy = 'day' }: ClicksOverTimeParams) {
     const params = new URLSearchParams({
         alias,
         groupBy,
@@ -119,7 +119,7 @@ export async function getClicksOverTime({ alias, startDate, endDate, groupBy = '
 }
 
 // Get geographic statistics
-export async function getGeographicStats({ alias, startDate, endDate }: AnalyticsParams): Promise<GeographicStat[]> {
+export async function getGeographicStats({ alias, startDate, endDate }: AnalyticsParams) {
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),
@@ -134,7 +134,7 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
 }
 
 // Get referer statistics
-export async function getRefererStats({ alias, startDate, endDate, limit = 10 }: RefererStatsParams): Promise<RefererStat[]> {
+export async function getRefererStats({ alias, startDate, endDate, limit = 10 }: RefererStatsParams) {
     const params = new URLSearchParams({
         alias,
         limit: limit.toString(),
@@ -150,7 +150,7 @@ export async function getRefererStats({ alias, startDate, endDate, limit = 10 }:
 }
 
 // Get hourly statistics
-export async function getHourlyStats({ alias, startDate, endDate }: AnalyticsParams): Promise<HourlyStat[]> {
+export async function getHourlyStats({ alias, startDate, endDate }: AnalyticsParams) {
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),
