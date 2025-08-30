@@ -22,7 +22,6 @@ import {
     refererStatsQuerySchema
 } from "#features/analytics/domain/analytics-schemas.js";
 
-import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 import validateRequest from "#lib/validation/validator-middleware.js";
 
 const router = Router();
@@ -31,7 +30,6 @@ const router = Router();
 router.get(
     "/",
     validateRequest([analyticsOverviewQuerySchema]),
-    ipRateLimiter(1, 300),
     getUrlAnalytics
 );
 
@@ -39,7 +37,6 @@ router.get(
 router.get(
     "/overview",
     validateRequest([analyticsOverviewQuerySchema]),
-    ipRateLimiter(1, 300),
     getAnalyticsOverview
 );
 
@@ -47,7 +44,6 @@ router.get(
 router.get(
     "/browsers",
     validateRequest([browserStatsQuerySchema]),
-    ipRateLimiter(1, 300),
     getBrowserStats
 );
 
@@ -55,7 +51,6 @@ router.get(
 router.get(
     "/devices",
     validateRequest([deviceStatsQuerySchema]),
-    ipRateLimiter(1, 300),
     getDeviceStats
 );
 
@@ -63,7 +58,6 @@ router.get(
 router.get(
     "/clicks-over-time",
     validateRequest([clicksOverTimeQuerySchema]),
-    ipRateLimiter(1, 300),
     getClicksOverTime
 );
 
@@ -71,7 +65,6 @@ router.get(
 router.get(
     "/geography",
     validateRequest([geographicStatsQuerySchema]),
-    ipRateLimiter(1, 300),
     getGeographicStats
 );
 
@@ -79,7 +72,6 @@ router.get(
 router.get(
     "/referers",
     validateRequest([refererStatsQuerySchema]),
-    ipRateLimiter(1, 300),
     getRefererStats
 );
 
@@ -87,7 +79,6 @@ router.get(
 router.get(
     "/hourly",
     validateRequest([hourlyStatsQuerySchema]),
-    ipRateLimiter(1, 300),
     getHourlyStats
 );
 

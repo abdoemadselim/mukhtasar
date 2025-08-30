@@ -61,8 +61,6 @@ app.disable("x-powered-by")
 export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
 
 // ------- App Routes -------------------
-app.use(ipRateLimiter(15, 2000)) // 2000 requests per 15 minutes per IP
-
 app.use("/api", apiRoutes)
 app.use("/ui", uiRoutes)
 app.use("/", publicRoutes)
