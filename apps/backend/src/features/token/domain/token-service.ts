@@ -14,7 +14,7 @@ export function authToken(requiredPermission: TokenPermission) {
         const header_token = validateAndExtractToken(req);
 
         // there is token attached to the authorization header, but the token doesn't exist in db
-        const db_token = await validateTokenExistenceInDB(header_token, (req as any).params.alias || "", requiredPermission)
+        const db_token = await validateTokenExistenceInDB(header_token, (req as any).params.alias || (req as any).query.alias || "", requiredPermission)
 
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
