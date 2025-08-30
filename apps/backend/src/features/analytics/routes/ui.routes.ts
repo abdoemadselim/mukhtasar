@@ -12,11 +12,9 @@ import {
     getRefererStats,
     getHourlyStats,
     getAnalyticsOverview
-} from "#features/analytics/controllers/ui.controllers.js";
+} from "#root/features/analytics/controllers/ui.controllers.js";
 
-import validateRequest from "#lib/validation/validator-middleware.js";
 import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
-import { authSession } from "#root/features/auth/domain/auth.service.js";
 
 const router = Router();
 

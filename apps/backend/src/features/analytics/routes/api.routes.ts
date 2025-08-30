@@ -1,8 +1,5 @@
 // apps/backend/src/features/analytics/routes/api.routes.ts
 import { Router } from "express";
-
-import { paramsSchema } from "#features/url/domain/url-schemas.js";
-
 import {
     getUrlAnalytics,
     getBrowserStats,
@@ -12,11 +9,9 @@ import {
     getRefererStats,
     getHourlyStats,
     getAnalyticsOverview
-} from "#features/analytics/controllers/ui.controllers.js";
+} from "#features/analytics/controllers/api.controllers.js";
 
-import validateRequest from "#lib/validation/validator-middleware.js";
 import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
-import { authSession } from "#root/features/auth/domain/auth.service.js";
 import { authToken } from "#root/features/token/domain/token-service";
 
 const router = Router();
