@@ -1,6 +1,7 @@
 import { Router } from "express"
 
 import urlRoutes from "#features/url/routes/api.routes.js"
+import analyticsRoutes from "#features/analytics/routes/api.routes.js"
 import swaggerUi from 'swagger-ui-express';
 import swaggerApiDoc from "../../docs/api-doc.json" with {type: "json"}
 
@@ -33,5 +34,6 @@ router.get('/docs', swaggerUi.setup(swaggerApiDoc, swaggerOptions));
 
 // Your API routes
 router.use("/url", urlRoutes)
+router.use("/analytics", analyticsRoutes)
 
 export default router;

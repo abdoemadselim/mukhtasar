@@ -56,7 +56,7 @@ export async function getBrowserStats(req: Request, res: Response) {
     const start = Date.now();
 
     // 1- prepare the data for the service
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
         endDate = new Date().toISOString()
@@ -292,9 +292,9 @@ export async function getHourlyStats(req: Request, res: Response) {
 export async function getAnalyticsOverview(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
-        startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // (30 days ago)
         endDate = new Date().toISOString()
     } = req.query;
 

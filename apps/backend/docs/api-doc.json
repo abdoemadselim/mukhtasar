@@ -10,13 +10,17 @@
   },
   "servers": [
     {
-      "url": "https://api.mukhtasar.pro/api"
+      "url": "http://localhost:3000/api"
     }
   ],
   "tags": [
     {
       "name": "Url",
       "description": "الروابط المختصرة التي تعيد التوجيه إلى الروابط الأصلية الطويلة. تتيح لك نقاط النهاية هذه اختصار روابط جديدة وتعديل كيفية عملها"
+    },
+    {
+      "name": "Analytics",
+      "description": "إحصائيات وتحليلات الروابط المختصرة تشمل عدد النقرات، المتصفحات، الأجهزة، والمواقع الجغرافية"
     }
   ],
   "paths": {
@@ -512,6 +516,209 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/overview": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "نظرة عامة على إحصائيات الرابط",
+        "description": "الحصول على نظرة عامة سريعة لإحصائيات الرابط المختصر تشمل إجمالي النقرات والزوار الفريدين",
+        "operationId": "getAnalyticsOverview",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate (UTC)",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate (UTC)",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد النظرة العامة بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_clicks": {
+                          "type": "integer",
+                          "example": 1250
+                        },
+                        "unique_visitors": {
+                          "type": "integer",
+                          "example": 890
+                        },
+                        "active_days": {
+                          "type": "integer",
+                          "example": 25
+                        },
+                        "avg_clicks_per_day": {
+                          "type": "number",
+                          "example": 50.0
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/browsers": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "إحصائيات المتصفحات",
+        "description": "توزيع النقرات حسب نوع المتصفح",
+        "operationId": "getBrowserStats",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد إحصائيات المتصفحات بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "browser": {
+                            "type": "string",
+                            "example": "Chrome"
+                          },
+                          "count": {
+                            "type": "integer",
+                            "example": 850
+                          },
+                          "percentage": {
+                            "type": "number",
+                            "example": 68.0
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
           },
           "429": {
             "$ref": "#/components/responses/RateLimitExceeded"

@@ -84,7 +84,8 @@ async function handleRedirect(request) {
         'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
         'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
         'X-Real-IP': request.headers.get('CF-Connecting-IP') || '',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Referer': request.headers.get('Referer') || ''
       }
     })
 

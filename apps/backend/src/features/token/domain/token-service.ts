@@ -6,7 +6,6 @@ import type { Token, TokenInput, TokenPermission, TokenWithUrlType } from "#feat
 import { CREATE_URL_PERMISSION, READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
 import { NotFoundException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js"
-import { log, LOG_TYPE } from "#root/lib/logger/logger.js";
 
 // TODO: The service shouldn't depend on the request, response objects of express
 export function authToken(requiredPermission: TokenPermission) {
@@ -55,13 +54,12 @@ async function validateTokenExistenceInDB(header_token: string, alias: string, r
 
     // If it's a creation request, then there is no url.
     // Just needs to ensure there is a token in db matches the provided token from user
-
     if (requiredPermission == CREATE_URL_PERMISSION) {
         db_token = await tokenRepository.getTokenByTokenHash(token_hash);
     } else {
         db_token = await tokenRepository.getTokenWithUrl({ token_hash, alias });
     }
-    log(LOG_TYPE.DEBUG, { message: "token checking", requiredPermission, db_token })
+
     if (!db_token) {
         throw new UnAuthorizedException();
     }

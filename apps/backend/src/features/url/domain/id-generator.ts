@@ -1,7 +1,7 @@
 import urlRepository from "#features/url/data-access/url.repository.js";
 let batch_start_id = -1;
 let local_counter = 0;
-const batch_size = 5
+const batch_size = 500
 
 async function get_new_batch() {
     let { batch_start } = await urlRepository.getIdBatch(batch_size);

@@ -14,7 +14,8 @@ export default {
         'test',
         'chore',
         'revert',
-        'setup'
+        'setup',
+        'debug'
       ]
     ],
     'scope-enum': [

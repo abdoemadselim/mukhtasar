@@ -37,6 +37,8 @@ const analyticsRepository = {
     },
 
     async getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams) {
+        // Why NULLIF? to avoid dividing over 0 to prevent throwing an error (instead return NULL) -- anything/NULL = NULL
+        // It expects start, end in UTC timezone
         const result = await query(`
             SELECT 
                 COUNT(*) as total_clicks,
@@ -57,8 +59,8 @@ const analyticsRepository = {
         const result = await query(`
             SELECT 
                 COALESCE(browser_name, 'Unknown') as browser,
-                COUNT(*) as visitors,
-                ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2) as percentage
+                COUNT(*)::INTEGER as visitors,
+                ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2)::FLOAT as percentage
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
@@ -137,15 +139,15 @@ const analyticsRepository = {
         // to convert IP addresses to countries. For now, this returns mock data structure.
         const result = await query(`
             SELECT 
-                SUBSTRING(ip_address, 1, POSITION('.' in ip_address) - 1) as region_code,
-                COUNT(*) as clicks
+            ip_address::inet as ip,
+            COUNT(*) as clicks
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
             AND ua.clicked_at >= $2::timestamptz 
             AND ua.clicked_at <= $3::timestamptz
             AND ip_address != 'Unknown'
-            GROUP BY region_code
+            GROUP BY ip_address::inet
             ORDER BY clicks DESC
             LIMIT 10
         `, [alias, startDate, endDate]);

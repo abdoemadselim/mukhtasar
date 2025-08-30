@@ -145,9 +145,9 @@ export async function getAnalyticsOverview({ alias, startDate, endDate }: Analyt
 
     return {
         ...overview,
-        total_clicks: parseInt(overview.total_clicks || '0'),
-        unique_visitors: parseInt(overview.unique_visitors || '0'),
-        active_days: parseInt(overview.active_days || '0'),
-        avg_clicks_per_day: parseFloat(overview.avg_clicks_per_day || '0')
+        total_clicks: parseInt(overview.total_clicks || 0),
+        unique_visitors: parseInt(overview.unique_visitors || 0),
+        active_days: parseInt(overview.active_days || 0),
+        avg_clicks_per_day: parseFloat(overview.avg_clicks_per_day || 0)
     };
 }
