@@ -13,19 +13,9 @@ import VisitorsPerHourChart, { VisitorsPerHourChartSkeleton } from "@/features/a
 import GeographicChart, { GeographicChartSkeleton } from "@/features/analytics/components/geographic-chart"
 import TopRefererVisitorsChart, { TopRefererVisitorsChartSkeleton } from "@/features/analytics/components/top-referer-visitors-chart"
 import StatsCards, { StatsCardsSkeleton } from "@/features/analytics/components/stats-cards"
+import { ErrorBoundary } from "next/dist/client/components/error-boundary"
 
 // Mock URL data - replace with props when integrating
-const url = {
-    "id": 1,
-    "alias": "grok1",
-    "domain": "x.ai",
-    "original_url": "https://x.com/grok",
-    "created_at": "2024-01-01",
-    "description": "Grok profile",
-    "clicks": "100",
-    "short_url": "https://x.ai/grok1"
-}
-
 export default async function UrlAnalyticsPage(
     {
         params
@@ -37,7 +27,7 @@ export default async function UrlAnalyticsPage(
         <div className="flex flex-1 flex-col gap-6 p-6">
             {/* Header */}
             <div className="flex items-center gap-4">
-                <Link href="/urls">
+                <Link href="/dashboard/urls">
                     <Button
                         variant="outline"
                         size="sm"
@@ -55,9 +45,8 @@ export default async function UrlAnalyticsPage(
                         </Highlighter>
                     </h1>
                     <div className="flex items-center gap-2 mt-2">
-                        <Badge variant="outline">{url.alias}</Badge>
+                        <Badge variant="outline">{alias}</Badge>
                         <span className="text-muted-foreground">•</span>
-                        <span className="text-primary underline cursor-pointer">{url.short_url}</span>
                     </div>
                 </div>
             </div>
@@ -68,24 +57,47 @@ export default async function UrlAnalyticsPage(
             {/* Charts Grid */}
             <div className="grid gap-6 xl:grid-cols-2">
                 {/* Browser Visitors Clicks */}
-                <BrowserVisitorsChart alias={alias} />
-
+                <Suspense fallback={<BrowserVisitorsChartSkeleton />}>
+                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                        <BrowserVisitorsChart alias={alias} />
+                    </ErrorBoundary>
+                </Suspense>
                 {/* Device Breakdown */}
-                <DeviceVisitorsChart alias={alias} />
+                <Suspense fallback={<DeviceVisitorsChartSkeleton />}>
+                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                        <DeviceVisitorsChart alias={alias} />
+                    </ErrorBoundary>
+                </Suspense>
 
                 {/* Clicks Over Time */}
-                <ClickOverTimeChart alias={alias} />
+                <Suspense fallback={<ClickOverTimeChartSkeleton />}>
+                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                        <ClickOverTimeChart alias={alias} />
+                    </ErrorBoundary>
+                </Suspense>
 
                 {/* Geographic Distribution */}
-                <GeographicChart alias={alias} />
+                <Suspense fallback={<GeographicChartSkeleton />}>
+                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                        <GeographicChart alias={alias} />
+                    </ErrorBoundary>
+                </Suspense>
 
                 {/* Hourly Activity */}
                 <div className="items-baseline">
-                    <VisitorsPerHourChart alias={alias} />
+                    <Suspense fallback={<VisitorsPerHourChartSkeleton />}>
+                        <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                            <VisitorsPerHourChart alias={alias} />
+                        </ErrorBoundary>
+                    </Suspense>
                 </div>
 
                 {/* Top Referrers */}
-                <TopRefererVisitorsChart alias={alias} />
+                <Suspense fallback={<TopRefererVisitorsChartSkeleton />}>
+                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
+                        <TopRefererVisitorsChart alias={alias} />
+                    </ErrorBoundary>
+                </Suspense>
             </div>
         </div>
     )

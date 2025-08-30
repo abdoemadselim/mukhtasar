@@ -8,49 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 import { useGetGeographicStats } from "@/features/analytics/hooks/analytics.hook";
 
-const countryFlags: Record<string, string> = {
-    "سعودي": "🇸🇦",
-    "السعودية": "🇸🇦",
-    "saudi arabia": "🇸🇦",
-    "الإمارات": "🇦🇪",
-    "uae": "🇦🇪",
-    "united arab emirates": "🇦🇪",
-    "مصر": "🇪🇬",
-    "egypt": "🇪🇬",
-    "قطر": "🇶🇦",
-    "qatar": "🇶🇦",
-    "الكويت": "🇰🇼",
-    "kuwait": "🇰🇼",
-    "العراق": "🇮🇶",
-    "iraq": "🇮🇶",
-    "الأردن": "🇯🇴",
-    "jordan": "🇯🇴",
-    "لبنان": "🇱🇧",
-    "lebanon": "🇱🇧",
-    "سوريا": "🇸🇾",
-    "syria": "🇸🇾",
-    "المغرب": "🇲🇦",
-    "morocco": "🇲🇦",
-    "تونس": "🇹🇳",
-    "tunisia": "🇹🇳",
-    "الجزائر": "🇩🇿",
-    "algeria": "🇩🇿",
-    "ليبيا": "🇱🇾",
-    "libya": "🇱🇾",
-    "السودان": "🇸🇩",
-    "sudan": "🇸🇩",
-    "اليمن": "🇾🇪",
-    "yemen": "🇾🇪",
-    "عمان": "🇴🇲",
-    "oman": "🇴🇲",
-    "البحرين": "🇧🇭",
-    "bahrain": "🇧🇭",
-    "فلسطين": "🇵🇸",
-    "palestine": "🇵🇸",
-    "unknown": "🌍",
-    "غير معروف": "🌍"
-};
-
 export default function GeographicChart({ alias }: { alias: string }) {
     const { data: geographicStats, isLoading, error } = useGetGeographicStats({
         alias,
@@ -66,13 +23,8 @@ export default function GeographicChart({ alias }: { alias: string }) {
         return geographicStats.slice(0, 5).map(stat => ({
             country: stat.country || "غير معروف",
             clicks: stat.clicks,
-            flag: countryFlags[stat.country?.toLowerCase()] || countryFlags["unknown"]
         }));
     }, [geographicStats]);
-
-    if (isLoading) {
-        return <GeographicChartSkeleton />;
-    }
 
     if (error || !geographicStats || geographicStats.length === 0) {
         return (
@@ -95,6 +47,7 @@ export default function GeographicChart({ alias }: { alias: string }) {
         );
     }
 
+    console.log(geographicStats)
     return (
         <Card>
             <CardHeader>
@@ -110,12 +63,12 @@ export default function GeographicChart({ alias }: { alias: string }) {
                 <div className="space-y-4">
                     {countriesData.map((country, index) => (
                         <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <span className="text-2xl">{country.flag}</span>
+                            <div className="flex items-center gap-3 pl-4">
+                                {/* <span className="text-2xl">{country.flag}</span> */}
                                 <span className="font-medium">{country.country}</span>
                             </div>
                             <div className="flex items-center gap-3 flex-1 ml-4">
-                                <div className="flex-1 bg-secondary rounded-full h-2">
+                                <div className=" bg-secondary rounded-full h-2 w-[60%]">
                                     <div
                                         className="bg-primary h-2 rounded-full transition-all duration-300"
                                         style={{ width: `${(country.clicks / maxClicks) * 100}%` }}

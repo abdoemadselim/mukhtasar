@@ -75,9 +75,6 @@ export default function BrowserVisitorsChart({ alias }: { alias: string }) {
         return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
     }, [chartData])
 
-    if (isLoading) {
-        return <BrowserVisitorsChartSkeleton />;
-    }
 
     if (error || !browserStats || browserStats.length === 0) {
         return (

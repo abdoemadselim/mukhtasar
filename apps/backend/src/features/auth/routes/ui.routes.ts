@@ -7,7 +7,7 @@ import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()
 
-router.post("/login", ipRateLimiter(15, 10), validateRequest([loginSchema]), login)
+router.post("/login", ipRateLimiter(15, 100), validateRequest([loginSchema]), login)
 router.post("/logout", logout)
 router.get("/verify", ipRateLimiter(60, 15), validateRequest([userVerificationSchema]), verify)
 router.post("/signup", ipRateLimiter(60, 5), validateRequest([newUserSchema]), signup)

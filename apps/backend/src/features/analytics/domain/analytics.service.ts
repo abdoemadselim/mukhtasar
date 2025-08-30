@@ -106,9 +106,23 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
         throw new URLNotFoundException();
     }
 
-    const results = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
-    console.log(results)
-    return results.map((event) => ({ clicks: event.clicks, country: getCountry(event.ip) }))
+    // 2. Fetch raw analytics events
+    let rawEvents = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
+
+    // 3. Aggregate by country
+    const aggregated: Record<string, { country: string; clicks: number }> = {};
+
+    for (const event of rawEvents) {
+        const country = getCountry(event.ip) || "Unknown";
+
+        if (!aggregated[country]) {
+            aggregated[country] = { country, clicks: 0 };
+        }
+
+        aggregated[country].clicks += event.clicks ?? 1; // default to 1 if not provided
+    }
+
+    return Object.values(aggregated);
 }
 
 export async function getRefererStats({ alias, startDate, endDate }: RefererStatsParams) {

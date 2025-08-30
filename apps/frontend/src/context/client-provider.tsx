@@ -8,7 +8,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
       gcTime: 1000 * 60 * 60 * 24, // 24 hours
-      refetchOnWindowFocus: true // Refetch data when user goes to another tab
+      refetchOnWindowFocus: true, // Refetch data when user goes to another tab
     },
   },
 });

@@ -61,10 +61,6 @@ export default function DeviceVisitorsChart({ alias }: { alias: string }) {
         }));
     }, [deviceStats]);
 
-    if (isLoading) {
-        return <DeviceVisitorsChartSkeleton />;
-    }
-
     if (error || !deviceStats || deviceStats.length === 0) {
         return (
             <Card className="flex flex-col">

@@ -12,9 +12,6 @@ export default function VisitorsPerHourChart({ alias }: { alias: string }) {
     const { data: hourlyStats, isLoading, error } = useGetHourlyStats({
         alias
     });
-    if (isLoading) {
-        return <VisitorsPerHourChartSkeleton />;
-    }
 
     if (error || !hourlyStats || hourlyStats.length === 0) {
         return (

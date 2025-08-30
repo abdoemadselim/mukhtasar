@@ -15,8 +15,11 @@ export const pool = new Pool({
     // database: process.env.DB_DATABASE_NAME,
     connectionString: process.env.DB_CONNECTION_STRING,
     max: 20,
+    ssl: {
+        rejectUnauthorized: false,
+    },
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 10000,
     min: 5
 });
 

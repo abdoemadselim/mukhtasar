@@ -52,9 +52,6 @@ export default function ClickOverTimeChart({ alias, groupBy = "day" }: { alias: 
     };
   }, [clicksData]);
 
-  if (isLoading) {
-    return <ClickOverTimeChartSkeleton />;
-  }
   if (error || !clicksData || clicksData.length === 0) {
     return (
       <Card className="py-0">

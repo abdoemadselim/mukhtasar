@@ -1,6 +1,6 @@
 // apps/frontend/src/features/analytics/hooks/analytics-query.ts
 import { useQuery } from "@tanstack/react-query";
-import { 
+import {
     getAnalyticsOverview,
     getBrowserStats,
     getDeviceStats,
@@ -30,6 +30,8 @@ export function useGetAnalyticsOverview(params: AnalyticsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         refetchOnWindowFocus: false,
+        suspense: true,
+        useErrorBoundary: true,
         enabled: !!params.alias,
     });
 }
@@ -42,6 +44,8 @@ export function useGetBrowserStats(params: AnalyticsParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -55,6 +59,8 @@ export function useGetDeviceStats(params: AnalyticsParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -68,6 +74,8 @@ export function useGetClicksOverTime(params: ClicksOverTimeParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -81,6 +89,8 @@ export function useGetGeographicStats(params: AnalyticsParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -94,6 +104,8 @@ export function useGetRefererStats(params: RefererStatsParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -107,6 +119,8 @@ export function useGetHourlyStats(params: AnalyticsParams) {
         staleTime: 2 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: 2,
+        suspense: true,
+        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });

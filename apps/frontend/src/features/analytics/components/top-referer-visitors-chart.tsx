@@ -46,10 +46,6 @@ export default function TopRefererVisitorsChart({ alias, limit = 6 }: { alias: s
     }));
   }, [refererStats]);
 
-  if (isLoading) {
-    return <TopRefererVisitorsChartSkeleton />;
-  }
-
   if (error || !refererStats || refererStats.length === 0) {
     return (
       <Card>

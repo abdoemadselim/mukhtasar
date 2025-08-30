@@ -31,7 +31,7 @@ class ApiClient {
 
     private async handleResponse<T>(response: Response, throwOnError: boolean = false): Promise<T | ApiError> {
         // Handle 500 errors
-        if (response.status === 500) {
+        if (response.status >= 500 && response.status <= 600) {
             const error = { root: { message: this.defaultErrorMessage } };
             if (throwOnError) throw new Error(this.defaultErrorMessage);
             return error;
