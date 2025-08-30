@@ -2,6 +2,7 @@
 
 import { Globe } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { useMemo } from "react"
 
 import {
   Card,
@@ -18,16 +19,10 @@ import {
 } from "@/components/ui/chart"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export const description = "A bar chart"
+import { useGetRefererStats } from "@/features/analytics/hooks/analytics.hook"
 
-const chartData = [
-  { website: "linkedin", visitors: 186 },
-  { website: "facebook", visitors: 305 },
-  { website: "twitter", visitors: 237 },
-  { website: "instagram", visitors: 73 },
-  { website: "google", visitors: 209 },
-  { website: "direct", visitors: 214 },
-]
+
+export const description = "A bar chart"
 
 const chartConfig = {
   visitors: {
@@ -36,7 +31,46 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function TopRefererVisitorsChart() {
+export default function TopRefererVisitorsChart({ alias, limit = 6 }: { alias: string, limit?: number }) {
+  const { data: refererStats, isLoading, error } = useGetRefererStats({
+    alias,
+    limit
+  });
+
+  const chartData = useMemo(() => {
+    if (!refererStats) return [];
+
+    return refererStats.map(stat => ({
+      website: stat.website,
+      visitors: stat.visitors,
+    }));
+  }, [refererStats]);
+
+  if (isLoading) {
+    return <TopRefererVisitorsChartSkeleton />;
+  }
+
+  if (error || !refererStats || refererStats.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5" />
+            أهم المصادر المرجعية
+          </CardTitle>
+          <CardDescription>
+            المواقع التي تجلب أكثر الزيارات لرابطك المختصر
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center h-[300px]">
+          <div className="text-center text-muted-foreground">
+            لا توجد بيانات مرجعية متاحة
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -50,21 +84,39 @@ export default function TopRefererVisitorsChart() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="website"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              className="text-lg"
-              tickFormatter={(value) => value}
+              className="text-sm"
+              tickFormatter={(value) => {
+                // Truncate long website names
+                return value.length > 10 ? `${value.slice(0, 10)}...` : value;
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
+              labelFormatter={(label) => `الموقع: ${label}`}
             />
-            <Bar dataKey="visitors" fill="var(--color-visitors)" radius={8} barSize={100} minPointSize={10} />
+            <Bar
+              dataKey="visitors"
+              fill="var(--color-visitors)"
+              radius={[4, 4, 0, 0]}
+              maxBarSize={60}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

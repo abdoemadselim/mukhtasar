@@ -26,12 +26,13 @@ const url = {
     "short_url": "https://x.ai/grok1"
 }
 
-export default function UrlAnalyticsPage(
+export default async function UrlAnalyticsPage(
     {
         params
     }: {
-        params: Promise<{ url: number }>
+        params: Promise<{ alias: string }>
     }) {
+    const { alias } = await params
     return (
         <div className="flex flex-1 flex-col gap-6 p-6">
             {/* Header */}
@@ -62,43 +63,29 @@ export default function UrlAnalyticsPage(
             </div>
 
             {/* Stats Cards */}
-            <Suspense fallback={<StatsCardsSkeleton />}>
-                <StatsCards />
-            </Suspense>
+            <StatsCards alias={alias} />
 
             {/* Charts Grid */}
             <div className="grid gap-6 xl:grid-cols-2">
                 {/* Browser Visitors Clicks */}
-                <Suspense fallback={<BrowserVisitorsChartSkeleton />}>
-                    <BrowserVisitorsChart />
-                </Suspense>
+                <BrowserVisitorsChart alias={alias} />
 
                 {/* Device Breakdown */}
-                <Suspense fallback={<DeviceVisitorsChartSkeleton />}>
-                    <DeviceVisitorsChart />
-                </Suspense>
+                <DeviceVisitorsChart alias={alias} />
 
                 {/* Clicks Over Time */}
-                <Suspense fallback={<ClickOverTimeChartSkeleton />}>
-                    <ClickOverTimeChart />
-                </Suspense>
+                <ClickOverTimeChart alias={alias} />
 
                 {/* Geographic Distribution */}
-                <Suspense fallback={<GeographicChartSkeleton />}>
-                    <GeographicChart />
-                </Suspense>
+                <GeographicChart alias={alias} />
 
                 {/* Hourly Activity */}
                 <div className="items-baseline">
-                    <Suspense fallback={<VisitorsPerHourChartSkeleton />}>
-                        <VisitorsPerHourChart />
-                    </Suspense>
+                    <VisitorsPerHourChart alias={alias} />
                 </div>
 
                 {/* Top Referrers */}
-                <Suspense fallback={<TopRefererVisitorsChartSkeleton />}>
-                    <TopRefererVisitorsChart />
-                </Suspense>
+                <TopRefererVisitorsChart alias={alias} />
             </div>
         </div>
     )

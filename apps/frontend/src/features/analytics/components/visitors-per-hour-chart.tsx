@@ -1,38 +1,42 @@
 'use client'
 
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Activity } from "lucide-react"
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
-const hourlyData = [
-    { hour: "00", clicks: 12 },
-    { hour: "01", clicks: 8 },
-    { hour: "02", clicks: 5 },
-    { hour: "03", clicks: 3 },
-    { hour: "04", clicks: 4 },
-    { hour: "05", clicks: 7 },
-    { hour: "06", clicks: 15 },
-    { hour: "07", clicks: 25 },
-    { hour: "08", clicks: 45 },
-    { hour: "09", clicks: 67 },
-    { hour: "10", clicks: 54 },
-    { hour: "11", clicks: 43 },
-    { hour: "12", clicks: 78 },
-    { hour: "13", clicks: 65 },
-    { hour: "14", clicks: 54 },
-    { hour: "15", clicks: 67 },
-    { hour: "16", clicks: 45 },
-    { hour: "17", clicks: 34 },
-    { hour: "18", clicks: 56 },
-    { hour: "19", clicks: 43 },
-    { hour: "20", clicks: 32 },
-    { hour: "21", clicks: 28 },
-    { hour: "22", clicks: 21 },
-    { hour: "23", clicks: 16 }
-]
+import { useGetHourlyStats } from "@/features/analytics/hooks/analytics.hook"
 
-export default function VisitorsPerHourChart() {
+export default function VisitorsPerHourChart({ alias }: { alias: string }) {
+    const { data: hourlyStats, isLoading, error } = useGetHourlyStats({
+        alias
+    });
+    if (isLoading) {
+        return <VisitorsPerHourChartSkeleton />;
+    }
+
+    if (error || !hourlyStats || hourlyStats.length === 0) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-5">
+                        <Activity className="h-5 w-5" />
+                        النشاط بالساعات
+                    </CardTitle>
+                    <CardDescription>
+                        توزيع النقرات خلال ساعات اليوم
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center h-[250px]">
+                    <div className="text-center text-muted-foreground">
+                        لا توجد بيانات ساعية متاحة
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -46,20 +50,45 @@ export default function VisitorsPerHourChart() {
             </CardHeader>
             <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={hourlyData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="hour" />
-                        <YAxis />
+                    <LineChart data={hourlyStats}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground) / 0.2)" />
+                        <XAxis
+                            dataKey="hour"
+                            stroke="hsl(var(--muted-foreground))"
+                            fontSize={12}
+                            tickFormatter={(value) => `${value}:00`}
+                        />
+                        <YAxis
+                            stroke="hsl(var(--muted-foreground))"
+                            fontSize={12}
+                        />
                         <Tooltip
+                            contentStyle={{
+                                backgroundColor: "hsl(var(--background))",
+                                border: "1px solid hsl(var(--border))",
+                                borderRadius: "8px",
+                                color: "hsl(var(--foreground))"
+                            }}
                             labelFormatter={(value) => `الساعة: ${value}:00`}
                             formatter={(value) => [value, 'النقرات']}
                         />
                         <Line
                             type="monotone"
                             dataKey="clicks"
-                            stroke="#0088FE"
+                            stroke="hsl(var(--primary))"
                             strokeWidth={2}
-                            dot={{ fill: '#0088FE', strokeWidth: 2, r: 4 }}
+                            dot={{
+                                fill: 'hsl(var(--primary))',
+                                strokeWidth: 2,
+                                r: 4,
+                                fillOpacity: 0.8
+                            }}
+                            activeDot={{
+                                r: 6,
+                                fill: 'hsl(var(--primary))',
+                                stroke: 'hsl(var(--background))',
+                                strokeWidth: 2
+                            }}
                         />
                     </LineChart>
                 </ResponsiveContainer>

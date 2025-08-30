@@ -1,6 +1,8 @@
 "use client"
 
 import { Label, Pie, PieChart } from "recharts"
+import { Earth } from "lucide-react"
+import { useMemo } from "react"
 
 import {
     Card,
@@ -15,9 +17,8 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import { useMemo } from "react"
-import { Earth } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useGetBrowserStats } from "@/features/analytics/hooks/analytics.hook"
 
 export const description = "عدد الزوار / المتصفح"
 
@@ -55,10 +56,49 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export default function BrowserVisitorsChart() {
+export default function BrowserVisitorsChart({ alias }: { alias: string }) {
+    const { data: browserStats, isLoading, error } = useGetBrowserStats({
+        alias,
+    });
+
+    const chartData = useMemo(() => {
+        if (!browserStats) return [];
+
+        return browserStats.map((stat, index) => ({
+            browser: stat.browser.toLowerCase(),
+            visitors: stat.visitors,
+            fill: `var(--chart-${(index % 5) + 1})`,
+        }));
+    }, [browserStats]);
+
     const totalVisitors = useMemo(() => {
         return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-    }, [])
+    }, [chartData])
+
+    if (isLoading) {
+        return <BrowserVisitorsChartSkeleton />;
+    }
+
+    if (error || !browserStats || browserStats.length === 0) {
+        return (
+            <Card className="flex flex-col">
+                <CardHeader className="items-center pb-0">
+                    <CardTitle className="flex items-center gap-5">
+                        <Earth className="h-5 w-5" />
+                        المتصفح
+                    </CardTitle>
+                    <CardDescription>
+                        توزيع النقرات حسب نوع المتصفح
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 pb-0 flex items-center justify-center">
+                    <div className="text-center text-muted-foreground">
+                        لا توجد بيانات متاحة
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <Card className="flex flex-col">
@@ -121,7 +161,6 @@ export default function BrowserVisitorsChart() {
                     </PieChart>
                 </ChartContainer>
             </CardContent>
-
         </Card>
     )
 }
@@ -144,7 +183,7 @@ export function BrowserVisitorsChartSkeleton() {
                     <div className="relative w-full h-full max-w-[250px] max-h-[250px]">
                         {/* Pie segments skeleton */}
                         <div className="absolute inset-0 rounded-full border-[20px] border-muted animate-pulse" />
-                        
+
                         {/* Individual segments with different opacities to simulate pie slices */}
                         <div className="absolute inset-0 rounded-full" style={{
                             background: `conic-gradient(
@@ -156,15 +195,15 @@ export function BrowserVisitorsChartSkeleton() {
                             )`,
                             mask: 'radial-gradient(circle at center, transparent 60px, black 60px, black 125px, transparent 125px)'
                         }} />
-                        
+
                         {/* Center content skeleton */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <Skeleton    className="h-8 w-16 mb-2" />
+                            <Skeleton className="h-8 w-16 mb-2" />
                             <Skeleton className="h-4 w-12" />
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Legend skeleton */}
                 <div className="mt-4 space-y-2">
                     {[1, 2, 3, 4, 5].map((item) => (

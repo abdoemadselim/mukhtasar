@@ -135,7 +135,7 @@ export const columns: ColumnDef<FullUrlType>[] = [
             <DropdownMenuItem
               className="flex gap-2 pr-3 justify-end items-center text-right cursor-pointer"
             >
-              <Link href={`/dashboard/urls/${row.original.id}`} className="text-sm font-semibold">
+              <Link href={`/dashboard/urls/${row.original.alias}`} className="text-sm font-semibold">
                 عرض التحليلات
               </Link>
               <ChartArea size={16} />

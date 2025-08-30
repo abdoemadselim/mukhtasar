@@ -17,6 +17,8 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useMemo } from "react"
+import { useGetDeviceStats } from "../hooks/analytics.hook"
 
 export const description = "A pie chart with a label list"
 
@@ -44,7 +46,46 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export default function DeviceVisitorsChart() {
+export default function DeviceVisitorsChart({ alias }: { alias: string }) {
+    const { data: deviceStats, isLoading, error } = useGetDeviceStats({
+        alias,
+    });
+
+    const chartData = useMemo(() => {
+        if (!deviceStats) return [];
+
+        return deviceStats.map((stat, index) => ({
+            device: stat.device.toLowerCase(),
+            visitors: stat.visitors,
+            fill: `var(--chart-${(index % 4) + 1})`,
+        }));
+    }, [deviceStats]);
+
+    if (isLoading) {
+        return <DeviceVisitorsChartSkeleton />;
+    }
+
+    if (error || !deviceStats || deviceStats.length === 0) {
+        return (
+            <Card className="flex flex-col">
+                <CardHeader className="items-center pb-0">
+                    <CardTitle className="flex items-center gap-2">
+                        <Smartphone className="h-5 w-5" />
+                        الأجهزة
+                    </CardTitle>
+                    <CardDescription>
+                        توزيع النقرات حسب نوع الجهاز
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 pb-0 flex items-center justify-center">
+                    <div className="text-center text-muted-foreground">
+                        لا توجد بيانات متاحة
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="flex flex-col">
             <CardHeader className="items-center pb-0">
@@ -71,9 +112,10 @@ export default function DeviceVisitorsChart() {
                                 className="fill-background"
                                 stroke="none"
                                 fontSize={12}
-                                formatter={(value: keyof typeof chartConfig) =>
-                                    chartConfig[value]?.label
-                                }
+                                formatter={(value: string) => {
+                                    const deviceKey = value as keyof typeof chartConfig;
+                                    return chartConfig[deviceKey]?.label || value;
+                                }}
                             />
                         </Pie>
                     </PieChart>
