@@ -12,8 +12,7 @@ import ClickOverTimeChart, { ClickOverTimeChartSkeleton } from "@/features/analy
 import VisitorsPerHourChart, { VisitorsPerHourChartSkeleton } from "@/features/analytics/components/visitors-per-hour-chart"
 import GeographicChart, { GeographicChartSkeleton } from "@/features/analytics/components/geographic-chart"
 import TopRefererVisitorsChart, { TopRefererVisitorsChartSkeleton } from "@/features/analytics/components/top-referer-visitors-chart"
-import StatsCards, { StatsCardsSkeleton } from "@/features/analytics/components/stats-cards"
-import { ErrorBoundary } from "next/dist/client/components/error-boundary"
+import StatsCards from "@/features/analytics/components/stats-cards"
 
 // Mock URL data - replace with props when integrating
 export default async function UrlAnalyticsPage(
@@ -58,45 +57,34 @@ export default async function UrlAnalyticsPage(
             <div className="grid gap-6 xl:grid-cols-2">
                 {/* Browser Visitors Clicks */}
                 <Suspense fallback={<BrowserVisitorsChartSkeleton />}>
-                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                        <BrowserVisitorsChart alias={alias} />
-                    </ErrorBoundary>
+                    <BrowserVisitorsChart alias={alias} />
                 </Suspense>
+
                 {/* Device Breakdown */}
                 <Suspense fallback={<DeviceVisitorsChartSkeleton />}>
-                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                        <DeviceVisitorsChart alias={alias} />
-                    </ErrorBoundary>
+                    <DeviceVisitorsChart alias={alias} />
                 </Suspense>
 
                 {/* Clicks Over Time */}
                 <Suspense fallback={<ClickOverTimeChartSkeleton />}>
-                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                        <ClickOverTimeChart alias={alias} />
-                    </ErrorBoundary>
+                    <ClickOverTimeChart alias={alias} />
                 </Suspense>
 
                 {/* Geographic Distribution */}
                 <Suspense fallback={<GeographicChartSkeleton />}>
-                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                        <GeographicChart alias={alias} />
-                    </ErrorBoundary>
+                    <GeographicChart alias={alias} />
                 </Suspense>
 
                 {/* Hourly Activity */}
                 <div className="items-baseline">
                     <Suspense fallback={<VisitorsPerHourChartSkeleton />}>
-                        <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                            <VisitorsPerHourChart alias={alias} />
-                        </ErrorBoundary>
+                        <VisitorsPerHourChart alias={alias} />
                     </Suspense>
                 </div>
 
                 {/* Top Referrers */}
                 <Suspense fallback={<TopRefererVisitorsChartSkeleton />}>
-                    <ErrorBoundary fallback={<div>⚠️ لا توجد بيانات متاحة</div>}>
-                        <TopRefererVisitorsChart alias={alias} />
-                    </ErrorBoundary>
+                    <TopRefererVisitorsChart alias={alias} />
                 </Suspense>
             </div>
         </div>

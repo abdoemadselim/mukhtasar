@@ -31,7 +31,6 @@ export function useGetAnalyticsOverview(params: AnalyticsParams) {
         retry: 2,
         refetchOnWindowFocus: false,
         suspense: true,
-        useErrorBoundary: true,
         enabled: !!params.alias,
     });
 }
@@ -45,7 +44,6 @@ export function useGetBrowserStats(params: AnalyticsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -60,7 +58,6 @@ export function useGetDeviceStats(params: AnalyticsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -75,7 +72,6 @@ export function useGetClicksOverTime(params: ClicksOverTimeParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -90,7 +86,6 @@ export function useGetGeographicStats(params: AnalyticsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -105,7 +100,6 @@ export function useGetRefererStats(params: RefererStatsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
@@ -120,7 +114,7 @@ export function useGetHourlyStats(params: AnalyticsParams) {
         gcTime: 5 * 60 * 1000,
         retry: 2,
         suspense: true,
-        useErrorBoundary: true,
+        useErrorBondary: true,
         refetchOnWindowFocus: false,
         enabled: !!params.alias,
     });
