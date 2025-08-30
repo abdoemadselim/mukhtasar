@@ -168,10 +168,10 @@ const analyticsRepository = {
             AND ua.clicked_at <= $3::timestamptz
             GROUP BY website
             ORDER BY visitors DESC
-            LIMIT $4
+            LIMIT 4
         `,
             // @ts-ignore
-            [alias, startDate, endDate, limit]
+            [alias, startDate, endDate]
         );
 
         return result.rows;
