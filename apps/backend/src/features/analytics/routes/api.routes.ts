@@ -12,9 +12,7 @@ import {
 } from "#features/analytics/controllers/api.controllers.js";
 import { analyticsOverviewQuerySchema, browserStatsQuerySchema, clicksOverTimeQuerySchema, deviceStatsQuerySchema, geographicStatsQuerySchema, hourlyStatsQuerySchema, refererStatsQuerySchema } from "#features/analytics/domain/analytics-schemas.js";
 
-import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 import validateRequest from "#lib/validation/validator-middleware.js";
-
 
 const router = Router();
 

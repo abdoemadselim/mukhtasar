@@ -1,23 +1,21 @@
 // apps/backend/src/features/analytics/domain/analytics.service.ts
 import analyticsRepository from "#features/analytics/data-access/analytics.repository.js";
-import urlRepository from "#root/features/url/data-access/url.repository.js";
+import urlRepository from "#features/url/data-access/url.repository.js";
 import { AnalyticsEventInput } from "#features/analytics/types.js";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
 import { getCountry } from "#lib/geo/geoip.js";
 
-interface AnalyticsParams {
+type AnalyticsParams = {
     alias: string;
     startDate: string;
     endDate: string;
 }
 
-interface ClicksOverTimeParams extends AnalyticsParams {
+type ClicksOverTimeParams = AnalyticsParams & {
     groupBy: string;
 }
 
-interface RefererStatsParams extends AnalyticsParams {
-    limit: number;
-}
+type RefererStatsParams = AnalyticsParams
 
 export async function updateAnalytics({ analyticsEvent, url_alias }: { analyticsEvent: Omit<AnalyticsEventInput, "url_id">, url_alias: string }) {
     const url = await urlRepository.getUrlByAlias(url_alias)

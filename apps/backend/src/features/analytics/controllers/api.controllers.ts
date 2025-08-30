@@ -215,14 +215,12 @@ export async function getRefererStats(req: Request, res: Response) {
     const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         endDate = new Date().toISOString(),
-        limit = 10
     } = req.query;
 
     const refererStats = await analyticsService.getRefererStats({
         alias,
         startDate: startDate as string,
         endDate: endDate as string,
-        limit: Number(limit)
     });
 
     const response = {
