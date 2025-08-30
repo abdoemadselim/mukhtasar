@@ -51,6 +51,10 @@ function validateAndExtractToken(req: Request): string {
         throw new UnAuthorizedException();
     }
 
+    if (token !== process.env.WORKER_SECRET) {
+        throw new UnAuthorizedException()
+    }
+
     return token;
 }
 
