@@ -1,3 +1,6 @@
+import {lru} from "tiny-lru";
+const cache = lru(1000, 1000 * 60 * 5);
+
 // Cloudflare Worker for mukhtasar.pro URL routing
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
@@ -75,41 +78,64 @@ async function handleRedirect(request) {
 
     console.log('Looking up alias:', alias)
 
-    // Call your backend to get the redirect URL
-    const backendUrl = `https://api.mukhtasar.pro/${alias}`
+    // Check LRU cache
+    let longUrl = cache.get(alias)
 
-    const backendResponse = await fetch(backendUrl, {
-      method: 'GET',
-      headers: {
-        'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
-        'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
-        'X-Real-IP': request.headers.get('CF-Connecting-IP') || '',
-        'Accept': 'application/json',
-        'Referer': request.headers.get('Referer') || ''
+    if (!longUrl) {
+      // Not cached → fetch from backend
+      const backendUrl = `https://api.mukhtasar.pro/${alias}`
+
+      const backendResponse = await fetch(backendUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
+          'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
+          'X-Real-IP': request.headers.get('CF-Connecting-IP') || '',
+          'Accept': 'application/json',
+          'Referer': request.headers.get('Referer') || ''
+        }
+      })
+
+      if (backendResponse.status === 200) {
+        const data = await backendResponse.json()
+        longUrl = data.data.url
+
+        // Cache the resolved alias
+        cache.set(alias, longUrl)
+      } else if (backendResponse.status === 404) {
+        return Response.redirect(`${url.origin}/pages/not-found`, 302)
+      } else {
+        return fetch(request)
       }
-    })
-
-    console.log('Backend response status:', backendResponse.status)
-
-    if (backendResponse.status === 200) {
-      const data = await backendResponse.json()
-      console.log('Redirecting to:', data.data.url)
-
-      // Perform the redirect
-      return Response.redirect(data.data.url, 302)
-    } else if (backendResponse.status === 404) {
-      // URL not found - redirect to frontend 404 page
-      console.log('Alias not found, redirecting to 404')
-      return Response.redirect(`${url.origin}/pages/not-found`, 302)
-    } else {
-      // Other errors - let frontend handle it
-      console.log('Backend error, falling back to frontend')
-      return fetch(request)
     }
 
+    // Fire and forget → record analytics (don’t block redirect)
+    sendAnalytics(alias, request).catch(err => console.error("Analytics error:", err))
+
+    // Redirect
+    return Response.redirect(longUrl, 302)
   } catch (error) {
     console.error('Worker error:', error)
     // On error, fall back to frontend
     return fetch(request)
   }
+}
+
+async function sendAnalytics(alias, request) {
+  const analyticsUrl = `https://api.mukhtasar.pro/analytics/${alias}`
+
+  await fetch(analyticsUrl, {
+    method: 'POST',
+    headers: {
+      "Authorization": "Bearer Randompasswordisherenooneknowsabout123",
+      'Content-Type': 'application/json',
+      'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
+      'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
+      'X-Real-IP': request.headers.get('CF-Connecting-IP') || ''
+    },
+    body: JSON.stringify({
+      referer: request.headers.get('Referer') || '',
+      ts: Date.now()
+    })
+  })
 }

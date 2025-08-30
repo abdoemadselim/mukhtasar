@@ -552,7 +552,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "example": "2024-01-01T00:00:00.000Z"
+              "example": "2025-08-01T00:00:00.000Z"
             }
           },
           {
@@ -562,7 +562,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "example": "2024-01-30T23:59:59.000Z"
+              "example": "2025-08-30T23:59:59.000Z"
             }
           }
         ],
@@ -648,23 +648,23 @@
             }
           },
           {
-            "name": "startDate",
+            "name": "startDate (UTC)",
             "in": "query",
             "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
             "schema": {
               "type": "string",
               "format": "date-time",
-              "example": "2024-01-01T00:00:00.000Z"
+              "example": "2025-08-01T00:00:00.000Z"
             }
           },
           {
-            "name": "endDate",
+            "name": "endDate (UTC)",
             "in": "query",
             "description": "تاريخ النهاية (افتراضي: الآن)",
             "schema": {
               "type": "string",
               "format": "date-time",
-              "example": "2024-01-30T23:59:59.000Z"
+              "example": "2025-08-30T23:59:59.000Z"
             }
           }
         ],
@@ -697,6 +697,517 @@
                       }
                     },
                     "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/devices": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "إحصائيات الأجهزة",
+        "description": "توزيع النقرات حسب نوع الجهاز (موبايل، سطح المكتب، تابلت)",
+        "operationId": "getDeviceStats",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate (UTC)",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate (UTC)",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد إحصائيات الأجهزة بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "device": {
+                            "type": "string",
+                            "example": "Mobile"
+                          },
+                          "count": {
+                            "type": "integer",
+                            "example": 750
+                          },
+                          "percentage": {
+                            "type": "number",
+                            "example": 60.0
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/clicks-over-time": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "النقرات عبر الوقت",
+        "description": "تتبع النقرات على مدار فترة زمنية معينة مع إمكانية التجميع حسب اليوم، الساعة، الأسبوع، أو الشهر",
+        "operationId": "getClicksOverTime",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate (UTC)",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 90 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate (UTC)",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-30T23:59:59.000Z"
+            }
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "description": "طريقة التجميع (افتراضي: day)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month"
+              ],
+              "example": "day"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد النقرات عبر الوقت بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-09-01"
+                          },
+                          "clicks": {
+                            "type": "integer",
+                            "example": 35
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/geography": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "الإحصائيات الجغرافية",
+        "description": "توزيع النقرات حسب البلد والموقع الجغرافي",
+        "operationId": "getGeographicStats",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate (UTC)",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate (UTC)",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2028-08-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد الإحصائيات الجغرافية بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "country": {
+                            "type": "string",
+                            "example": "Egypt"
+                          },
+                          "count": {
+                            "type": "integer",
+                            "example": 450
+                          },
+                          "percentage": {
+                            "type": "number",
+                            "example": 36.0
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/analytics/referers": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "إحصائيات المصادر",
+        "description": "المواقع والمصادر التي أتت منها النقرات",
+        "operationId": "getRefererStats",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 30 يوماً مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-01T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد إحصائيات المصادر بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "referer": {
+                            "type": "string",
+                            "example": "facebook.com"
+                          },
+                          "count": {
+                            "type": "integer",
+                            "example": 320
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "NO_ERROR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitExceeded"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+     "/analytics/hourly": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "الإحصائيات بالساعة",
+        "description": "توزيع النقرات حسب الساعات على مدار اليوم",
+        "operationId": "getHourlyStats",
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "query",
+            "description": "الاسم المستعار للرابط المختصر",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "myalias123"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "تاريخ البداية (افتراضي: 7 أيام مضت)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-24T00:00:00.000Z"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "تاريخ النهاية (افتراضي: الآن)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-30T23:59:59.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم استرداد الإحصائيات بالساعة بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "hour": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 23,
+                            "example": 14
+                          },
+                          "clicks": {
+                            "type": "integer",
+                            "example": 85
+                          }
+                        }
+                      }
+                    },
+                     "errors": {
                       "type": "array",
                       "items": {},
                       "example": []

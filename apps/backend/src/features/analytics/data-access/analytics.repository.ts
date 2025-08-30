@@ -2,25 +2,20 @@
 import { query } from "#lib/db/db-connection.js";
 import { AnalyticsEventInput } from "#features/analytics/types";
 
-interface AnalyticsParams {
+type AnalyticsParams = {
     alias: string;
     startDate: string;
     endDate: string;
 }
 
-interface StatsParams extends AnalyticsParams { }
+type StatsParams = AnalyticsParams
 
-interface ClicksOverTimeParams extends AnalyticsParams {
+type ClicksOverTimeParams = AnalyticsParams & {
     groupBy: string;
 }
 
-interface RefererStatsParams extends AnalyticsParams {
-    limit: number;
-}
-
-interface HourlyStatsParams extends AnalyticsParams {
-    timezone: string;
-}
+type RefererStatsParams = AnalyticsParams
+type HourlyStatsParams = AnalyticsParams
 
 const analyticsRepository = {
     async createEvent(analyticsEvent: AnalyticsEventInput): Promise<undefined> {
@@ -77,8 +72,8 @@ const analyticsRepository = {
         const result = await query(`
             SELECT 
                 COALESCE(device_type, 'Desktop') as device,
-                COUNT(*) as visitors,
-                ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2) as percentage
+                COUNT(*)::INTEGER as visitors,
+                ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2)::FLOAT as percentage
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
@@ -120,8 +115,8 @@ const analyticsRepository = {
         const result = await query(`
             SELECT 
                 TO_CHAR(${dateGroup}, '${dateFormat}') as date,
-                COUNT(*) as clicks,
-                COUNT(DISTINCT ip_address) as unique_visitors
+                COUNT(*)::INTEGER as clicks,
+                COUNT(DISTINCT ip_address)::INTEGER as unique_visitors
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
@@ -140,7 +135,7 @@ const analyticsRepository = {
         const result = await query(`
             SELECT 
             ip_address::inet as ip,
-            COUNT(*) as clicks
+            COUNT(*)::INTEGER as clicks
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
@@ -152,18 +147,10 @@ const analyticsRepository = {
             LIMIT 10
         `, [alias, startDate, endDate]);
 
-        // Mock country mapping - in production, use a proper GeoIP service
-        const mockCountries = ['السعودية', 'الإمارات', 'مصر', 'قطر', 'الكويت', 'الأردن', 'لبنان', 'العراق'];
-        const mockFlags = ['🇸🇦', '🇦🇪', '🇪🇬', '🇶🇦', '🇰🇼', '🇯🇴', '🇱🇧', '🇮🇶'];
-
-        return result.rows.map((row, index) => ({
-            country: mockCountries[index % mockCountries.length] || 'غير محدد',
-            clicks: parseInt(row.clicks),
-            flag: mockFlags[index % mockFlags.length] || '🏳️'
-        }));
+        return result.rows
     },
 
-    async getRefererStats({ alias, startDate, endDate, limit }: RefererStatsParams) {
+    async getRefererStats({ alias, startDate, endDate }: RefererStatsParams) {
         const result = await query(`
             SELECT 
                 CASE 
@@ -173,7 +160,7 @@ const analyticsRepository = {
                         '/.*$', ''
                     )
                 END as website,
-                COUNT(*) as visitors
+                COUNT(*)::INTEGER as visitors
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
@@ -181,7 +168,7 @@ const analyticsRepository = {
             AND ua.clicked_at <= $3::timestamptz
             GROUP BY website
             ORDER BY visitors DESC
-            LIMIT $4    
+            LIMIT $4
         `,
             // @ts-ignore
             [alias, startDate, endDate, limit]
@@ -190,19 +177,19 @@ const analyticsRepository = {
         return result.rows;
     },
 
-    async getHourlyStats({ alias, startDate, endDate, timezone }: HourlyStatsParams) {
+    async getHourlyStats({ alias, startDate, endDate }: HourlyStatsParams) {
         const result = await query(`
             SELECT 
-                EXTRACT(HOUR FROM clicked_at AT TIME ZONE $5) as hour,
-                COUNT(*) as clicks
+                EXTRACT(HOUR FROM clicked_at) as hour,
+                COUNT(*)::INTEGER as clicks
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
             AND ua.clicked_at >= $2::timestamptz 
             AND ua.clicked_at <= $3::timestamptz
-            GROUP BY EXTRACT(HOUR FROM clicked_at AT TIME ZONE $4)
+            GROUP BY EXTRACT(HOUR FROM clicked_at)
             ORDER BY hour
-        `, [alias, startDate, endDate, timezone]);
+        `, [alias, startDate, endDate]);
 
         // Fill missing hours with 0 clicks
         const hourlyData = Array.from({ length: 24 }, (_, i) => ({

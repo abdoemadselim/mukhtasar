@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "src/lib/email/templates/error-handling"],
+  "include": ["src", "src/lib/email/templates/error-handling", "src/**/*.mmdb"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "outDir": "./dist",

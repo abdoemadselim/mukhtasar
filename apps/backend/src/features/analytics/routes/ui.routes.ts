@@ -1,8 +1,6 @@
 // apps/backend/src/features/analytics/routes/api.routes.ts
 import { Router } from "express";
 
-import { paramsSchema } from "#features/url/domain/url-schemas.js";
-
 import {
     getUrlAnalytics,
     getBrowserStats,
@@ -11,16 +9,28 @@ import {
     getGeographicStats,
     getRefererStats,
     getHourlyStats,
-    getAnalyticsOverview
-} from "#root/features/analytics/controllers/ui.controllers.js";
+    getAnalyticsOverview,
+} from "#features/analytics/controllers/ui.controllers.js";
+
+import {
+    analyticsOverviewQuerySchema,
+    browserStatsQuerySchema,
+    clicksOverTimeQuerySchema,
+    deviceStatsQuerySchema,
+    geographicStatsQuerySchema,
+    hourlyStatsQuerySchema,
+    refererStatsQuerySchema
+} from "#features/analytics/domain/analytics-schemas.js";
 
 import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
+import validateRequest from "#lib/validation/validator-middleware.js";
 
 const router = Router();
 
 // Get comprehensive analytics for a URL
 router.get(
     "/",
+    validateRequest([analyticsOverviewQuerySchema]),
     ipRateLimiter(1, 100),
     getUrlAnalytics
 );
@@ -28,6 +38,7 @@ router.get(
 // Get analytics overview (summary stats)
 router.get(
     "/overview",
+    validateRequest([analyticsOverviewQuerySchema]),
     ipRateLimiter(1, 100),
     getAnalyticsOverview
 );
@@ -35,6 +46,7 @@ router.get(
 // Get browser statistics
 router.get(
     "/browsers",
+    validateRequest([browserStatsQuerySchema]),
     ipRateLimiter(1, 100),
     getBrowserStats
 );
@@ -42,6 +54,7 @@ router.get(
 // Get device statistics
 router.get(
     "/devices",
+    validateRequest([deviceStatsQuerySchema]),
     ipRateLimiter(1, 100),
     getDeviceStats
 );
@@ -49,6 +62,7 @@ router.get(
 // Get clicks over time
 router.get(
     "/clicks-over-time",
+    validateRequest([clicksOverTimeQuerySchema]),
     ipRateLimiter(1, 100),
     getClicksOverTime
 );
@@ -56,6 +70,7 @@ router.get(
 // Get geographic statistics
 router.get(
     "/geography",
+    validateRequest([geographicStatsQuerySchema]),
     ipRateLimiter(1, 100),
     getGeographicStats
 );
@@ -63,6 +78,7 @@ router.get(
 // Get referer statistics
 router.get(
     "/referers",
+    validateRequest([refererStatsQuerySchema]),
     ipRateLimiter(1, 100),
     getRefererStats
 );
@@ -70,6 +86,7 @@ router.get(
 // Get hourly statistics
 router.get(
     "/hourly",
+    validateRequest([hourlyStatsQuerySchema]),
     ipRateLimiter(1, 100),
     getHourlyStats
 );

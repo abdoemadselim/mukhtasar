@@ -15,7 +15,6 @@ export async function getUrlAnalytics(req: Request, res: Response) {
     const {
         startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(), // 90 days ago
         endDate = new Date().toISOString(),
-        timezone = 'UTC'
     } = req.body;
 
     // 2- pass the prepared data to the service
@@ -23,7 +22,6 @@ export async function getUrlAnalytics(req: Request, res: Response) {
         alias,
         startDate: startDate as string,
         endDate: endDate as string,
-        timezone: timezone as string
     });
 
     // 3- prepare the response
@@ -96,7 +94,7 @@ export async function getBrowserStats(req: Request, res: Response) {
 export async function getDeviceStats(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         endDate = new Date().toISOString()
@@ -134,7 +132,7 @@ export async function getDeviceStats(req: Request, res: Response) {
 export async function getClicksOverTime(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
         endDate = new Date().toISOString(),
@@ -174,7 +172,7 @@ export async function getClicksOverTime(req: Request, res: Response) {
 export async function getGeographicStats(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         endDate = new Date().toISOString()
@@ -212,7 +210,7 @@ export async function getGeographicStats(req: Request, res: Response) {
 export async function getRefererStats(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         endDate = new Date().toISOString(),
@@ -252,7 +250,7 @@ export async function getRefererStats(req: Request, res: Response) {
 export async function getHourlyStats(req: Request, res: Response) {
     const start = Date.now();
 
-    const { alias } = req.body;
+    const { alias } = req.query as { alias: string };
     const {
         startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
         endDate = new Date().toISOString(),
@@ -263,7 +261,6 @@ export async function getHourlyStats(req: Request, res: Response) {
         alias,
         startDate: startDate as string,
         endDate: endDate as string,
-        timezone: timezone as string
     });
 
     const response = {

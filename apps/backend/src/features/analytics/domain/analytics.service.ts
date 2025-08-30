@@ -3,15 +3,12 @@ import analyticsRepository from "#features/analytics/data-access/analytics.repos
 import urlRepository from "#root/features/url/data-access/url.repository.js";
 import { AnalyticsEventInput } from "#features/analytics/types.js";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
+import { getCountry } from "#lib/geo/geoip.js";
 
 interface AnalyticsParams {
     alias: string;
     startDate: string;
     endDate: string;
-}
-
-interface AnalyticsParamsWithTimezone extends AnalyticsParams {
-    timezone: string;
 }
 
 interface ClicksOverTimeParams extends AnalyticsParams {
@@ -31,7 +28,7 @@ export async function updateAnalytics({ analyticsEvent, url_alias }: { analytics
     analyticsRepository.createEvent(analyticsEvent as AnalyticsEventInput);
 }
 
-export async function getUrlAnalytics({ alias, startDate, endDate, timezone }: AnalyticsParamsWithTimezone) {
+export async function getUrlAnalytics({ alias, startDate, endDate }: AnalyticsParams) {
     // Check if URL exists first
     const url = await urlRepository.getUrlByAlias(alias);
     if (!url) {
@@ -52,8 +49,8 @@ export async function getUrlAnalytics({ alias, startDate, endDate, timezone }: A
         analyticsRepository.getDeviceStats({ alias, startDate, endDate }),
         analyticsRepository.getClicksOverTime({ alias, startDate, endDate, groupBy: 'day' }),
         analyticsRepository.getGeographicStats({ alias, startDate, endDate }),
-        analyticsRepository.getRefererStats({ alias, startDate, endDate, limit: 10 }),
-        analyticsRepository.getHourlyStats({ alias, startDate, endDate, timezone })
+        analyticsRepository.getRefererStats({ alias, startDate, endDate }),
+        analyticsRepository.getHourlyStats({ alias, startDate, endDate })
     ]);
 
     return {
@@ -111,27 +108,29 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
         throw new URLNotFoundException();
     }
 
-    return await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
+    const results = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
+    console.log(results)
+    return results.map((event) => ({ clicks: event.clicks, country: getCountry(event.ip) }))
 }
 
-export async function getRefererStats({ alias, startDate, endDate, limit }: RefererStatsParams) {
+export async function getRefererStats({ alias, startDate, endDate }: RefererStatsParams) {
     // Check if URL exists first
     const url = await urlRepository.getUrlByAlias(alias);
     if (!url) {
         throw new URLNotFoundException();
     }
 
-    return await analyticsRepository.getRefererStats({ alias, startDate, endDate, limit });
+    return await analyticsRepository.getRefererStats({ alias, startDate, endDate });
 }
 
-export async function getHourlyStats({ alias, startDate, endDate, timezone }: AnalyticsParamsWithTimezone) {
+export async function getHourlyStats({ alias, startDate, endDate }: AnalyticsParams) {
     // Check if URL exists first
     const url = await urlRepository.getUrlByAlias(alias);
     if (!url) {
         throw new URLNotFoundException();
     }
 
-    return await analyticsRepository.getHourlyStats({ alias, startDate, endDate, timezone });
+    return await analyticsRepository.getHourlyStats({ alias, startDate, endDate });
 }
 
 export async function getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams) {

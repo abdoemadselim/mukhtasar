@@ -10,73 +10,67 @@ import {
     getHourlyStats,
     getAnalyticsOverview
 } from "#features/analytics/controllers/api.controllers.js";
+import { analyticsOverviewQuerySchema, browserStatsQuerySchema, clicksOverTimeQuerySchema, deviceStatsQuerySchema, geographicStatsQuerySchema, hourlyStatsQuerySchema, refererStatsQuerySchema } from "#features/analytics/domain/analytics-schemas.js";
 
-import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
-import { authToken } from "#root/features/token/domain/token-service";
+import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
+import validateRequest from "#lib/validation/validator-middleware.js";
+
 
 const router = Router();
 
 // Get comprehensive analytics for a URL
 router.get(
     "/",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([analyticsOverviewQuerySchema]),
     getUrlAnalytics
 );
 
 // Get analytics overview (summary stats)
 router.get(
     "/overview",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([analyticsOverviewQuerySchema]),
     getAnalyticsOverview
 );
 
 // Get browser statistics
 router.get(
     "/browsers",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([browserStatsQuerySchema]),
     getBrowserStats
 );
 
 // Get device statistics
 router.get(
     "/devices",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([deviceStatsQuerySchema]),
     getDeviceStats
 );
 
 // Get clicks over time
 router.get(
     "/clicks-over-time",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([clicksOverTimeQuerySchema]),
     getClicksOverTime
 );
 
 // Get geographic statistics
 router.get(
     "/geography",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([geographicStatsQuerySchema]),
     getGeographicStats
 );
 
 // Get referer statistics
 router.get(
     "/referers",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([refererStatsQuerySchema]),
     getRefererStats
 );
 
 // Get hourly statistics
 router.get(
     "/hourly",
-    authToken("can_read"),
-    ipRateLimiter(1, 100),
+    validateRequest([hourlyStatsQuerySchema]),
     getHourlyStats
 );
 

@@ -2,6 +2,7 @@
 import 'newrelic';
 import "dotenv/config"
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { initGeoIp } from '#lib/geo/geoip.js';
 import "#lib/db/redis-connection.js";
 
 import helmet from "helmet";
@@ -54,6 +55,7 @@ app.use(bodyParser.json())
 app.use(routesContext)
 app.use(cookieParser())
 app.use(express.static("public"))
+initGeoIp();
 app.disable("x-powered-by")
 
 export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()

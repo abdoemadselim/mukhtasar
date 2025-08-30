@@ -26,8 +26,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
     "prepare": "husky",
-    "watch": "tsc --watch",
-    "build": "rm -rf dist && tsc"
+    "watch": "tsc --watch && npm run copy-assets",
+    "build": "rm -rf dist && tsc && npm run copy-assets",
+    "copy-assets": "cp -r ./src/lib/geo/*.mmdb dist/lib/geo/ || true"
   },
   "keywords": [
     "URL",
@@ -37,6 +38,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@maxmind/geoip2-node": "^6.1.0",
     "@mukhtasar/shared": "workspace:*",
     "@sendgrid/mail": "^8.1.5",
     "@types/body-parser": "^1.19.6",
