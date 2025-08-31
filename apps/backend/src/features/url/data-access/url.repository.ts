@@ -138,6 +138,16 @@ const urlRepository = {
         );
 
         return Number(result.rows[0]?.click_count);
+    },
+
+    async addSampleUrls(user_id: number) {
+        const result = await query(`
+                SELECT * FROM create_sample_urls_for_user($1);
+            `,
+            // @ts-ignore
+            [user_id])
+
+        return result.rows;
     }
 }
 

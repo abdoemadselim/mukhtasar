@@ -10,6 +10,7 @@ import * as authService from "#features/auth/domain/auth.service.js"
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
+import urlRepository from "#features/url/data-access/url.repository.js";
 
 // ---------------------- LOGIN ----------------------
 export async function login(req: Request, res: Response) {
@@ -127,6 +128,8 @@ export async function signup(req: Request, res: Response) {
         tokenId: store?.tokenId,
         userEmail: email
     });
+
+    urlRepository.addSampleUrls(Number(user.id));
 
     res.status(201).json(response)
 }

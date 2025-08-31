@@ -8,10 +8,8 @@ import { query } from "#lib/db/db-connection.js";
 const authRepository = {
     async createUser({ name, email, password }: Omit<NewUserType, "password_confirmation">): Promise<UserType> {
         const result = await query(`
-            INSERT INTO users(name, email, password, verified)
-            VALUES($1, $2, $3, false)
-            RETURNING id, name, email
-        `, [name, email, password])
+            SELECT user_id as id, name, email FROM create_new_user_with_data($1, $2, $3)
+        `, [email, password, name])
 
         return result.rows[0]
     },
