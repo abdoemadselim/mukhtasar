@@ -9,7 +9,7 @@ import { log, LOG_TYPE } from "#lib/logger/logger.js"
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
 
-const baseUrl = process.env.NODE_ENV === "production" ? "http://api.mukhtasar.pro/ui": "http://localhost:3000/ui"
+const baseUrl = process.env.NODE_ENV === "production" ? "https://api.mukhtasar.pro/ui" : "http://localhost:3000/ui"
 export async function sendVerificationMail({ userEmail, userName, verificationToken }: { userEmail: string, userName: string, verificationToken: string }) {
     // 1. Load the template
     const templatePath = path.join(process.cwd(), "templates", "email-verification.html")
@@ -26,6 +26,10 @@ export async function sendVerificationMail({ userEmail, userName, verificationTo
         from: 'مُختصِر <support@mukhtasar.pro>',
         subject: "تأكيد البريد الإلكتروني - مُختصِر",
         html: htmlTemplate,
+        trackingSettings: {
+            clickTracking: { enable: false, enableText: false },
+            openTracking: { enable: false },
+        },
         attachments: [
             {
                 content: (await fs.readFile(path.join(process.cwd(), "public", "logo-lg.png"))).toString("base64"), // adjust path
