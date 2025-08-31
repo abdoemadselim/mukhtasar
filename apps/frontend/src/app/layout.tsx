@@ -33,7 +33,7 @@ export default function RootLayout({
           <AuthProvider>
             <UrlProvider>
               {children}
-              {/* <SpeedInsights /> */}
+              <SpeedInsights />
               {/* <Analytics /> */}
             </UrlProvider>
           </AuthProvider>
