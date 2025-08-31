@@ -130,21 +130,20 @@ const analyticsRepository = {
     },
 
     async getGeographicStats({ alias, startDate, endDate }: StatsParams) {
-        // Note: This is a simplified implementation. In production, you'd want to use a GeoIP service
-        // to convert IP addresses to countries. For now, this returns mock data structure.
         const result = await query(`
             SELECT 
-            ip_address::inet as ip,
-            COUNT(*)::INTEGER as clicks
+                ip_address::inet as ip,
+                COUNT(*)::INTEGER as clicks
             FROM url_analytics ua
             JOIN url u ON ua.url_id = u.id
             WHERE u.alias = $1
             AND ua.clicked_at >= $2::timestamptz 
             AND ua.clicked_at <= $3::timestamptz
             AND ip_address != 'Unknown'
+            AND ip_address IS NOT NULL
             GROUP BY ip_address::inet
             ORDER BY clicks DESC
-            LIMIT 10
+            LIMIT 100
         `, [alias, startDate, endDate]);
 
         return result.rows

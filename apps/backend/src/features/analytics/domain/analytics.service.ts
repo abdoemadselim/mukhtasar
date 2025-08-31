@@ -109,6 +109,8 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
     // 2. Fetch raw analytics events
     let rawEvents = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
 
+    console.log(rawEvents)
+
     // 3. Aggregate by country
     const aggregated: Record<string, { country: string; clicks: number }> = {};
 

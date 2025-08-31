@@ -60,9 +60,10 @@ export default function BrowserVisitorsChart({ browserStats, error }: { browserS
         }));
     }, [browserStats]);
 
-    const totalVisitors = useMemo(() => {
-        return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-    }, [chartData])
+    const totalVisitors = useMemo(() =>
+        chartData.reduce((acc, curr) => acc + curr.visitors, 0),
+        [chartData]
+    );
 
 
     if (error || !browserStats || browserStats.length === 0) {

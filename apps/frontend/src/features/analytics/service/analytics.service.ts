@@ -82,7 +82,6 @@ export async function getBrowserStats({ alias, startDate, endDate }: AnalyticsPa
     return apiClient.get(`/analytics/browsers?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
