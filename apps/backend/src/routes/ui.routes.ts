@@ -13,6 +13,6 @@ const router = Router()
 router.use("/token", authSession(), tokenRoutes)
 router.use("/auth", authRoutes)
 router.use("/url", urlRoutes)
-router.use("/analytics", authSession(), ipRateLimiter(1, 300), analyticsRoutes)
+router.use("/analytics", analyticsRoutes)
 
 export default router;

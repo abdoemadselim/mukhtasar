@@ -1,8 +1,8 @@
 import { Router } from "express"
 
-import publicRoutes from "#features/url/routes/public.routes.js"
+import urlRoutes from "#features/url/routes/public.routes.js"
 
 const router = Router()
 
-router.use("/", publicRoutes)
+router.use("/", urlRoutes)
 export default router;

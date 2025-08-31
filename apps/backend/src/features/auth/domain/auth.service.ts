@@ -97,10 +97,14 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
         throw new NotFoundException("User not found for this verification link.");
     }
 
-    authRepository.setUserVerified(user.id);
+    if (user.verified) {
+        return user
+    }
+
+    await authRepository.setUserVerified(user.id);
 
     if (sessionId) {
-        redisClient.setEx(
+        await redisClient.setEx(
             `sessions:${sessionId}`,
             Number(process.env.SESSION_DURATION) / 1000,
             JSON.stringify({

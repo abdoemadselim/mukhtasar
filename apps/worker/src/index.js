@@ -1,4 +1,4 @@
-import {lru} from "tiny-lru";
+import { lru } from "tiny-lru";
 const cache = lru(1000, 1000 * 60 * 5);
 
 // Cloudflare Worker for mukhtasar.pro URL routing
@@ -110,7 +110,7 @@ async function handleRedirect(request) {
     }
 
     // Fire and forget → record analytics (don’t block redirect)
-    sendAnalytics(alias, request).catch(err => console.error("Analytics error:", err))
+    await sendAnalytics(alias, request).catch(err => console.error("Analytics error:", err))
 
     // Redirect
     return Response.redirect(longUrl, 302)
@@ -122,9 +122,9 @@ async function handleRedirect(request) {
 }
 
 async function sendAnalytics(alias, request) {
-  const analyticsUrl = `https://api.mukhtasar.pro/analytics/${alias}`
+  const analyticsUrl = `https://api.mukhtasar.pro/analytics/`
 
-  await fetch(analyticsUrl, {
+  const res =  await fetch(analyticsUrl, {
     method: 'POST',
     headers: {
       "Authorization": "Bearer Randompasswordisherenooneknowsabout123",
@@ -134,8 +134,8 @@ async function sendAnalytics(alias, request) {
       'X-Real-IP': request.headers.get('CF-Connecting-IP') || ''
     },
     body: JSON.stringify({
-      referer: request.headers.get('Referer') || '',
-      ts: Date.now()
+      alias
     })
   })
+  console.log(res.ok)
 }

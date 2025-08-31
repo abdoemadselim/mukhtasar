@@ -10,6 +10,7 @@ import {
     getRefererStats,
     getHourlyStats,
     getAnalyticsOverview,
+    createAnalyticsEvent,
 } from "#features/analytics/controllers/ui.controllers.js";
 
 import {
@@ -21,8 +22,10 @@ import {
     hourlyStatsQuerySchema,
     refererStatsQuerySchema
 } from "#features/analytics/domain/analytics-schemas.js";
+import { authSession } from "#features/auth/domain/auth.service.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
+
 
 const router = Router();
 
@@ -39,6 +42,7 @@ router.get("*splash", (req, res, next) => {
 // Get comprehensive analytics for a URL
 router.get(
     "/",
+    authSession(),
     validateRequest([analyticsOverviewQuerySchema]),
     getUrlAnalytics
 );
@@ -46,6 +50,7 @@ router.get(
 // Get analytics overview (summary stats)
 router.get(
     "/overview",
+    authSession(),
     validateRequest([analyticsOverviewQuerySchema]),
     getAnalyticsOverview
 );
@@ -53,6 +58,7 @@ router.get(
 // Get browser statistics
 router.get(
     "/browsers",
+    authSession(),
     validateRequest([browserStatsQuerySchema]),
     getBrowserStats
 );
@@ -60,6 +66,7 @@ router.get(
 // Get device statistics
 router.get(
     "/devices",
+    authSession(),
     validateRequest([deviceStatsQuerySchema]),
     getDeviceStats
 );
@@ -67,6 +74,7 @@ router.get(
 // Get clicks over time
 router.get(
     "/clicks-over-time",
+    authSession(),
     validateRequest([clicksOverTimeQuerySchema]),
     getClicksOverTime
 );
@@ -74,6 +82,7 @@ router.get(
 // Get geographic statistics
 router.get(
     "/geography",
+    authSession(),
     validateRequest([geographicStatsQuerySchema]),
     getGeographicStats
 );
@@ -81,6 +90,7 @@ router.get(
 // Get referer statistics
 router.get(
     "/referers",
+    authSession(),
     validateRequest([refererStatsQuerySchema]),
     getRefererStats
 );
@@ -88,8 +98,15 @@ router.get(
 // Get hourly statistics
 router.get(
     "/hourly",
+    authSession(),
     validateRequest([hourlyStatsQuerySchema]),
     getHourlyStats
+);
+
+// Add analytics event
+router.post(
+    "/",
+    createAnalyticsEvent
 );
 
 export default router;
