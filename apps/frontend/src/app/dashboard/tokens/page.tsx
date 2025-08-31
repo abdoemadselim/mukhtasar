@@ -3,7 +3,6 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Highlighter } from "@/components/ui/highlighter";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 
 import CreateTokenDialog from "@/features/token/components/create-token-dialog";
@@ -25,7 +24,7 @@ export default async function TokensPage() {
                                     </Button>
                                 </CreateTokenDialog>
                                 <div className="flex gap-4 items-center">
-                                    <h1 className="text-3xl"><Highlighter color="#4F39DD" action="underline">رموز وصولك (APIs)</Highlighter></h1>
+                                    <h1 className="text-3xl">رموز وصولك (APIs)</h1>
                                     <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg hidden sm:block" href="https://api.mukhtasar.pro/api/docs"> (API documentation) وثائق المطورين</Link>
                                 </div>
                             </div>
