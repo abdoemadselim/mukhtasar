@@ -68,7 +68,6 @@ export async function getAnalyticsOverview({ alias, startDate, endDate }: Analyt
     return apiClient.get(`/analytics/overview?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
@@ -98,7 +97,6 @@ export async function getDeviceStats({ alias, startDate, endDate }: AnalyticsPar
     return apiClient.get(`/analytics/devices?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
@@ -114,7 +112,6 @@ export async function getClicksOverTime({ alias, startDate, endDate, groupBy = '
     return apiClient.get(`/analytics/clicks-over-time?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
@@ -129,7 +126,6 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
     return apiClient.get(`/analytics/geography?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
@@ -145,7 +141,6 @@ export async function getRefererStats({ alias, startDate, endDate, limit = 10 }:
     return apiClient.get(`/analytics/referers?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
 
@@ -160,6 +155,5 @@ export async function getHourlyStats({ alias, startDate, endDate }: AnalyticsPar
     return apiClient.get(`/analytics/hourly?${params.toString()}`, {
         throwOnError: true,
         includeCredentials: true,
-        cache: 'no-store'
     });
 }
