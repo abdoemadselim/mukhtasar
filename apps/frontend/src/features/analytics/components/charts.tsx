@@ -42,7 +42,7 @@ import { useGetBrowserStats, useGetClicksOverTime, useGetDeviceStats, useGetGeog
 
 // Mock URL data - replace with props when integrating
 export default function AnalyticsCharts({ alias }: { alias: string }) {
-    const { data: browserStats, error: browserStatsError } = useGetBrowserStats({
+    const { data: browserStats, isLoading, error: browserStatsError } = useGetBrowserStats({
         alias,
     });
 
@@ -73,24 +73,48 @@ export default function AnalyticsCharts({ alias }: { alias: string }) {
     return (
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             {/* Browser Visitors Clicks */}
-            <BrowserVisitorsChart browserStats={browserStats} error={browserStatsError} />
+            {isLoading ?
+                <BrowserVisitorsChartSkeleton /> :
+                <BrowserVisitorsChart browserStats={browserStats} error={browserStatsError} />
+            }
 
             {/* Device Breakdown */}
-            <DeviceVisitorsChart deviceStats={deviceStats} error={deviceStatsError} />
+            {
+                isLoading ?
+                    <DeviceVisitorsChartSkeleton /> :
+                    <DeviceVisitorsChart deviceStats={deviceStats} error={deviceStatsError} />
+            }
 
             {/* Clicks Over Time */}
-            <ClickOverTimeChart clicksData={clicksData} error={clicksOverTimeError} />
+            {
+                isLoading ?
+                    <ClickOverTimeChartSkeleton /> :
+                    <ClickOverTimeChart clicksData={clicksData} error={clicksOverTimeError} />
+            }
 
             {/* Geographic Distribution */}
-            <GeographicChart geographicStats={geographicStats} error={geographicError} />
+            {
+                isLoading ?
+                    <GeographicChartSkeleton /> :
+                    <GeographicChart geographicStats={geographicStats} error={geographicError} />
+            }
 
             {/* Hourly Activity */}
-            <div className="items-baseline">
-                <VisitorsPerHourChart hourlyStats={hourlyStats} error={hourlyError} />
-            </div>
+            {
+                isLoading ?
+                    <VisitorsPerHourChartSkeleton /> :
+                    <div className="items-baseline">
+                        <VisitorsPerHourChart hourlyStats={hourlyStats} error={hourlyError} />
+                    </div>
+            }
 
             {/* Top Referrers */}
-            <TopRefererVisitorsChart refererStats={refererStats} error={refererError} />
+            {
+                isLoading ?
+                    <TopRefererVisitorsChartSkeleton /> :
+                    <TopRefererVisitorsChart refererStats={refererStats} error={refererError} />
+            }
+
         </div>
     )
 }

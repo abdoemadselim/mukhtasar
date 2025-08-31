@@ -58,11 +58,6 @@ export const columns: ColumnDef<DomainType>[] = [
     id: "actions",
     header: () => <p className="lg:text-lg">إجراءات</p>,
     cell: ({ row }) => {
-      const handleDeleteDomain = () => {
-        // Your delete logic here
-        console.log("Deleting domain:", row.original.domain)
-      }
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

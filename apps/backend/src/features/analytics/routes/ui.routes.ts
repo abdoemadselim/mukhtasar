@@ -26,6 +26,16 @@ import validateRequest from "#lib/validation/validator-middleware.js";
 
 const router = Router();
 
+router.options("*splash", (req, res) => {
+    res.setHeader("Access-Control-Max-Age", "100"); // cache preflight for 10 minutes
+    res.sendStatus(204);
+});
+
+router.get("*splash", (req, res, next) => {
+    res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+    next();
+})
+
 // Get comprehensive analytics for a URL
 router.get(
     "/",

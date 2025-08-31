@@ -32,7 +32,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function TopRefererVisitorsChart({ refererStats, limit = 6, error }: { refererStats:RefererStat[] | undefined, limit?: number, error: Error | null }) {
+export default function TopRefererVisitorsChart({ refererStats, limit = 6, error }: { refererStats: RefererStat[] | undefined, limit?: number, error: Error | null }) {
   const chartData = useMemo(() => {
     if (!refererStats) return [];
 
@@ -119,60 +119,62 @@ export default function TopRefererVisitorsChart({ refererStats, limit = 6, error
 
 export function TopRefererVisitorsChartSkeleton() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Globe className="h-5 w-5" />
-          أهم المصادر المرجعية
-        </CardTitle>
-        <CardDescription>
-          المواقع التي تجلب أكثر الزيارات لرابطك المختصر
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="w-full h-[300px] flex flex-col">
-          {/* Chart area */}
-          <div className="flex-1 flex items-end justify-between px-4 pb-4">
-            {/* Vertical bar chart skeleton */}
-            {[
-              { height: '85%' },
-              { height: '70%' },
-              { height: '60%' },
-              { height: '45%' },
-              { height: '30%' }
-            ].map((bar, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center justify-end flex-1 mx-2"
-              >
-                <Skeleton
-                  className="rounded-lg"
-                  style={{
-                    height: bar.height,
-                    width: '100px',
-                    maxWidth: '100%'
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+    <div className="min-h-[350px]">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5" />
+            أهم المصادر المرجعية
+          </CardTitle>
+          <CardDescription>
+            المواقع التي تجلب أكثر الزيارات لرابطك المختصر
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="w-full h-[300px] flex flex-col">
+            {/* Chart area */}
+            <div className="flex-1 flex items-end justify-between px-4 pb-4">
+              {/* Vertical bar chart skeleton */}
+              {[
+                { height: '85%' },
+                { height: '70%' },
+                { height: '60%' },
+                { height: '45%' },
+                { height: '30%' }
+              ].map((bar, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center justify-end flex-1 mx-2"
+                >
+                  <Skeleton
+                    className="rounded-lg"
+                    style={{
+                      height: bar.height,
+                      width: '100px',
+                      maxWidth: '100%'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
 
-          {/* X-axis labels skeleton (website names) */}
-          <div className="flex justify-between px-4 pt-2">
-            {[
-              { width: 'w-16' }, // Google
-              { width: 'w-12' }, // Direct  
-              { width: 'w-20' }, // Facebook
-              { width: 'w-14' }, // Twitter
-              { width: 'w-18' }  // LinkedIn
-            ].map((label, index) => (
-              <div key={index} className="flex-1 flex justify-center mx-2">
-                <Skeleton className={`h-4 ${label.width}`} />
-              </div>
-            ))}
+            {/* X-axis labels skeleton (website names) */}
+            <div className="flex justify-between px-4 pt-2">
+              {[
+                { width: 'w-16' }, // Google
+                { width: 'w-12' }, // Direct  
+                { width: 'w-20' }, // Facebook
+                { width: 'w-14' }, // Twitter
+                { width: 'w-18' }  // LinkedIn
+              ].map((label, index) => (
+                <div key={index} className="flex-1 flex justify-center mx-2">
+                  <Skeleton className={`h-4 ${label.width}`} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

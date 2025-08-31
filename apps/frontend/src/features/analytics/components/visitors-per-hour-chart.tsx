@@ -94,7 +94,7 @@ export default function VisitorsPerHourChart({ hourlyStats, error }: { hourlySta
 
 export function VisitorsPerHourChartSkeleton() {
     return (
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm max-h-[350px]">
             <div className="p-6">
                 <div className="flex items-center gap-5">
                     <Skeleton className="h-5 w-5" />

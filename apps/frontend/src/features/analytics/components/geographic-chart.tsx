@@ -45,7 +45,6 @@ export default function GeographicChart({ geographicStats, error }: { geographic
         );
     }
 
-    console.log(geographicStats)
     return (
         <Card>
             <CardHeader>
@@ -92,28 +91,26 @@ export default function GeographicChart({ geographicStats, error }: { geographic
 
 export function GeographicChartSkeleton() {
     return (
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div className="p-6">
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-5 w-5" />
-                    <Skeleton className="h-6 w-32" />
+        <div className="min-h-[350px]">
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm ">
+                <div className="p-6">
+                    <div className="flex items-center gap-2">
+                        <Skeleton className="h-5 w-5" />
+                        <Skeleton className="h-6 w-32" />
+                    </div>
+                    <Skeleton className="h-4 w-48 mt-2" />
                 </div>
-                <Skeleton className="h-4 w-48 mt-2" />
-            </div>
-            <div className="p-6 pt-0">
-                <div className="space-y-3">
-                    {[1, 2, 3].map((_, index) => (
-                        <div key={index} className="flex items-center gap-50">
-                            <div className="flex items-center gap-3">
-                                <Skeleton className="h-6 w-6" />
-                                <Skeleton className="h-4 w-24" />
+                <div className="p-6 pt-0">
+                    <div className="space-y-3">
+                        {[1, 2, 3].map((_, index) => (
+                            <div key={index} className="flex items-center gap-50">
+                                <div className="flex items-center gap-3">
+                                    <Skeleton className="h-6 w-6" />
+                                    <Skeleton className="h-4 w-24" />
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Skeleton className="h-2 w-50 rounded-full" />
-                                <Skeleton className="h-4 w-8" />
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
