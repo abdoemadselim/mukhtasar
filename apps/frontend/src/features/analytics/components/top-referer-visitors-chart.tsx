@@ -20,6 +20,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { useGetRefererStats } from "@/features/analytics/hooks/analytics.hook"
+import { RefererStat } from "../service/analytics.service"
 
 
 export const description = "A bar chart"
@@ -31,12 +32,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function TopRefererVisitorsChart({ alias, limit = 6 }: { alias: string, limit?: number }) {
-  const { data: refererStats, isLoading, error } = useGetRefererStats({
-    alias,
-    limit
-  });
-
+export default function TopRefererVisitorsChart({ refererStats, limit = 6, error }: { refererStats:RefererStat[] | undefined, limit?: number, error: Error | null }) {
   const chartData = useMemo(() => {
     if (!refererStats) return [];
 

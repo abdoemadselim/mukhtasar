@@ -27,14 +27,14 @@ export function useDeleteUrl({ domain, alias }: ParamsType) {
 
 export function useCreateUrl() {
     const queryClient = useQueryClient();
-    const { mutateAsync, isError, isPending, data, isSuccess } = useMutation({
+    const { mutateAsync, isError, isPending, data, isSuccess, error } = useMutation({
         mutationFn: (url: ShortUrlType) => createUrl(url),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["urls"] })
         }
     })
 
-    return { mutateAsync, isError, isPending, data, isSuccess }
+    return { mutateAsync, isError, isPending, data, isSuccess, error }
 }
 
 export function useUpdateUrl() {

@@ -39,7 +39,7 @@ export function CreateUrlDialog({ children }: { children: React.ReactNode }) {
         },
     })
 
-    const { mutateAsync, isError, isSuccess } = useCreateUrl()
+    const { mutateAsync, isError, isSuccess, error } = useCreateUrl()
 
     const onSubmit = async (data: ShortUrlType) => {
         await mutateAsync(data)
@@ -50,13 +50,13 @@ export function CreateUrlDialog({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (isError) {
-            openToaster("حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا.", "error")
+            openToaster(error?.message as string, "error")
         }
 
         if (isSuccess) {
             openToaster("تم إنشاء الرابط بنجاح.", "success")
         }
-    }, [isError, isSuccess])
+    }, [isError, isSuccess, error])
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>

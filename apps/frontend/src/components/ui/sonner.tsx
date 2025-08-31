@@ -32,7 +32,7 @@ const openToaster = (text: string, type: "error" | "success") => {
   }
 
   const component = (
-    <div className={clsx("rounded-md w-fit min-w-[430px] px-4 py-2 flex gap-4", type === "success" && "bg-primary text-white", type === "error" && "bg-red-500 text-white")}>
+    <div className={clsx("rounded-md w-fit md:min-w-[350px] px-4 py-2 flex gap-4", type === "success" && "bg-primary text-white", type === "error" && "bg-red-500 text-white")}>
       {icons[type]}
       <p> {text}</p>
     </div >

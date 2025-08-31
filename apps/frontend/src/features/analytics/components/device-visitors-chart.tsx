@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useMemo } from "react"
 import { useGetDeviceStats } from "../hooks/analytics.hook"
+import { DeviceStat } from "../service/analytics.service"
 
 export const description = "A pie chart with a label list"
 
@@ -46,10 +47,8 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export default function DeviceVisitorsChart({ alias }: { alias: string }) {
-    const { data: deviceStats, isLoading, error } = useGetDeviceStats({
-        alias,
-    });
+export default function DeviceVisitorsChart({ deviceStats, error }: { deviceStats: DeviceStat[] | undefined, error: Error | null }) {
+
 
     const chartData = useMemo(() => {
         if (!deviceStats) return [];

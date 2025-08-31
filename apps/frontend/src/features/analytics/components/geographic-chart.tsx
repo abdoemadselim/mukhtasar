@@ -7,11 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { useGetGeographicStats } from "@/features/analytics/hooks/analytics.hook";
+import { GeographicStat } from "../service/analytics.service";
 
-export default function GeographicChart({ alias }: { alias: string }) {
-    const { data: geographicStats, isLoading, error } = useGetGeographicStats({
-        alias,
-    });
+export default function GeographicChart({ geographicStats, error }: { geographicStats: GeographicStat[] | undefined, error: Error | null }) {
     const maxClicks = useMemo(() => {
         if (!geographicStats || geographicStats.length === 0) return 1;
         return Math.max(...geographicStats.map(stat => stat.clicks));

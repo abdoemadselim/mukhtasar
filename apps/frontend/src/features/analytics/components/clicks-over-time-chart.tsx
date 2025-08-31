@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/chart"
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetClicksOverTime } from '@/features/analytics/hooks/analytics.hook';
+import { ClickOverTime } from '../service/analytics.service';
 
 export const description = "An interactive bar chart"
 
@@ -35,13 +36,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function ClickOverTimeChart({ alias, groupBy = "day" }: { alias: string, groupBy?: "hour" | "day" | "week" | "month" }) {
+export default function ClickOverTimeChart({ clicksData, error, groupBy = "day" }: { clicksData: ClickOverTime[] | undefined, error: Error | null, groupBy?: "hour" | "day" | "week" | "month" }) {
   const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("clicks")
-
-  const { data: clicksData, isLoading, error } = useGetClicksOverTime({
-    alias,
-    groupBy
-  });
 
   const total = useMemo(() => {
     if (!clicksData) return { clicks: 0, unique_visitors: 0 };

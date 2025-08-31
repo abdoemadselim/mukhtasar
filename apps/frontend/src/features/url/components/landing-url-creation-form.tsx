@@ -24,7 +24,7 @@ import { useAuth } from "@/features/auth/context/auth-context";
 import { useUrl } from "@/features/url/context/urls-context";
 import { useCreateUrl } from "@/features/url/hooks/urls-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { getUrls } from "../service/urls-service";
+import { getUrls } from "@/features/url/service/urls-service";
 
 export default function LandingUrlCreationForm() {
     const { user } = useAuth();
@@ -39,7 +39,7 @@ export default function LandingUrlCreationForm() {
         }
     })
 
-    const { mutateAsync, data, isSuccess, isError } = useCreateUrl()
+    const { mutateAsync, data, isSuccess, isError, error } = useCreateUrl()
     const queryClient = useQueryClient()
     useEffect(() => {
         queryClient.prefetchQuery({
@@ -67,14 +67,14 @@ export default function LandingUrlCreationForm() {
 
     useEffect(() => {
         if (isError) {
-            openToaster("حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا.", "error")
+            openToaster(error?.message as string, "error")
         }
 
         if (isSuccess) {
             openToaster("تم إنشاء الرابط بنجاح.", "success")
             form.reset()
         }
-    }, [isError, isSuccess, form])
+    }, [isError, isSuccess, form, error])
 
     const handleCopy = async () => {
         await navigator.clipboard.writeText(data?.short_url || "")
@@ -126,7 +126,7 @@ export default function LandingUrlCreationForm() {
                 )}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
-                    <div className="pb-8">
+                    <div className="pb-4">
                         <FormField control={form.control} name="original_url" render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل هنا</FormLabel>
@@ -199,7 +199,7 @@ export default function LandingUrlCreationForm() {
                         </div>
                     )}
 
-                    <Button className="mt-15 cursor-pointer w-full text-2xl py-4 h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
+                    <Button className="mt-10 cursor-pointer w-full md:text-2xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
                         {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
                     </Button>
                 </form>

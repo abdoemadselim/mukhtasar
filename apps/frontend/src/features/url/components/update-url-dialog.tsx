@@ -40,7 +40,7 @@ export function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialogProps) 
     });
 
     const [isOpen, setIsOpen] = useState(false)
-    const { mutateAsync, isError, isPending, isSuccess } = useUpdateUrl()
+    const { mutateAsync, isError, isPending, isSuccess, error } = useUpdateUrl()
 
     const onSubmit = async (data: ToUpdateUrlType) => {
         await mutateAsync({
@@ -55,13 +55,13 @@ export function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialogProps) 
 
     useEffect(() => {
         if (isError) {
-            openToaster("حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا.", "error")
+            openToaster(error?.message as string, "error")
         }
 
         if (isSuccess) {
             openToaster("تم تعديل الرابط بنجاح.", 'success');
         }
-    }, [isError, isSuccess])
+    }, [isError, isSuccess, error])
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>

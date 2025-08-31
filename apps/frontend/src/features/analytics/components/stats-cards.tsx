@@ -1,4 +1,5 @@
 'use client'
+
 import { Calendar, Clock, MousePointer, Users } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,7 +17,7 @@ export default function StatsCards({ alias }: { alias: string }) {
 
     if (error || !overview) {
         return (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
                 <Card>
                     <CardContent className="p-6">
                         <div className="text-sm text-muted-foreground">خطأ في تحميل البيانات</div>
@@ -27,7 +28,7 @@ export default function StatsCards({ alias }: { alias: string }) {
     }
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">إجمالي النقرات</CardTitle>
@@ -85,7 +86,7 @@ export default function StatsCards({ alias }: { alias: string }) {
 
 export function StatsCardsSkeleton() {
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6">
                     <Skeleton className="h-4 w-24" />

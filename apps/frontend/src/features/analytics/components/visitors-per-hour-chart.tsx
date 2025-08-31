@@ -7,11 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { useGetHourlyStats } from "@/features/analytics/hooks/analytics.hook"
+import { HourlyStat } from "../service/analytics.service"
 
-export default function VisitorsPerHourChart({ alias }: { alias: string }) {
-    const { data: hourlyStats, isLoading, error } = useGetHourlyStats({
-        alias
-    });
+export default function VisitorsPerHourChart({ hourlyStats, error }: { hourlyStats: HourlyStat[] | undefined, error: Error | null }) {
 
     if (error || !hourlyStats || hourlyStats.length === 0) {
         return (
