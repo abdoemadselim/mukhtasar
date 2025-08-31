@@ -17,8 +17,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetClicksOverTime } from '@/features/analytics/hooks/analytics.hook';
-import { ClickOverTime } from '../service/analytics.service';
+import { ClickOverTime } from '@/features/analytics/service/analytics.service';
 
 export const description = "An interactive bar chart"
 
@@ -31,7 +30,7 @@ const chartConfig = {
     color: "var(--chart-1)",
   },
   unique_visitors: {
-    label: "الزوار الجداد",
+    label: "الزيارات الجديدة",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig

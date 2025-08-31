@@ -19,8 +19,7 @@ import {
 } from "@/components/ui/chart"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { useGetRefererStats } from "@/features/analytics/hooks/analytics.hook"
-import { RefererStat } from "../service/analytics.service"
+import { RefererStat } from "@/features/analytics/service/analytics.service"
 
 
 export const description = "A bar chart"

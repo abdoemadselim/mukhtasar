@@ -18,8 +18,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useGetBrowserStats } from "@/features/analytics/hooks/analytics.hook"
-import { BrowserStat } from "../service/analytics.service"
+import { BrowserStat } from "@/features/analytics/service/analytics.service"
 
 export const description = "عدد الزوار / المتصفح"
 

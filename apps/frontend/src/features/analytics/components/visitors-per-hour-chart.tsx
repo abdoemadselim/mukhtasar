@@ -6,8 +6,7 @@ import { Activity } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { useGetHourlyStats } from "@/features/analytics/hooks/analytics.hook"
-import { HourlyStat } from "../service/analytics.service"
+import { HourlyStat } from "@/features/analytics/service/analytics.service"
 
 export default function VisitorsPerHourChart({ hourlyStats, error }: { hourlyStats: HourlyStat[] | undefined, error: Error | null }) {
 
@@ -100,7 +99,6 @@ export function VisitorsPerHourChartSkeleton() {
                     <Skeleton className="h-5 w-5" />
                     <Skeleton className="h-6 w-32" />
                 </div>
-                <Skeleton className="h-4 w-48 mt-2" />
             </div>
             <div className="p-6 pt-0">
                 <Skeleton className="w-full h-[250px]" />

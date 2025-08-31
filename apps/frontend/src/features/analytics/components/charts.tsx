@@ -38,7 +38,7 @@ import { DeviceVisitorsChartSkeleton } from "@/features/analytics/components/dev
 import { BrowserVisitorsChartSkeleton } from "@/features/analytics/components/browser-visitors-chart"
 import { ClickOverTimeChartSkeleton } from "@/features/analytics/components/clicks-over-time-chart"
 import { VisitorsPerHourChartSkeleton } from "@/features/analytics/components/visitors-per-hour-chart"
-import { useGetBrowserStats, useGetClicksOverTime, useGetDeviceStats, useGetGeographicStats, useGetHourlyStats, useGetRefererStats } from "../hooks/analytics.hook"
+import { useGetBrowserStats, useGetClicksOverTime, useGetDeviceStats, useGetGeographicStats, useGetHourlyStats, useGetRefererStats } from "@/features/analytics/hooks/analytics.hook"
 
 // Mock URL data - replace with props when integrating
 export default function AnalyticsCharts({ alias }: { alias: string }) {
@@ -118,12 +118,3 @@ export default function AnalyticsCharts({ alias }: { alias: string }) {
         </div>
     )
 }
-
-
-// 'use client' ---> initial render on the server ---> html + hydration on client with JS
-// client components with 'use client' can still break in initial rendering on server if using browser API with no guards (e.g. effects) (react things)
-// const width = window.innerWidth
-//dynamic --> Don't include the component in the initial bundle (wait until it's required)  (otherwise, if a client component is heavy like charts (it will slow down initial load))  --> faster TTFB
-// --> fallback with dynamic (render this until bundle loads)
-// dynamic with ssr = true (default) --> still the component renders first on server, and the initial html is sent  and the JS bundle is lazy loaded (Better SEO)
-// dynamic with SSR = false --> nothing is rendered on server at all

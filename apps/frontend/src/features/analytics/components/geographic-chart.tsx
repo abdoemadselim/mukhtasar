@@ -6,8 +6,7 @@ import { useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { useGetGeographicStats } from "@/features/analytics/hooks/analytics.hook";
-import { GeographicStat } from "../service/analytics.service";
+import { GeographicStat } from "@/features/analytics/service/analytics.service";
 
 export default function GeographicChart({ geographicStats, error }: { geographicStats: GeographicStat[] | undefined, error: Error | null }) {
     const maxClicks = useMemo(() => {
@@ -15,16 +14,7 @@ export default function GeographicChart({ geographicStats, error }: { geographic
         return Math.max(...geographicStats.map(stat => stat.clicks));
     }, [geographicStats]);
 
-    const countriesData = useMemo(() => {
-        if (!geographicStats) return [];
-
-        return geographicStats.slice(0, 5).map(stat => ({
-            country: stat.country || "غير معروف",
-            clicks: stat.clicks,
-        }));
-    }, [geographicStats]);
-
-    if (error || !geographicStats || geographicStats.length === 0) {
+    if (error || !geographicStats?.length) {
         return (
             <Card>
                 <CardHeader>
@@ -58,7 +48,7 @@ export default function GeographicChart({ geographicStats, error }: { geographic
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {countriesData.map((country, index) => (
+                    {geographicStats.map((country, index) => (
                         <div key={index} className="flex items-center justify-between">
                             <div className="flex items-center gap-3 pl-4">
                                 {/* <span className="text-2xl">{country.flag}</span> */}
@@ -77,7 +67,7 @@ export default function GeographicChart({ geographicStats, error }: { geographic
                             </div>
                         </div>
                     ))}
-                    {countriesData.length === 0 && (
+                    {geographicStats.length === 0 && (
                         <div className="text-center text-muted-foreground py-4">
                             لا توجد بيانات جغرافية متاحة
                         </div>
@@ -91,7 +81,7 @@ export default function GeographicChart({ geographicStats, error }: { geographic
 
 export function GeographicChartSkeleton() {
     return (
-        <div className="min-h-[350px]">
+        <div className="min-h-[380px]">
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm ">
                 <div className="p-6">
                     <div className="flex items-center gap-2">
@@ -102,7 +92,7 @@ export function GeographicChartSkeleton() {
                 </div>
                 <div className="p-6 pt-0">
                     <div className="space-y-3">
-                        {[1, 2, 3].map((_, index) => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
                             <div key={index} className="flex items-center gap-50">
                                 <div className="flex items-center gap-3">
                                     <Skeleton className="h-6 w-6" />
