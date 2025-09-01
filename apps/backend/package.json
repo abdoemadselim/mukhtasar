@@ -28,7 +28,7 @@
     "watch": "tsc --watch && npm run copy-assets",
     "build": "rm -rf dist && tsc && npm run copy-assets && npm run migrate -- up",
     "copy-assets": "cp -r ./src/lib/geo/*.mmdb dist/lib/geo/ || true",
-    "migrate": "node-pg-migrate"
+    "migrate": "DATABASE_URL=postgres://abdelrahman:abdelrahman@localhost:5432/mukhtasar node-pg-migrate"
   },
   "keywords": [
     "URL",
