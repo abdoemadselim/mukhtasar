@@ -1,5 +1,5 @@
 {
   "db": {
-    "url": "postgresql://mukhtasar_user:XXegV0jhVZHnEE2jWps8Q8THZeLlODNK@dpg-d2o1b515pdvs739bousg-a/mukhtasar"
+    "url": "postgresql://mukhtasar_user:XXegV0jhVZHnEE2jWps8Q8THZeLlODNK@dpg-d2o1b515pdvs739bousg-a.singapore-postgres.render.com/mukhtasar"
   }
 }
