@@ -55,8 +55,7 @@ async function createTables() {
       UNIQUE(alias, domain)
     );
 
-    ALTER TABLE url 
-      ADD COLUMN IF NOT EXISTS url_hash BYTEA GENERATED ALWAYS AS (DECODE(MD5(original_url), 'hex')) STORED;
+    ALTER TABLE url ADD COLUMN IF NOT EXISTS url_hash BYTEA GENERATED ALWAYS AS (DECODE(MD5(original_url), 'hex')) STORED;
 
     CREATE INDEX IF NOT EXISTS unique_url_hash ON url USING HASH (url_hash);
     CREATE INDEX IF NOT EXISTS idx_url_user_id_created_at ON url(user_id, created_at);
@@ -84,10 +83,10 @@ async function createTables() {
       user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
       date_added TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
       domain_string VARCHAR(100) NOT NULL
-  
+    );
+
     CREATE INDEX idx_url_analytics_url_id_clicked_at ON url_analytics(url_id, clicked_at);
     CREATE INDEX idx_url_analytics_clicked_at_url_id ON url_analytics(clicked_at, url_id);
-      );
   `);
 }
 
@@ -146,7 +145,7 @@ async function seedData() {
 async function main() {
   try {
     await createTables();
-    await seedData();
+    // await seedData();
   } catch (err) {
     console.error("❌ Error:", err);
   } finally {

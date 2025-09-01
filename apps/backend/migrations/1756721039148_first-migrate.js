@@ -104,7 +104,7 @@ export const up = (pgm) => {
         },
         analytics_enabled: {
             type: 'boolean',
-            default: false,
+            default: true,
         },
         created_at: {
             type: 'timestamptz',
@@ -117,7 +117,7 @@ export const up = (pgm) => {
             type: 'varchar(200)',
             generated: {
                 precedence: 'ALWAYS',
-                expression: "('http://' || domain || '/' || alias)",
+                expression: "('https://' || domain || '/' || alias)",
                 stored: true,
             },
         },

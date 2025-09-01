@@ -97,10 +97,6 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
         throw new NotFoundException("User not found for this verification link.");
     }
 
-    if (user.verified) {
-        return user
-    }
-
     await authRepository.setUserVerified(user.id);
 
     if (sessionId) {
