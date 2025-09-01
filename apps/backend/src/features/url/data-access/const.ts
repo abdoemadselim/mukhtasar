@@ -1,6 +1,6 @@
 const BLOCKED_ALIAS = [
     // app reserved routes
-    "pages", "api", "admin", "dashboard", "login", "logout",
+    "pages", "auth", "admin", "dashboard", "login", "logout",
     "signup", "register", "user", "profile", "settings",
 
     // ─── Common web files / infra ───

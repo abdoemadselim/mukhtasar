@@ -160,7 +160,7 @@ export async function verify(req: Request, res: Response) {
                 userEmail: user.email
             });
 
-            res.redirect("http://mukhtasar.pro")
+            res.redirect(process.env.WEB_URL as string)
         }
     }
 
@@ -180,7 +180,7 @@ export async function verify(req: Request, res: Response) {
         userEmail: user?.email
     });
 
-    res.redirect("http://mukhtasar.pro")
+    res.redirect(process.env.WEB_URL as string)
 }
 
 export async function logout(req: Request, res: Response) {

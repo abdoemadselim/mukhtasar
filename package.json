@@ -22,7 +22,9 @@
     "dev:frontend": "pnpm --filter @mukhtasar/frontend dev",
     "dev": "pnpm dev:backend & pnpm dev:frontend",
     "watch:backend": "pnpm --filter @mukhtasar/backend watch",
-    "prepare": "husky"
+    "prepare": "husky",
+    "migrate": "pnpm --filter @mukhtasar/backend migrate",
+    "start-dev": "pnpm dev:backend & pnpm dev:frontend"
   },
   "keywords": [
     "URL",

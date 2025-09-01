@@ -34,7 +34,7 @@ export default function RootLayout({
             <UrlProvider>
               {children}
               <SpeedInsights />
-              {/* <Analytics /> */}
+              <Analytics />
             </UrlProvider>
           </AuthProvider>
           <Toaster position="top-right" richColors />
