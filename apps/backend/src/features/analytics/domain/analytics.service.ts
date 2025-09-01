@@ -64,7 +64,6 @@ export async function getUrlAnalytics({ alias, startDate, endDate }: AnalyticsPa
             domain: url.domain,
             original_url: url.original_url,
             short_url: url.short_url,
-            click_count: url.click_count
         }
     };
 }

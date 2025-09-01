@@ -45,7 +45,8 @@ export default {
         "deploy",
         "email",
         "navbar",
-        "bugs"
+        "bugs",
+        "rate-limit"
       ]
     ],
     'type-empty': [2, 'never'],

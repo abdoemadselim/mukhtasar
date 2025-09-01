@@ -106,15 +106,15 @@ export const columns: ColumnDef<FullUrlType>[] = [
       </div>
     ),
   },
-  {
-    accessorKey: "clicks",
-    header: () => <div className="w-full text-right lg:text-lg">عدد النقرات </div>,
-    cell: ({ row }) => (
-      <div className="text-right lg:text-lg">
-        {row.original.click_count}
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: "clicks",
+  //   header: () => <div className="w-full text-right lg:text-lg">عدد النقرات </div>,
+  //   cell: ({ row }) => (
+  //     <div className="text-right lg:text-lg">
+  //       {row.original.click_count}
+  //     </div>
+  //   ),
+  // },
   {
     id: "actions",
     header: () => <p className="lg:text-lg">إجراءات</p>,

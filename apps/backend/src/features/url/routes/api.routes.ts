@@ -51,10 +51,10 @@ router.patch("/:domain/:alias",
     updateUrl
 )
 
-// Get the click count for a URL
-router.get("/:domain/:alias/count",
-    authToken(READ_URL_PERMISSION),
-    validateRequest([paramsSchema]),
-    getUrlClickCounts
-)
+// // Get the click count for a URL
+// router.get("/:domain/:alias/count",
+//     authToken(READ_URL_PERMISSION),
+//     validateRequest([paramsSchema]),
+//     getUrlClickCounts
+// )
 export default router;

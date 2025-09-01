@@ -3,7 +3,6 @@ export type UrlType = {
   alias: string;
   domain: string;
   original_url: string;
-  click_count?: number;
   user_id: number;
   analytics_enabled?: boolean;
   created_at?: string;

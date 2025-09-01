@@ -6,7 +6,7 @@ import { query } from "#lib/db/db-connection.js";
 const urlRepository = {
     async getUrlsByUserId(user_id: number) {
         const result = await query(
-            "SELECT id, alias, domain, original_url, short_url, click_count, created_at FROM url WHERE user_id = $1",
+            "SELECT id, alias, domain, original_url, short_url, created_at FROM url WHERE user_id = $1",
             [String(user_id)]
         );
 
@@ -16,12 +16,11 @@ const urlRepository = {
     async getUrlsPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
         const offset = page * page_size;
         const urls_result = query(
-            `SELECT id, alias, domain, original_url, short_url, click_count, created_at 
+            `SELECT id, alias, domain, original_url, short_url, created_at 
             FROM url 
             WHERE user_id = $1 
             ORDER BY created_at DESC
             OFFSET $2 LIMIT $3
-            
             `,
             // @ts-ignore
             [user_id, offset, page_size]
@@ -39,13 +38,10 @@ const urlRepository = {
 
     async getUrlByAliasAndDomain({ alias, domain }: ParamsType): Promise<UrlType | undefined> {
         const result = await query(
-            "SELECT alias, domain, original_url, short_url, click_count FROM url WHERE alias = $1 AND domain = $2",
+            "SELECT alias, domain, original_url, short_url FROM url WHERE alias = $1 AND domain = $2",
             [alias, domain]
         );
 
-        if (result.rows.length) {
-            result.rows[0].click_count = Number(result.rows[0].click_count)
-        }
         return result.rows[0];
     },
 
