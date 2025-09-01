@@ -18,9 +18,8 @@ const PLANS = [
         },
         bullets: [
             "لوحة تحليلات أساسية",
-            "إدارة روابط أساسية (تعديل/حذف)",
-            "نطاق مختصر افتراضي فقط",
-            "تاريخ صلاحية مخصص لكل رابط",
+            "عدد محدود من الروابط",
+            "إدارة الروابط (تعديل/حذف)",
         ],
         cta: { label: "ابدأ الآن", href: "/auth/signup", disabled: false },
         highlight: false,
@@ -96,12 +95,12 @@ export default function PricingPlans() {
                                         {plan.id === "bulk-100k" && <Zap className="h-5 w-5" />}
                                     </div>
                                     <CardDescription className="mt-1 leading-relaxed">{plan.headline}</CardDescription>
-                                    <div className="mt-3 text-2xl font-semibold">
+                                    <div className={`mt-3 text-2xl font-semibold  ${plan.id !== "free" && "blur-sm"}`}>
                                         ${plan.price}
                                     </div>
                                 </CardHeader>
 
-                                <CardContent className="space-y-4 pb-6">
+                                <CardContent className={`space-y-4 pb-6 ${plan.id !== "free" && "blur-sm"}`}>
                                     <hr className="border-dashed" />
 
                                     <div className="grid grid-cols-2 gap-2 text-sm">
