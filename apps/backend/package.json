@@ -27,9 +27,10 @@
     "prepare": "husky",
     "watch": "tsc --watch && npm run copy-assets",
     "build": "rm -rf dist && tsc && npm run copy-assets && npm run migrate:up",
+    "migrate": "node-pg-migrate",
     "copy-assets": "cp -r ./src/lib/geo/*.mmdb dist/lib/geo/ || true",
-    "migrate:up": "DATABASE_URL=postgresql://mukhtasar_user:XXegV0jhVZHnEE2jWps8Q8THZeLlODNK@dpg-d2o1b515pdvs739bousg-a/mukhtasar node-pg-migrate up",
-    "migrate:down": "DATABASE_URL=postgresql://mukhtasar_user:XXegV0jhVZHnEE2jWps8Q8THZeLlODNK@dpg-d2o1b515pdvs739bousg-a/mukhtasar node-pg-migrate down"
+    "migrate:up": "PGSSLMODE=require node-pg-migrate up -f config/config.json",
+    "migrate:down": "PGSSLMODE=require node-pg-migrate down -f config/config.json"
   },
   "keywords": [
     "URL",
