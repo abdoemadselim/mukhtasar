@@ -26,7 +26,7 @@
     "dev": "NEW_RELIC_APP_NAME=Mukhtasar NEW_RELIC_LICENSE_KEY=eu01xx5eaee22281d31e35e3e3add618FFFFNRAL node --experimental-loader=newrelic/esm-loader.mjs --watch ./dist/main.js",
     "prepare": "husky",
     "watch": "tsc --watch && npm run copy-assets",
-    "build": "rm -rf dist && tsc && npm run copy-assets && npm run migrate:up",
+    "build": "rm -rf dist && tsc && npm run copy-assets",
     "migrate": "node-pg-migrate",
     "copy-assets": "cp -r ./src/lib/geo/*.mmdb dist/lib/geo/ || true",
     "migrate:up": "PGSSLMODE=require node-pg-migrate up -f config/config.json",
