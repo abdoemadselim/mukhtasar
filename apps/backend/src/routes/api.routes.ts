@@ -24,21 +24,21 @@ const customCss = `
     }
 
 `
-// Swagger UI setup with options
+// Swagger UI setup
 const swaggerOptions = {
     swaggerOptions: {
         showRequestDuration: true
     },
     customSiteTitle: "مُختصِر | وثائق المبرمجين",
-    customCss: customCss,
+    customCss
 };
 
 // The API Doc
 router.use('/docs', swaggerUi.serve);
 router.get('/docs', swaggerUi.setup(swaggerApiDoc, swaggerOptions));
 
-// Your API routes
-router.use("/url", urlRoutes)
-router.use("/analytics", authToken(READ_URL_PERMISSION), apiRateLimiter(1, 150), analyticsRoutes)
+// The API routes
+router.use("/url", apiRateLimiter(1, 100), urlRoutes)
+router.use("/analytics", apiRateLimiter(1, 100), authToken(READ_URL_PERMISSION), analyticsRoutes)
 
 export default router;

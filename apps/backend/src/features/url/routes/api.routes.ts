@@ -19,7 +19,6 @@ import {
 } from "#features/url/controllers/api.controllers.js"
 
 import validateRequest from "#lib/validation/validator-middleware.js";
-import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router();
 
@@ -27,7 +26,6 @@ const router = Router();
 router.get(
     "/:domain/:alias",
     authToken(READ_URL_PERMISSION),
-    apiRateLimiter(15, 1000),
     validateRequest([paramsSchema]),
     getShortUrlInfo
 )
@@ -35,7 +33,6 @@ router.get(
 // Create a short URL
 router.post("/",
     authToken(CREATE_URL_PERMISSION),
-    apiRateLimiter(20, 100),
     validateRequest([shortUrlSchema]),
     createUrl
 )
@@ -43,7 +40,6 @@ router.post("/",
 // Delete a short URL
 router.delete("/:domain/:alias",
     authToken(DELETE_URL_PERMISSION),
-    apiRateLimiter(10, 100),
     validateRequest([paramsSchema]),
     deleteUrl
 )
@@ -51,7 +47,6 @@ router.delete("/:domain/:alias",
 // Change the long url (Update the attached destination)
 router.patch("/:domain/:alias",
     authToken(UPDATE_URL_PERMISSION),
-    apiRateLimiter(10, 100),
     validateRequest([paramsSchema, toUpdateUrlSchema]),
     updateUrl
 )
@@ -59,7 +54,6 @@ router.patch("/:domain/:alias",
 // Get the click count for a URL
 router.get("/:domain/:alias/count",
     authToken(READ_URL_PERMISSION),
-    apiRateLimiter(15, 500),
     validateRequest([paramsSchema]),
     getUrlClickCounts
 )

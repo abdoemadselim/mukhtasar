@@ -18,7 +18,6 @@ import publicRoutes from "#routes/public.routes.js"
 
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 import { logger } from "#lib/logger/logger.js";
-import { ipRateLimiter } from '#lib/rate-limiting/rate-limiters.js';
 
 import errorHandlerMiddleware from "#middlewares/error-handler.js";
 import routesContext from "#middlewares/routes-context.js";

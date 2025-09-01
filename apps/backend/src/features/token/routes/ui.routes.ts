@@ -4,14 +4,12 @@ import { deleteToken, generateToken, getTokensPage, updateToken } from "#feature
 import { tokenParams, tokenSchema, toUpdateTokenSchema } from "#features/token/data-access/token-schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
-import { ipRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()
 
 // Generate token
 router.post(
     "/",
-    ipRateLimiter(60, 20), // 20 token generations per hour
     validateRequest([tokenSchema]),
     generateToken
 )
@@ -19,7 +17,6 @@ router.post(
 // Update token
 router.patch(
     "/:tokenId",
-    ipRateLimiter(60, 50),
     validateRequest([tokenParams, toUpdateTokenSchema]),
     updateToken
 )
@@ -27,7 +24,6 @@ router.patch(
 // Delete token
 router.delete(
     "/:tokenId",
-    ipRateLimiter(60, 50),
     validateRequest([tokenParams]),
     deleteToken
 )
@@ -35,7 +31,6 @@ router.delete(
 // Get tokens of a user
 router.get(
     "/",
-    ipRateLimiter(15, 200),
     getTokensPage
 )
 
