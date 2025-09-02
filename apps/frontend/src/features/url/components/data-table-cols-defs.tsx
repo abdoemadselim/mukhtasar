@@ -26,6 +26,7 @@ import {
 
 import { UpdateUrlDialog } from "@/features/url/components/update-url-dialog"
 import { DeleteUrlDialog } from "@/features/url/components/delete-url-dialog"
+import { openToaster } from "@/components/ui/sonner"
 
 
 export const columns: ColumnDef<FullUrlType>[] = [
@@ -54,7 +55,7 @@ export const columns: ColumnDef<FullUrlType>[] = [
     cell: ({ row }) => {
       const handleCopy = async () => {
         await navigator.clipboard.writeText(row.original.short_url)
-        toast("تم نسخ الرابط إلى حافظة جهازك.")
+        openToaster("تم نسخ الرمز إلى حافظة جهازك.", "success")
       }
       return (
         <div className="flex items-center gap-2" >

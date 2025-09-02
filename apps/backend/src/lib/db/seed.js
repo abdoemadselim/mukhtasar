@@ -51,7 +51,7 @@ async function createTables() {
       analytics_enabled BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
       description VARCHAR(300),
-      short_url VARCHAR(200) GENERATED ALWAYS AS ('http://' || domain || '/' || alias) STORED,
+      short_url VARCHAR(200) GENERATED ALWAYS AS ('https://' || domain || '/' || alias) STORED,
       UNIQUE(alias, domain)
     );
 

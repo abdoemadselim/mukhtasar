@@ -16,7 +16,7 @@ const urlRepository = {
     async getUrlsPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
         const offset = page * page_size;
         const urls_result = query(
-            `SELECT id, alias, domain, original_url, short_url, created_at 
+            `SELECT id, alias, domain, original_url, short_url, created_at, description
             FROM url 
             WHERE user_id = $1 
             ORDER BY created_at DESC

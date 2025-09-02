@@ -9,7 +9,6 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { AuthProvider } from "@/features/auth/context/auth-context";
 import { UrlProvider } from "@/features/url/context/urls-context";
-import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "مُختصِر | أول منتج عربي متكامل لإختصار الروابط",

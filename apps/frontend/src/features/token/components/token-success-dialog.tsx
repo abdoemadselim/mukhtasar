@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { openToaster } from "@/components/ui/sonner"
 
 type TokenSuccessDialogProps = {
     isOpen: boolean
@@ -27,7 +28,7 @@ export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialo
     const handleCopy = async () => {
         await navigator.clipboard.writeText(token)
         setCopied(true)
-        toast("تم نسخ الرمز إلى حافظة جهازك!")
+        openToaster("تم نسخ الرمز إلى حافظة جهازك.", "success")
         setTimeout(() => setCopied(false), 2000)
     }
 
