@@ -94,7 +94,7 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
     const user = await userRepository.getUserById(decodedToken.userId)
 
     if (!user) {
-        throw new NotFoundException("User not found for this verification link.");
+        return;
     }
 
     await authRepository.setUserVerified(user.id);

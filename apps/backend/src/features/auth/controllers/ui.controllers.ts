@@ -166,6 +166,14 @@ export async function verify(req: Request, res: Response) {
 
     const user = await authService.verifyEmail({ token, sessionId })
 
+    if (!user) {
+        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax"
+        });
+    }
+
     const durationMs = Date.now() - start;
     const store = asyncStore.getStore();
 
