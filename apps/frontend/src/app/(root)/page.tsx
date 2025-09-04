@@ -17,9 +17,8 @@ export default function HomePage() {
         </h2>
         <div className="flex justify-center items-center">
           <div className="text-gray-600 lg:text-2xl text-xl">
-            مع خدمتنا، التحويل بين الرابط المختصر والأصلي يتم في أجزاء من الثانية..
-
-            <p>زوّارك لن هيلاحظوا أنه في إعادة توجيه حتى.</p>
+            مع خدمتنا، يتم التحويل من الرابط المُختصَر إلى الرابط الأصلي في أجزاء من الثانية،
+            <p>لن يُلاحظ زوّارك وجود أي إعادة توجيه على الإطلاق.</p>
           </div>
           <Image
             src="/flash.png"

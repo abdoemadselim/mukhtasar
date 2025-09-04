@@ -1,5 +1,5 @@
 import { lru } from "tiny-lru";
-const cache = lru(1000, 1000 * 60 * 5);
+const cache = lru(1000, 1000 * 60 * 10);
 
 // Cloudflare Worker for mukhtasar.pro URL routing
 addEventListener('fetch', event => {
