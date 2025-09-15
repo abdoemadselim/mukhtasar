@@ -29,7 +29,7 @@ export default function HomePage() {
             />
             <p>تخيّل لو استطعت قراءة عقول عملائك!<span className="text-[1rem] block pt-1">(حسناً - فقط الجزء الخاص بك)</span></p>
             <p className="text-[1.3rem] text-gray-600 mt-3">
-              نقدم لك فى مُختصِر إحصاءات دقيقة لكل رابط تساعدك على فهم كامل لزوارك
+              نُقدم لك فى مُختصِر إحصاءات دقيقة لكل رابط تُساعدك على فهم كامل لزوارك
             </p>
           </div>
 
@@ -41,7 +41,7 @@ export default function HomePage() {
               height={100}
             />
             ادفع فقط على قدر احتياجك وأكبر معنا
-            <p className="text-[1.3rem] text-gray-600 mt-3">1$ يُمكنك من الحصول على كل خدمات مُختصِر!</p>
+            <p className="text-[1.3rem] text-gray-600 mt-3">مقابل 1$ فقط تحصل على جميع خدمات مُختصِر!</p>
           </div>
 
         </div>

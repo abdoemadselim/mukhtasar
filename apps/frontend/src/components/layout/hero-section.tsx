@@ -25,7 +25,7 @@ export default function HeroSection() {
 
                 <div className="pt-10 min-h-[100px] md:min-h-[120px] flex items-start justify-center">
                     <p className="text-lg md:text-2xl lg:text-3xl md:max-w-[1000px] max-w-[530px] leading-relaxed px-4">
-                        اعرف عملاءك أكثر من أنفسهم واستهدفهم بثقة فتكبر شركتك ويزيد عملاءك
+                        فهم أعمق لعملائك = استهداف أدق = نمو أسرع لشركتك!
                         <p className="text-base md:text-md lg:text-xl text-muted-foreground leading-relaxed hidden sm:block">مع إحصاءات مُختصِر الدقيقة: نوع الجهاز، الدولة، المتصفح، مصدر الزيارة، وأكثر.</p>
 
                         <p className="pt-4"> كل روابطك تتكلم عنك</p>
