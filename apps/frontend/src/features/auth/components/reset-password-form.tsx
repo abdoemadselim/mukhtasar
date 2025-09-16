@@ -22,12 +22,12 @@ export default function ResetPasswordForm() {
     })
 
     const onSubmit: SubmitHandler<ForgetPasswordType> = async (data) => {
-        const errors = await requestPasswordReset(data)
+        // const errors = await requestPasswordReset(data)
 
         // Handle API validation errors
-        for (let error in errors) {
-            return setError(error as keyof ForgetPasswordType, { message: errors[error].message })
-        }
+        // for (let error in errors) {
+        //     return setError(error as keyof ForgetPasswordType, { message: errors[error].message })
+        // }
 
         // ✅ Show confirmation message
         setSuccessMessage(`لقد قمت بإرسال طلب تغيير كلمة السر بنجاح. تم إرسال تعليمات لبريدك الإلكتروني ${data.email} تحتوي على كيفية تغيير كلمة السر.`)
