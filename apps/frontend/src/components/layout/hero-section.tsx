@@ -23,10 +23,10 @@ export default function HeroSection() {
                 </div>
                 <AnimatedGradientText text="أول منتج عربي متكامل لإختصار الروابط" />
                 <div className="text-xl sm:text-2xl lg:text-3xl md:max-w-[1000px] max-w-[530px] leading-relaxed px-4 pt-8">
-                    فهم أعمق لعملائك = استهداف أدق = نمو أسرع لشركتك!
+                    فهم أعمق لزوار موقعك = استهداف أدق = نمو أسرع لشركتك!
                     <p className="text-base md:text-md lg:text-xl text-muted-foreground leading-relaxed hidden sm:block">مع إحصاءات مُختصِر الدقيقة: نوع الجهاز، الدولة، المتصفح، مصدر الزيارة، وأكثر.</p>
 
-                    <p className="pt-4 hidden sm:block"> كل روابطك تتكلم عنك</p>
+                    <p className="pt-4 hidden sm:block"> كل روابط موقعك تتكلم عنك</p>
                     <p className="text-base hidden sm:block md:text-md lg:text-xl text-muted-foreground leading-relaxed mb-4">مع روابط قصيرة معبرة تحمل نطاق موقعك</p>
                 </div>
             </header>
