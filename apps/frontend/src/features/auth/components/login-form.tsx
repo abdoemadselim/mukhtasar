@@ -30,7 +30,7 @@ export default function LoginForm() {
 
         // If everything is ok, update auth context and redirect
         await checkAuth()
-        router.replace("/") // or wherever you want to redirect after login
+        router.replace("/dashboard/urls") // or wherever you want to redirect after login
     }
 
     return (
