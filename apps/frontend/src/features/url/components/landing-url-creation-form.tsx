@@ -99,7 +99,7 @@ export default function LandingUrlCreationForm() {
                             <Link
                                 href="/auth/signup"
                             >
-                                اشترك معنا
+                                اشترك الآن مجانًا
                             </Link>
                         </Button>
                         <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
