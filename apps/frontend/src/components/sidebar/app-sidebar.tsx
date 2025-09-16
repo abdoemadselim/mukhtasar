@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { ChevronUp, Link as LinkIcon, Lock, LogOut, User2 } from "lucide-react"
+import { ChevronUp, Globe, Link as LinkIcon, Lock, LogOut, User2 } from "lucide-react"
 
 import {
   Sidebar,
@@ -32,11 +32,11 @@ const items = [
     url: "/dashboard/tokens",
     icon: Lock,
   },
-  //  {
-  //   title: "نطاق خاص",
-  //   url: "/dashboard/domains",
-  //   icon: Globe,
-  // },
+  {
+    title: "نطاق خاص",
+    url: "/dashboard/domains",
+    icon: Globe,
+  },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

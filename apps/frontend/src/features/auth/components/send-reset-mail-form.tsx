@@ -37,7 +37,7 @@ export default function SendResetPasswordMail() {
     if (successMessage) {
         return (
             <div className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
-                <div className="p-8 pt-2 pb-6 md:w-[500px] w-[350px] sm:w-[450px] text-center">
+                <div className="p-8 pt-4 pb-6 md:w-[500px] w-[350px] sm:w-[450px] text-center">
                     <h1 className="mb-4 text-xl text-primary font-semibold">تم إرسال الطلب</h1>
                     <p className="text-md text-foreground">{successMessage}</p>
                     <Button

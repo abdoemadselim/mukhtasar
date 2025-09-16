@@ -24,6 +24,8 @@ export default function PasswordResetConfirmForm({ token }: { token: string }) {
         for (let error in errors) {
             return setError(error as keyof ResetPasswordType, { message: errors[error].message })
         }
+
+        router.replace("/auth/password-reset-complete")
     }
     return (
         <form
