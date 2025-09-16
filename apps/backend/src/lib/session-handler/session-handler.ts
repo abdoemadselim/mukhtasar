@@ -22,7 +22,7 @@ export function getSecureSessionConfig({ key, value = "", age }: { key: string, 
             httpOnly: true,
             secure: true,
             sameSite: "lax",
-            domain: ".mukhtasar.pro"
+            domain: process.env.NODE_ENV === "production" ? ".mukhtasar.pro" : "localhost"
         }
     }
 }

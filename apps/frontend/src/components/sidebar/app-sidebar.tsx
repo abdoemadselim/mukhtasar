@@ -43,18 +43,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <Image
-                src="/logo.webp"
-                alt="مُختصِر"
-                width={90}
-                height={70}
-                priority
-              />
-            </SidebarMenuButton>
+            <Image
+              src="/logo.webp"
+              alt="مُختصِر"
+              width={101}
+              height={45}
+              priority
+            />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

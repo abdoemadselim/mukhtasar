@@ -10,8 +10,8 @@ export class LoginException extends HttpException {
 }
 
 export class UnVerifiedException extends HttpException {
-    constructor(){
-        super(403, 11, "Email is unverified", "EMAIL_UNVERIFIED");
+    constructor() {
+        super(403, 11, "يرجى تأكيد بريدك الإلكتروني.", "EMAIL_UNVERIFIED");
 
         this.name = this.constructor.name;
         Error.captureStackTrace(this);

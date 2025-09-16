@@ -8,7 +8,7 @@ const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-grad
 
 export default function HeroSection() {
     return (
-        <section className="pb-10 pt-30">
+        <section className="pt-30">
             <header className="text-center mb-2 flex flex-col justify-center items-center">
                 <div className="flex justify-center items-center gap-4">
                     <Image

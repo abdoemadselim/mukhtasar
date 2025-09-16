@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <section className="text-center pb-50 pt-15 mt-60 relative mx-auto bg-white">
+      <section className="text-center pb-50 pt-15 mt-38 relative mx-auto bg-white">
         <h2 className="lg:text-4xl text-3xl font-bold mb-4">
           <Highlighter action="underline" strokeWidth={2} color="red">
             <BadgeQuestionMark size={40} />

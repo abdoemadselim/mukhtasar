@@ -14,6 +14,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/auth/login")
   }
 
+  if (!session.verified) {
+    redirect("/auth/verification")
+  }
+
   return (
     <SidebarProvider
       style={

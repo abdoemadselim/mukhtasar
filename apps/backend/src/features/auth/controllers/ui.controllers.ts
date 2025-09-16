@@ -70,6 +70,8 @@ export async function signup(req: IRequest, res: Response) {
         age: Number(process.env.SESSION_DURATION)
     });
 
+    console.log(sessionConfig)
+
     res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
