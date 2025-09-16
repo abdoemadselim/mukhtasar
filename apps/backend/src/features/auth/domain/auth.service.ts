@@ -151,7 +151,8 @@ export function authSession() {
             res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
                 httpOnly: true,
                 secure: false,
-                sameSite: "lax"
+                sameSite: "lax",
+                domain: ".mukhtasar.pro"
             });
 
             throw new UnAuthorizedException();
