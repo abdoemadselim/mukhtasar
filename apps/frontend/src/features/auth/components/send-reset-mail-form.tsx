@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ResetPasswordMailSchema, ResetPasswordMailType } from '@mukhtasar/shared'
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -14,7 +13,6 @@ import { Label } from '@/components/ui/label'
 import { requestPasswordReset } from '@/features/auth/service/auth';
 
 export default function SendResetPasswordMail() {
-    const router = useRouter()
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ResetPasswordMailType>({
