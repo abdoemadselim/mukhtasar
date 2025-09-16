@@ -1,10 +1,19 @@
-import Navbar from "@/components/layout/navbar";
+import { redirect } from "next/navigation";
 
-export default function NavLayout({
+import Navbar from "@/components/layout/navbar";
+import { getSession } from "@/features/auth/service/auth-session";
+
+export default async function NavLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await getSession()
+
+    if (session) {
+        redirect("/dashboard/urls")
+    }
+
     return (
         <>
             <Navbar />

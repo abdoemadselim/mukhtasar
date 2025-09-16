@@ -1,20 +1,11 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import dynamic from "next/dynamic";
 import { BadgeQuestionMark } from "lucide-react";
 
 import HeroSection from "@/components/layout/hero-section";
 const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
 
-import { getSession } from "@/features/auth/service/auth-session";
-
-export default async function HomePage() {
-  const session = await getSession()
-
-  if (session) {
-    redirect("/dashboard/urls")
-  }
-
+export default function HomePage() {
   return (
     <>
       <HeroSection />
