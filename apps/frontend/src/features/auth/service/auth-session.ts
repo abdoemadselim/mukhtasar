@@ -2,13 +2,13 @@ import { cookies } from "next/headers"
 
 export async function getSession() {
   const cookieStore = cookies()
-  const token = (await cookieStore).get("adaa-session")?.value
+  const token = (await cookieStore).get("mukhtasar-session")?.value
 
   if (!token) return null
 
   try {
     const res = await fetch(`${process.env.API_URL}/auth/me`, {
-      headers: { Cookie: `adaa-session=${token}` },
+      headers: { Cookie: `mukhtasar-session=${token}` },
       cache: "no-store", // always fresh session
     })
 
