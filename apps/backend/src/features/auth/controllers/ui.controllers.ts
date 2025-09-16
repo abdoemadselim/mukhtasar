@@ -28,7 +28,8 @@ export async function login(req: Request, res: Response) {
         maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
-        sameSite: "lax"
+        sameSite: "lax",
+        domain: ".mukhtasar.pro"
     });
 
     redisClient.setEx(
@@ -88,7 +89,8 @@ export async function signup(req: Request, res: Response) {
         maxAge: Number(process.env.SESSION_DURATION),
         httpOnly: true,
         secure: true,
-        sameSite: "lax"
+        sameSite: "lax",
+        domain: ".mukhtasar.pro"
     });
 
     redisClient.setEx(
@@ -170,7 +172,8 @@ export async function verify(req: Request, res: Response) {
         res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
             httpOnly: true,
             secure: true,
-            sameSite: "lax"
+            sameSite: "lax",
+            domain: ".mukhtasar.pro"
         });
     }
 
@@ -201,7 +204,8 @@ export async function logout(req: Request, res: Response) {
     res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
         httpOnly: true,
         secure: true,
-        sameSite: "lax"
+        sameSite: "lax",
+        domain: ".mukhtasar.pro"
     });
 
     const response = {
@@ -295,7 +299,8 @@ export async function verifyUser(req: Request, res: Response) {
         res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
             httpOnly: true,
             secure: true,
-            sameSite: "lax"
+            sameSite: "lax",
+            domain: ".mukhtasar.pro"
         });
 
         throw new UnAuthorizedException()
