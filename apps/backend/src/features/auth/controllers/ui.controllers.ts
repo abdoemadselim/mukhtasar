@@ -21,13 +21,12 @@ export async function login(req: IRequest, res: Response) {
     req.user = user;
 
     const sessionId = randomUUID()
-    const sessionConfig = getSecureSessionConfig({
-        key: process.env.AUTH_SESSION_NAME as string,
-        value: sessionId,
-        age: Number(process.env.SESSION_DURATION)
+    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
+        maxAge: Number(process.env.SESSION_DURATION),
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax"
     });
-
-    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
         `sessions:${sessionId}`,
@@ -63,14 +62,15 @@ export async function signup(req: IRequest, res: Response) {
     req.user = user
 
     const sessionId = randomUUID()
-
-    const sessionConfig = getSecureSessionConfig({
-        key: process.env.AUTH_SESSION_NAME as string,
-        value: sessionId,
-        age: Number(process.env.SESSION_DURATION)
+    // httpOnly: so even if a malicious script managed to land on our server, it can't access the cookie
+    // secure: so the session is only sent over HTTPS (anyway, the server runs only over HTTPS)
+    // sameSite: lax (default value): to prevent CSRF attacks (attackers do something on behalf of users because the user's cookie is sent with the malicious request)
+    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
+        maxAge: Number(process.env.SESSION_DURATION),
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax"
     });
-
-    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
         `sessions:${sessionId}`,
@@ -118,13 +118,26 @@ export async function verify(req: Request, res: Response) {
     const user = await authService.verifyEmail({ token, sessionId })
 
     if (!user) {
-        // Clear cookie on client
-        const sessionConfig = getSecureSessionConfig({
-            key: process.env.AUTH_SESSION_NAME as string
-        })
-
-        res.clearCookie(sessionConfig.key);
+        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax"
+        });
     }
+
+    const durationMs = Date.now() - start;
+    const store = asyncStore.getStore();
+
+    log(LOG_TYPE.INFO, {
+        message: "Email verified",
+        requestId: store?.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        status: 200,
+        durationMs,
+        tokenId: store?.tokenId,
+        userEmail: user?.email
+    });
 
     res.redirect(process.env.WEB_URL as string)
 }
@@ -136,11 +149,11 @@ export async function logout(req: Request, res: Response) {
     }
 
     // Clear cookie on client
-    const sessionConfig = getSecureSessionConfig({
-        key: process.env.AUTH_SESSION_NAME as string
-    })
-
-    res.clearCookie(sessionConfig.key);
+    res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax"
+    });
 
     const response = {
         errors: [],
@@ -162,12 +175,12 @@ export async function verifyUser(req: Request, res: Response) {
     const session = await redisClient.get(`sessions:${sessionId}`)
 
     if (!session) {
-        // Clear cookie on client
-        const sessionConfig = getSecureSessionConfig({
-            key: process.env.AUTH_SESSION_NAME as string
-        })
+        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax"
+        });
 
-        res.clearCookie(sessionConfig.key);
         throw new UnAuthorizedException()
     }
 
