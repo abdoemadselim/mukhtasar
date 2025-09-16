@@ -10,11 +10,11 @@ import { getSession } from "@/features/auth/service/auth-session"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession()
-  if (!session) {
+  if (!session?.data.user) {
     redirect("/auth/login")
   }
 
-  if (!session.verified) {
+  if (!session?.data.user.verified) {
     redirect("/auth/verification")
   }
 

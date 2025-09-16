@@ -10,7 +10,7 @@ export default async function NavLayout({
 }>) {
     const session = await getSession()
 
-    if (session && session.verified) {
+    if (session?.data.user && session?.data.user.verified) {
         redirect("/dashboard/urls")
     }
 

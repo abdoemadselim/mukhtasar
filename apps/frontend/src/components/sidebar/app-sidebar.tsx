@@ -2,13 +2,13 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
-
-import { Globe, Link as LinkIcon, Lock } from "lucide-react"
+import { redirect, usePathname } from "next/navigation"
+import { ChevronUp, Link as LinkIcon, Lock, LogOut, User2 } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -16,6 +16,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+
+import { logout } from "@/features/auth/service/auth"
+import { useAuth } from "@/features/auth/context/auth-context"
 
 const items = [
   {
@@ -37,6 +41,7 @@ const items = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
+  const { user } = useAuth();
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -71,6 +76,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu >
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton className="text-lg">
+                  <User2 /> {user?.name}
+                  <ChevronUp className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                side="top"
+              >
+                <DropdownMenuItem className="flex items-center gap-6 cursor-pointer" onClick={() => {
+                  logout()
+                  redirect("/auth/login")
+                }}>
+                  <LogOut color="red" />
+                  <span className="text-red-500 hover:text-red-500">تسجيل الخروج</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }
