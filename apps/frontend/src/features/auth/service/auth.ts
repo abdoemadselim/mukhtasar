@@ -76,6 +76,8 @@ export async function logout() {
             throw new Error('Logout failed')
         }
 
+        window.location.href = '/auth/login'
+
         return { success: true }
     } catch (error) {
         console.error('Logout error:', error)

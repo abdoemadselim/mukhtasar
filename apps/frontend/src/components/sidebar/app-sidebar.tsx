@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { redirect, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { ChevronUp, Link as LinkIcon, Lock, LogOut, User2 } from "lucide-react"
 
 import {
@@ -92,7 +92,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               >
                 <DropdownMenuItem className="flex items-center gap-6 cursor-pointer" onClick={() => {
                   logout()
-                  redirect("/auth/login")
                 }}>
                   <LogOut color="red" />
                   <span className="text-red-500 hover:text-red-500">تسجيل الخروج</span>

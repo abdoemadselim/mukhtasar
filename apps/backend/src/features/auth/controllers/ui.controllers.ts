@@ -36,7 +36,7 @@ export async function login(req: IRequest, res: Response) {
             id: user.id,
             name: user.name,
             email: user.email,
-            verified: user.verified
+            verified: true
         }))
 
     const response = {
