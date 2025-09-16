@@ -1,7 +1,7 @@
-import ResetPasswordForm from "@/features/auth/components/reset-password-form";
+import SendResetPasswordMail from "@/features/auth/components/send-reset-mail-form";
 
 export default function ResetPasswordPage() {
     return (
-        <ResetPasswordForm />
+        <SendResetPasswordMail />
     )
 }

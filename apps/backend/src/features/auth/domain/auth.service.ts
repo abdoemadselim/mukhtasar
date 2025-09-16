@@ -12,7 +12,7 @@ import { LoginException, UnVerifiedException } from "#features/auth/domain/error
 import { IRequest } from "#features/auth/types";
 
 import { ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
-import { sendVerificationMail } from "#lib/email/email.js";
+import { sendVerificationMail, sendResetMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { getSecureSessionConfig } from "#lib/session-handler/session-handler.js";
@@ -176,4 +176,44 @@ export function authSession() {
 
         next();
     }
+}
+
+export async function sendResetPasswordMail(email: string) {
+    const existent_user = await userRepository.getUserByEmail(email)
+    if (!existent_user) {
+        throw new ValidationException({ email: { message: "لا يوجد حساب مسجَّل مسبقًا بهذا البريد الإلكتروني." } })
+    }
+
+    const resetPasswordToken = jwt.sign({
+        email: existent_user.email,
+        type: "reset-password",
+    }, process.env.PASSWORD_RESET_SECRET_KEY as string, { expiresIn: "15m" })
+
+    sendResetMail({ userEmail: existent_user.email, userName: existent_user.name, resetPasswordToken })
+}
+
+export async function resetPassword({ password, token }: { password: string, token: string }) {
+    let decodedToken = null;
+    try {
+        decodedToken = jwt.verify(token, process.env.PASSWORD_RESET_SECRET_KEY as string) as JwtPayload
+        // TODO: how a user can asks for another verification link
+    } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
+            throw new ResourceExpiredException(" انتهت صلاحية هذا الرابط. اطلب رابط جديد ونكمل معك ");
+        }
+
+        throw new Error();
+    }
+
+    const existent_user = await userRepository.getUserByEmail(decodedToken.email)
+    if (!existent_user) {
+        throw new ValidationException({ email: { message: "لا يوجد حساب مسجَّل مسبقًا بهذا البريد الإلكتروني." } })
+    }
+
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds)
+
+    const user = await userRepository.updatePassword({ email: decodedToken.email, password: passwordHash });
+
+    return user;
 }

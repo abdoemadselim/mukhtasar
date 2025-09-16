@@ -1,11 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation.js";
 
-export default function Layout({
+import { getSession } from "@/features/auth/service/auth-session";
+
+export default async function Layout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await getSession()
+    if (session?.data.user) {
+        redirect("/")
+    }
+
     return (
         <>
             <div className="min-h-screen bg-zinc-50 px-4 py-16  dark:bg-transparent">

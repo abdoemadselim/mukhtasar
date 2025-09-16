@@ -15,11 +15,11 @@ export const logger = winston.createLogger({
     format.json()
   ),
   exceptionHandlers: [
-    new transports.Console({ level: "info" }),
+    new transports.Console(),
     new transports.File({ filename: path.join("logs", "exceptions.log") })
   ],
   transports: [
-    new transports.Console({ level: "info" }),
+    new transports.Console({ level: "error" }),
     new transports.File({ filename: path.join("logs", "combined.log") }),
     new transports.File({ filename: path.join("logs", "errors.log"), level: 'error' })
   ]

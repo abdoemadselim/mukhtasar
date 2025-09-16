@@ -5,7 +5,7 @@ export const UserVerificationSchema = zod.object({
 })
 
 export const EmailSchema = zod.string().trim().min(1, "يُرجى إدخال البريد الإلكتروني.").email("صيغة البريد الإلكتروني غير صحيحة.")
-export const ForgotPasswordSchema = zod.object({
+export const ResetPasswordMailSchema = zod.object({
     email: EmailSchema
 });
 
@@ -14,6 +14,17 @@ const PasswordSchema = zod
     .trim()
     .min(8, "كلمة المرور يجب أن تتكون من 8 أحرف على الأقل.")
     .max(64, "كلمة المرور يجب ألا تتجاوز 64 حرفًا.")
+
+export const ResetPasswordSchema = zod.object({
+    password: PasswordSchema,
+    password_confirmation: zod
+        .string()
+        .trim()
+        .min(1, "يُرجى إدخال تأكيد كلمة المرور.")
+}, "البيانات المدخلة غير صحيحة.").refine(
+    (data) => data.password === data.password_confirmation,
+    { message: "كلمتا المرور غير متطابقتين.", path: ["password_confirmation"] }
+)
 
 export const NewUserSchema = zod.object({
     name: zod
@@ -150,7 +161,8 @@ export const ToUpdateTokenSchema = zod.object({
 })
 
 export type TokenType = zod.infer<typeof TokenSchema>;
-export type ForgetPasswordType = zod.infer<typeof ForgotPasswordSchema>;
+export type ResetPasswordMailType = zod.infer<typeof ResetPasswordMailSchema>;
+export type ResetPasswordType = zod.infer<typeof ResetPasswordSchema>;
 export type TokenParamsType = zod.infer<typeof TokenParams>;
 export type ToUpdateTokenType = zod.infer<typeof ToUpdateTokenSchema>;
 export type FullTokenType = TokenType & {

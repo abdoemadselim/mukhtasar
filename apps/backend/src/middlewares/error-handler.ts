@@ -55,6 +55,7 @@ const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: R
         })
     }
 
+    console.log("hello")
     // 3- Any other unexpected thrown error 
     log(LOG_TYPE.ERROR, {
         ...logMeta,

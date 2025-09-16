@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { login, logout, signup, verify, verifyUser } from "#root/features/auth/controllers/ui.controllers.js";
-import { loginSchema, newUserSchema, userVerificationSchema } from "#features/auth/domain/auth.schemas.js";
+import { login, logout, signup, verify, verifyUser, sendResetPasswordMail, resetPassword } from "#features/auth/controllers/ui.controllers.js";
+import { loginSchema, newUserSchema, resetPasswordMailSchema, resetPasswordSchemaWithToken, userVerificationSchema } from "#features/auth/domain/auth.schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
 import { authRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
@@ -11,7 +11,8 @@ router.post("/login", authRateLimiter(15, 20), validateRequest([loginSchema]), l
 router.post("/logout", logout)
 router.get("/verify", authRateLimiter(15, 20), validateRequest([userVerificationSchema]), verify)
 router.post("/signup", authRateLimiter(15, 20), validateRequest([newUserSchema]), signup)
-// router.post("/password-reset-mail", authRateLimiter(15, 20), validateRequest([forgotPasswordSchema]), SendResetPasswordMail)
+router.post("/password-reset-mail", authRateLimiter(15, 20), validateRequest([resetPasswordMailSchema]), sendResetPasswordMail)
+router.post("/reset-password", authRateLimiter(15, 20), validateRequest([resetPasswordSchemaWithToken]), resetPassword)
 router.get("/me", verifyUser)
 
 export default router; 

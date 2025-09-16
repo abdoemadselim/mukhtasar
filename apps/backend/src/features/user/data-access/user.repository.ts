@@ -1,5 +1,5 @@
 import { UserType } from "#root/features/user/types.js";
-import {  query } from "#lib/db/db-connection.js";
+import { query } from "#lib/db/db-connection.js";
 
 const userRepository = {
     // Do we need password here all the time? What about creating a different query 
@@ -22,6 +22,20 @@ const userRepository = {
                 WHERE id = $1
             `,
             [id]
+        )
+
+        return result.rows[0];
+    },
+
+    async updatePassword({ email, password }: { email: string, password: string }): Promise<UserType> {
+        const result = await query(
+            `
+                UPDATE users
+                SET password = $1
+                WHERE email = $2
+                RETURNING id
+            `,
+            [password, email]
         )
 
         return result.rows[0];

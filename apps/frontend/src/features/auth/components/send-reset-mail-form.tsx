@@ -1,36 +1,37 @@
 'use client'
 
+import { useState } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ForgotPasswordSchema, ForgetPasswordType } from '@mukhtasar/shared'
+import { ResetPasswordMailSchema, ResetPasswordMailType } from '@mukhtasar/shared'
 import { SubmitHandler, useForm } from "react-hook-form"
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useAuth } from '@/features/auth/context/auth-context'
-import { useState } from 'react';
+import { requestPasswordReset } from '@/features/auth/service/auth';
 
-export default function ResetPasswordForm() {
+export default function SendResetPasswordMail() {
     const router = useRouter()
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ForgetPasswordType>({
-        resolver: zodResolver(ForgotPasswordSchema)
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ResetPasswordMailType>({
+        resolver: zodResolver(ResetPasswordMailSchema)
     })
 
-    const onSubmit: SubmitHandler<ForgetPasswordType> = async (data) => {
-        // const errors = await requestPasswordReset(data)
+    const onSubmit: SubmitHandler<ResetPasswordMailType> = async (data) => {
+        const errors = await requestPasswordReset(data.email)
 
         // Handle API validation errors
-        // for (let error in errors) {
-        //     return setError(error as keyof ForgetPasswordType, { message: errors[error].message })
-        // }
+        for (let error in errors) {
+            return setError(error as keyof ResetPasswordMailType, { message: errors[error].message })
+        }
 
-        // ✅ Show confirmation message
-        setSuccessMessage(`لقد قمت بإرسال طلب تغيير كلمة السر بنجاح. تم إرسال تعليمات لبريدك الإلكتروني ${data.email} تحتوي على كيفية تغيير كلمة السر.`)
+        if (!Object.keys(errors).length) {
+            setSuccessMessage(`لقد قمت بإرسال طلب تغيير كلمة السر بنجاح. تم إرسال تعليمات لبريدك الإلكتروني ${data.email} تحتوي كيفية تغيير كلمة السر.`)
+        }
     }
 
     if (successMessage) {

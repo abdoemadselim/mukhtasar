@@ -41,7 +41,11 @@ export async function sendVerificationMail({ userEmail, userName, verificationTo
         ],
     }
 
-    await sgMail.send(msg);
+    sgMail
+        .send(msg)
+        .catch((error) => {
+            log(LOG_TYPE.ERROR, { message: "Failed to send email verification mail.", error: error })
+        })
     const store = asyncStore.getStore();
 
     log(LOG_TYPE.INFO, {
@@ -51,26 +55,30 @@ export async function sendVerificationMail({ userEmail, userName, verificationTo
     })
 }
 
-export async function sendResetPasswordMail({
+export async function sendResetMail({
     userEmail,
     userName,
-    resetToken,
+    resetPasswordToken,
 }: {
     userEmail: string;
     userName: string;
-    resetToken: string;
+    resetPasswordToken: string;
 }) {
     // 1. Load the reset password template
     const templatePath = path.join(
         process.cwd(),
         "templates",
-        "reset-password.html"
+        "password-reset.html"
     );
     let htmlTemplate = await fs.readFile(templatePath, "utf8");
 
+    const redirectionUrl = process.env.NODE_ENV === "production" ?
+        `https://mukhtasar.pro/auth/password-reset-confirm?token=${resetPasswordToken}` :
+        `http://localhost:3002/auth/password-reset-confirm?token=${resetPasswordToken}`;
+
     // 2. Replace placeholders
     htmlTemplate = htmlTemplate
-        .replace(/{{resetLink}}/g, `https://mukhtasar.pro/auth/reset-password?token=${resetToken}`)
+        .replace(/{{resetPasswordLink}}/g, redirectionUrl)
         .replace(/{{username}}/g, userName);
 
     // 3. Send email
@@ -98,7 +106,11 @@ export async function sendResetPasswordMail({
         ],
     };
 
-    await sgMail.send(msg);
+    sgMail
+        .send(msg)
+        .catch((error) => {
+            log(LOG_TYPE.ERROR, { message: "Failed to send reset password mail.", error: error })
+        })
 
     const store = asyncStore.getStore();
     log(LOG_TYPE.INFO, {

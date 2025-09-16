@@ -70,8 +70,6 @@ export async function signup(req: IRequest, res: Response) {
         age: Number(process.env.SESSION_DURATION)
     });
 
-    console.log(sessionConfig)
-
     res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
@@ -185,6 +183,36 @@ export async function verifyUser(req: Request, res: Response) {
                 verified: user.verified
             }
         }
+    };
+
+    res.json(response);
+}
+
+export async function sendResetPasswordMail(req: Request, res: Response) {
+    const { email } = req.body as { email: string };
+
+    authService.sendResetPasswordMail(email);
+
+    const response = {
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+        data: {}
+    };
+
+    res.json(response);
+}
+
+export async function resetPassword(req: Request, res: Response) {
+    const { password, token } = req.body as { password: string, token: string };
+
+    await authService.resetPassword({ password, token });
+
+    const response = {
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+        data: {}
     };
 
     res.json(response);
