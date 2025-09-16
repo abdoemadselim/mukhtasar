@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // seed.js
 import dotenv from "dotenv"
 dotenv.config();

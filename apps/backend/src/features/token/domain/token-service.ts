@@ -1,20 +1,21 @@
 import { createHash, randomBytes } from "node:crypto";
-import type { Request, Response, NextFunction } from "express"
+import type { Response, NextFunction } from "express"
 
 import tokenRepository from "#features/token/data-access/token.repository.js"
-import type { Token, TokenInput, TokenPermission, TokenWithUrlType } from "#features/token/types.js";
+import type { IRequest, Token, TokenInput, TokenPermission, TokenWithUrlType } from "#features/token/types.js";
 import { CREATE_URL_PERMISSION, READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
 import { NotFoundException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js"
 
-// TODO: The service shouldn't depend on the request, response objects of express
+// TODO: The service shouldn't depend on the request, response objects of express 
 export function authToken(requiredPermission: TokenPermission) {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return async (req: IRequest, res: Response, next: NextFunction) => {
         // no token is provided at all (no authorization field is set or it's sent with an empty value)
         const header_token = validateAndExtractToken(req);
 
         // there is token attached to the authorization header, but the token doesn't exist in db
-        const db_token = await validateTokenExistenceInDB(header_token, (req as any).params.alias || (req as any).query.alias || "", requiredPermission)
+
+        const db_token = await validateTokenExistenceInDB(header_token, req.params.alias || req.query.alias || "", requiredPermission)
 
         // The token requires more than read permission (e.g. create, update, delete), and it doesn't have this permission
         validateTokenPermission(db_token, requiredPermission);
@@ -27,14 +28,15 @@ export function authToken(requiredPermission: TokenPermission) {
             }
         }
 
-        (req as any).user_id = db_token?.user_id;
+        req.user = { id: -1 }
+        req.user.id = db_token?.user_id;
 
         // the token is totally valid and has required access
         next()
     }
 }
 
-function validateAndExtractToken(req: Request): string {
+function validateAndExtractToken(req: IRequest): string {
     const authHeader = req.headers.authorization;
     if (!authHeader) throw new UnAuthorizedException();
 
@@ -116,7 +118,7 @@ export async function updateToken({
     tokenId,
     userId,
     updates
-}: { tokenId: string, userId: string, updates: Partial<Omit<TokenInput, "userId">> }) {
+}: { tokenId: string, userId: number, updates: Partial<Omit<TokenInput, "userId">> }) {
     const token = await tokenRepository.getTokenById(tokenId);
     if (!token) throw new NotFoundException("This token doesn't exist");
 
@@ -126,7 +128,7 @@ export async function updateToken({
     return updated;
 }
 
-export async function deleteToken({ userId, tokenId }: { userId: string, tokenId: string }) {
+export async function deleteToken({ userId, tokenId }: { userId: number, tokenId: string }) {
     const token = await tokenRepository.getTokenById(tokenId);
     if (!token) throw new NotFoundException("This token doesn't exist");
 

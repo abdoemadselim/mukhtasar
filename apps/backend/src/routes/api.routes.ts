@@ -9,7 +9,6 @@ import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 import swaggerApiDoc from "../../docs/api-doc.json" with {type: "json"}
 import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
-
 const router = Router()
 
 const customCss = `

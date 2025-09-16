@@ -1,7 +1,7 @@
 import { NewUserType } from "@mukhtasar/shared";
 
 // TODO: auth feature depends on user feature (is it OK?)
-import type { UserType } from "#features/user/type.js";
+import type { UserType } from "#features/user/types.js";
 
 import { query } from "#lib/db/db-connection.js";
 
@@ -14,7 +14,7 @@ const authRepository = {
         return result.rows[0]
     },
 
-    async setUserVerified(userId: string): Promise<undefined> {
+    async setUserVerified(userId: number): Promise<undefined> {
         const result = await query(`
             UPDATE users
             SET verified = true

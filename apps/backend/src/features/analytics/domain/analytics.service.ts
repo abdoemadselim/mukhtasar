@@ -1,8 +1,8 @@
-// apps/backend/src/features/analytics/domain/analytics.service.ts
 import analyticsRepository from "#features/analytics/data-access/analytics.repository.js";
 import urlRepository from "#features/url/data-access/url.repository.js";
 import { AnalyticsEventInput } from "#features/analytics/types.js";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
+
 import { getCountry } from "#lib/geo/geoip.js";
 
 type AnalyticsParams = {
@@ -20,10 +20,12 @@ type RefererStatsParams = AnalyticsParams
 export async function updateAnalytics({ analyticsEvent, url_alias }: { analyticsEvent: Omit<AnalyticsEventInput, "url_id">, url_alias: string }) {
     const url = await urlRepository.getUrlByAlias(url_alias)
 
-    // @ts-ignore
-    analyticsEvent.url_id = url.id;
+    const fullAnalyticsEvent = {
+        ...analyticsEvent,
+        url_id: url.id
+    }
 
-    analyticsRepository.createEvent(analyticsEvent as AnalyticsEventInput);
+    analyticsRepository.createEvent(fullAnalyticsEvent);
 }
 
 export async function getUrlAnalytics({ alias, startDate, endDate }: AnalyticsParams) {
@@ -106,15 +108,13 @@ export async function getGeographicStats({ alias, startDate, endDate }: Analytic
     }
 
     // 2. Fetch raw analytics events
-    let rawEvents = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
-
-    console.log(rawEvents)
+    const rawEvents = await analyticsRepository.getGeographicStats({ alias, startDate, endDate });
 
     // 3. Aggregate by country
     const aggregated: Record<string, { country: string; clicks: number }> = {};
 
     for (const event of rawEvents) {
-        const country = getCountry(event.ip) || "Unknown";
+        const country = await getCountry(event.ip) || "Unknown";
 
         if (!aggregated[country]) {
             aggregated[country] = { country, clicks: 0 };

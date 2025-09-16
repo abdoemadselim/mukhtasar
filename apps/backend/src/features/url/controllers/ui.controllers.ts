@@ -1,17 +1,14 @@
 import type { Request, Response } from "express";
-import { asyncStore } from "#root/main.js";
 
 import * as urlService from "#features/url/domain/url.service.js";
 import domainRepository from "#features/domain/data-access/domain-repository.js";
 import urlRepository from "#features/url/data-access/url.repository.js";
+import { IRequest } from "#features/url/types.js";
 
 import { NoException, ValidationException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
 export async function createUrl(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { original_url, alias, domain, description = "" } = req.body;
 
@@ -74,31 +71,15 @@ export async function createUrl(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // Logging logic
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        level: "info",
-        message: "Create URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 201,
-        durationMs,
-        tokenId: store?.tokenId,
-        userEmail: user?.email || "guest"
-    })
-
     res.status(201).json(response)
 }
 
-export async function getAllUrls(req: Request, res: Response) {
+export async function getAllUrls(req: IRequest, res: Response) {
     //1- prepare the data for the service
-    const { id } = (req as any).user;
+    const userId = req.user?.id;
 
     //2- pass the data to the service
-    const urls = await urlRepository.getUrlsByUserId(id);
+    const urls = await urlRepository.getUrlsByUserId(userId as number);
 
     //3- prepare the response
     const response = {
@@ -113,13 +94,13 @@ export async function getAllUrls(req: Request, res: Response) {
     res.json(response)
 }
 
-export async function getUrlsPage(req: Request, res: Response) {
+export async function getUrlsPage(req: IRequest, res: Response) {
     //1- prepare the data for the service
-    const { id } = (req as any).user;
+    const userId = req.user?.id;
     const { page = 0, pageSize = 10 } = req.query;
 
     //2- pass the data to the service
-    const { urls, total } = await urlService.getUrlsPage({ user_id: id, page: Number(page), page_size: Number(pageSize) })
+    const { urls, total } = await urlService.getUrlsPage({ user_id: userId as number, page: Number(page), page_size: Number(pageSize) })
 
     //3- prepare the response
     const response = {
@@ -136,8 +117,6 @@ export async function getUrlsPage(req: Request, res: Response) {
 }
 
 export async function deleteUrl(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { domain, alias } = req.params;
 
@@ -152,27 +131,11 @@ export async function deleteUrl(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Delete URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        user_email: (req as any).user.email
-    })
-
     // 4- send the response
     res.json(response)
 }
 
 export async function updateUrl(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { alias, domain } = req.params;
     const { original_url } = req.body;
@@ -191,20 +154,6 @@ export async function updateUrl(req: Request, res: Response) {
         code: NoException.NoErrorCode,
         errorCode: NoException.NoErrorCodeString,
     }
-
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Update URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        user_email: (req as any).user.email
-    })
 
     // 4- send the response
     res.json(response)

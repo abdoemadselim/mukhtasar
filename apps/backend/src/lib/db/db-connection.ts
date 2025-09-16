@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 dotenv.config()
 import { Pool, QueryArrayConfig, QueryConfigValues } from 'pg'
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
-import { asyncStore } from "#root/main.js";
+import { asyncStore } from '#middlewares/routes-context.js';
 
 /*
   database connection
@@ -37,7 +37,7 @@ pool.on("error", (err) => log(LOG_TYPE.ERROR, { message: 'Unexpected error on id
 /*
     All queries go from here, so it's easy to log them
 */
-export const query = async (queryData: string | QueryArrayConfig, params?: QueryConfigValues<string[]>) => {
+export const query = async (queryData: string | QueryArrayConfig, params?: QueryConfigValues<(string | number | boolean | undefined)[]>) => {
     const start = Date.now();
 
     log(LOG_TYPE.DEBUG, {

@@ -99,8 +99,13 @@ export default function LoginForm() {
                             }
                         </div>
                     </div>
-
-                    <Button className="w-full cursor-pointer mt-4 text-md" type="submit" disabled={isSubmitting}>
+                    <Button
+                        asChild
+                        variant="link"
+                        className="px-2">
+                        <Link href="/auth/reset-password">هل نسيت كلمة السر؟</Link>
+                    </Button>
+                    <Button className="w-full cursor-pointer text-md" type="submit" disabled={isSubmitting}>
                         تسجيل الدخول
                     </Button>
                 </div>

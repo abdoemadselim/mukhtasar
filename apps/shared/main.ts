@@ -4,7 +4,7 @@ export const UserVerificationSchema = zod.object({
     token: zod.jwt("يُرجى إدخال رمز تحقق صالح.")
 })
 
-const EmailSchema = zod.string().trim().min(1, "يُرجى إدخال البريد الإلكتروني.").email("صيغة البريد الإلكتروني غير صحيحة.")
+export const EmailSchema = zod.string().trim().min(1, "يُرجى إدخال البريد الإلكتروني.").email("صيغة البريد الإلكتروني غير صحيحة.")
 export const ForgotPasswordSchema = zod.object({
     email: EmailSchema
 });
@@ -150,6 +150,7 @@ export const ToUpdateTokenSchema = zod.object({
 })
 
 export type TokenType = zod.infer<typeof TokenSchema>;
+export type ForgetPasswordType = zod.infer<typeof ForgotPasswordSchema>;
 export type TokenParamsType = zod.infer<typeof TokenParams>;
 export type ToUpdateTokenType = zod.infer<typeof ToUpdateTokenSchema>;
 export type FullTokenType = TokenType & {

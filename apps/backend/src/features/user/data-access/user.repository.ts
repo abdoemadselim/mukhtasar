@@ -1,11 +1,12 @@
-import { UserType } from "#features/user/type.js";
+import { UserType } from "#root/features/user/types.js";
 import {  query } from "#lib/db/db-connection.js";
 
 const userRepository = {
     // Do we need password here all the time? What about creating a different query 
     async getUserByEmail(email: string): Promise<UserType> {
         const result = await query(`
-                SELECT id, name, password, email, verified FROM users
+                SELECT id, name, password, email, verified
+                FROM users
                 WHERE email = $1
             `,
             [email]

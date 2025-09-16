@@ -1,7 +1,7 @@
 export type UserType = {
-    id: string
+    id: number
     name: string,
     email: string,
-    verified?: boolean,
+    verified: boolean,
     password?: string
 }

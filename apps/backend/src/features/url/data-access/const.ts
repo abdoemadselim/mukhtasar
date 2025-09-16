@@ -1,4 +1,4 @@
-const BLOCKED_ALIAS = [
+export const BLOCKED_ALIAS = [
     // app reserved routes
     "pages", "auth", "admin", "dashboard", "login", "logout",
     "signup", "register", "user", "profile", "settings",

@@ -16,9 +16,9 @@ export async function initGeoIp() {
     return geoLookup;
 }
 
-export function getCountry(ip: string): string | undefined {
+export async function getCountry(ip: string): Promise<string | undefined> {
     if (!geoLookup) {
-        throw new Error("GeoIP not initialized. Call initGeoIP() first.");
+        await initGeoIp()
     }
     const result = geoLookup.country(ip);
     return getCountryNameAr(result?.country?.isoCode as isoCode);

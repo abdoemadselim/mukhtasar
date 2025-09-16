@@ -7,7 +7,7 @@ const urlRepository = {
     async getUrlsByUserId(user_id: number) {
         const result = await query(
             "SELECT id, alias, domain, original_url, short_url, created_at FROM url WHERE user_id = $1",
-            [String(user_id)]
+            [user_id]
         );
 
         return result.rows;
@@ -22,13 +22,11 @@ const urlRepository = {
             ORDER BY created_at DESC
             OFFSET $2 LIMIT $3
             `,
-            // @ts-ignore
             [user_id, offset, page_size]
         )
 
         const total_pages_result = query(
             "SELECT COUNT(*) as total FROM url WHERE user_id = $1",
-            // @ts-ignore
             [user_id]
         )
 
@@ -66,7 +64,6 @@ const urlRepository = {
     async getIdBatch(batch_size: number) {
         const result = await query(
             `SELECT SETVAL('url_unique_id', NEXTVAL('url_unique_id') + $1 - 1) - $2 + 1 AS batch_start`,
-            // @ts-ignore
             [batch_size, batch_size]
         );
 
@@ -75,17 +72,16 @@ const urlRepository = {
 
     async createUrl(newUrl: UrlInputType) {
         const fields: string[] = [];
-        const values: any[] = [];
+        const values: UrlInputType[keyof UrlInputType][] = [];
         const placeholders: string[] = [];
         let i = 1;
 
-        for (const key of Object.keys(newUrl)) {
-            // @ts-ignore
+        type KeyType = keyof UrlInputType;
+        for (const key of Object.keys(newUrl) as KeyType[]) {
             if (newUrl[key] !== undefined) {
                 fields.push(key);                  // just the column name
 
                 placeholders.push(`$${i}`);        // parameter placeholder
-                // @ts-ignore
                 values.push(newUrl[key]);          // actual value
                 i++;
             }
@@ -140,7 +136,6 @@ const urlRepository = {
         const result = await query(`
                 SELECT * FROM create_sample_urls_for_user($1);
             `,
-            // @ts-ignore
             [user_id])
 
         return result.rows;

@@ -9,17 +9,17 @@ export const LOG_TYPE = {
 }
 
 export const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  // level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   format: format.combine(
     format.timestamp(),
     format.json()
   ),
   exceptionHandlers: [
-    new transports.Console({ level: "error" }),
+    new transports.Console({ level: "info" }),
     new transports.File({ filename: path.join("logs", "exceptions.log") })
   ],
   transports: [
-    new transports.Console({ level: "error" }),
+    new transports.Console({ level: "info" }),
     new transports.File({ filename: path.join("logs", "combined.log") }),
     new transports.File({ filename: path.join("logs", "errors.log"), level: 'error' })
   ]

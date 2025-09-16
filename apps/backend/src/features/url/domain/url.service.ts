@@ -4,11 +4,13 @@ import type { ParamsType } from "@mukhtasar/shared";
 import { URLNotFoundException } from "#features/url/domain/error-types.js";
 import { UrlInputType, UrlType } from "#features/url/types.js";
 import generate_id from "#features/url/domain/id-generator.js";
+import { BLOCKED_ALIAS } from "#features/url/data-access/const.js";
 
 import { ConflictException } from "#lib/error-handling/error-types.js";
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
-import { log, LOG_TYPE } from "#root/lib/logger/logger.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
+
 
 // Returns the details of a shortened URL
 export async function getUrlInfo({ domain, alias }: ParamsType) {
@@ -34,6 +36,10 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlTy
     if (alias) {
         const aliasExists = await urlRepository.getUrlByAlias(alias);
         if (aliasExists) {
+            throw new ConflictException("هذا الاسم المستعار غير متوفر.");
+        }
+
+        if (BLOCKED_ALIAS.includes(alias)) {
             throw new ConflictException("هذا الاسم المستعار غير متوفر.");
         }
         return saveUrl({ alias, resolvedDomain, original_url, user_id, description });
@@ -135,8 +141,7 @@ export async function getOriginalUrl(alias: string) {
 
     // If not found in Redis, fetch from the database and store in Redis
     if (!url) {
-        // @ts-ignore
-        let record = await urlRepository.getUrlByAlias(alias);
+        const record = await urlRepository.getUrlByAlias(alias);
 
         if (!record) throw new URLNotFoundException();
 

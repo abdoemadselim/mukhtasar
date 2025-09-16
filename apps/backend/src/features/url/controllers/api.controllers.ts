@@ -1,13 +1,11 @@
 import type { Request, Response } from "express";
-import { asyncStore } from "#root/main.js";
 
 import * as urlService from "#features/url/domain/url.service.js";
+import { IRequest } from "#features/url/types";
 
 import { NoException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 export async function getShortUrlInfo(req: Request, res: Response) {
-    const start = Date.now();
     // 1- prepare the data for the service
     const { domain, alias } = req.params;
 
@@ -26,32 +24,16 @@ export async function getShortUrlInfo(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Get URL info",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId
-    })
-
     // 4- send the response
     res.json(response)
 }
 
-export async function createUrl(req: Request, res: Response) {
-    const start = Date.now();
-
+export async function createUrl(req: IRequest, res: Response) {
     // 1- prepare the data for the service
     const newUrl =
     {
         ...req.body,
-        user_id: (req as any).user_id
+        user_id: req.user?.id
     }
 
     // 2- pass the prepared data to the service
@@ -72,28 +54,10 @@ export async function createUrl(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // Logging logic
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        level: "info",
-        message: "Create URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId
-    })
-
     res.status(201).json(response)
 }
 
 export async function deleteUrl(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { domain, alias } = req.params;
 
@@ -108,27 +72,11 @@ export async function deleteUrl(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Delete URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId
-    })
-
     // 4- send the response
     res.json(response)
 }
 
 export async function updateUrl(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { alias, domain } = req.params;
     const { original_url } = req.body;
@@ -148,27 +96,11 @@ export async function updateUrl(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     }
 
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Update URL",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId
-    })
-
     // 4- send the response
     res.json(response)
 }
 
 export async function getUrlClickCounts(req: Request, res: Response) {
-    const start = Date.now();
-
     // 1- prepare the data for the service
     const { alias, domain } = req.params;
 
@@ -186,20 +118,6 @@ export async function getUrlClickCounts(req: Request, res: Response) {
         code: NoException.NoErrorCode,
         errorCode: NoException.NoErrorCodeString,
     }
-
-    // TODO: Can't be abstracted?
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore()
-
-    log(LOG_TYPE.INFO, {
-        message: "Get URL click count",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId
-    })
 
     // 4- send the response
     res.json(response)

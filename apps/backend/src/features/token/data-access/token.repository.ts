@@ -32,7 +32,6 @@ const tokenRepository = {
             `INSERT INTO api_token(user_id, token_hash, label, can_create, can_update, can_delete)
              VALUES($1, $2, $3, $4, $5, $6)
              RETURNING id, user_id, label, can_create, can_update, can_delete, created_at`,
-            // @ts-ignore
             [user_id, tokenHash, label, can_create, can_update, can_delete]
         );
 
@@ -59,13 +58,11 @@ const tokenRepository = {
              WHERE user_id = $1
              ORDER BY created_at DESC
              OFFSET $2 LIMIT $3`,
-            //@ts-ignore
             [user_id, offset, page_size]
         );
 
         const total_pages_result = query(
             "SELECT COUNT(*) AS total FROM api_token WHERE user_id = $1",
-            // @ts-ignore
             [user_id]
         )
 
@@ -89,16 +86,15 @@ const tokenRepository = {
         tokenId,
         userId,
         updates
-    }: { tokenId: string, userId: string, updates: Partial<Omit<TokenInput, "userId">> }): Promise<Token> {
+    }: { tokenId: string, userId: number, updates: Partial<Omit<TokenInput, "userId">> }): Promise<Token> {
         const fields: string[] = [];
-        const values: any[] = [];
+        const values: TokenInput[keyof TokenInput][] = [];
         let i = 1;
 
-        for (const key of Object.keys(updates)) {
-            // @ts-ignore
+        type KeyType = keyof TokenInput;
+        for (const key of Object.keys(updates) as KeyType[]) {
             if (updates[key] !== undefined) {
                 fields.push(`${key} = $${i}`);
-                // @ts-ignore
                 values.push(updates[key]);
                 i++;
             }

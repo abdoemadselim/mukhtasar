@@ -85,3 +85,28 @@ export async function logout() {
         }
     }
 }
+
+export async function requestPasswordReset() {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/password-reset-mail`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // Send cookies with the request
+            credentials: "include"
+        })
+
+        if (!res.ok) {
+            throw new Error('Logout failed')
+        }
+
+        return { success: true }
+    } catch (error) {
+        console.error('Logout error:', error)
+        return {
+            success: false,
+            error: "حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى."
+        }
+    }
+}

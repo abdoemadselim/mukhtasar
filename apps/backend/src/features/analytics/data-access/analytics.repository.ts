@@ -24,7 +24,6 @@ const analyticsRepository = {
             INSERT INTO url_analytics(url_id, ip_address, browser_name, os_name, device_type, referer)
             VALUES($1, $2, $3, $4, $5, $6)
             `,
-            // @ts-ignore
             [url_id, ip_address, browser_name, os_name, device_type, referer]
         );
 
@@ -155,7 +154,7 @@ const analyticsRepository = {
                 CASE 
                     WHEN referer = 'Unknown' OR referer IS NULL THEN 'مباشر'
                     ELSE REGEXP_REPLACE(
-                        REGEXP_REPLACE(referer, '^https?://(www\.)?', ''),
+                        REGEXP_REPLACE(referer, '^https?://(www.)?', ''),
                         '/.*$', ''
                     )
                 END as website,
@@ -169,7 +168,6 @@ const analyticsRepository = {
             ORDER BY visitors DESC
             LIMIT 4
         `,
-            // @ts-ignore
             [alias, startDate, endDate]
         );
 

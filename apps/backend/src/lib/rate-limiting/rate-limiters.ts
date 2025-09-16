@@ -1,8 +1,9 @@
 import { ipKeyGenerator, rateLimit } from 'express-rate-limit'
 import { RedisStore } from 'rate-limit-redis'
 
-import { RateLimitingException } from '../error-handling/error-types.js';
-import { asyncStore } from '#root/main.js';
+import { asyncStore } from '#middlewares/routes-context.js';
+
+import { RateLimitingException } from '#lib/error-handling/error-types.js';
 import { client as redisClient } from '#lib/db/redis-connection.js';
 
 function getToken(): string {
@@ -22,7 +23,7 @@ function rateLimitingConfig(windowInMin: number, limit: number) {
 export function apiRateLimiter(windowInMin: number, limit: number) {
     return rateLimit({
         ...rateLimitingConfig(windowInMin, limit),
-        keyGenerator: (req, res) => getToken(),
+        keyGenerator: () => getToken(),
         handler: () => { throw new RateLimitingException },
         store: new RedisStore({
             sendCommand: (...args: string[]) => redisClient.sendCommand(args),
@@ -34,7 +35,7 @@ export function apiRateLimiter(windowInMin: number, limit: number) {
 export function authRateLimiter(windowInMin: number, limit: number) {
     return rateLimit({
         ...rateLimitingConfig(windowInMin, limit),
-        keyGenerator: (req, res) => ipKeyGenerator(req.ip as string),
+        keyGenerator: (req) => ipKeyGenerator(req.ip as string),
         handler: () => { throw new RateLimitingException() },
         store: new RedisStore({
             sendCommand: (...args: string[]) => redisClient.sendCommand(args),
@@ -46,7 +47,7 @@ export function authRateLimiter(windowInMin: number, limit: number) {
 export function uiRateLimiter(windowInMin: number, limit: number) {
     return rateLimit({
         ...rateLimitingConfig(windowInMin, limit),
-        keyGenerator: (req, res) => ipKeyGenerator(req.ip as string),
+        keyGenerator: (req) => ipKeyGenerator(req.ip as string),
         handler: () => { throw new RateLimitingException() },
         store: new RedisStore({
             sendCommand: (...args: string[]) => redisClient.sendCommand(args),

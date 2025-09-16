@@ -1,18 +1,21 @@
 import { createHash } from "node:crypto";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
+
+import type { NewUserType } from "@mukhtasar/shared";
 
 // TODO: auth feature depends on user feature (Is this OK?)
 import userRepository from "#features/user/data-access/user.repository.js";
 import authRepository from "#features/auth/data-access/auth.repository.js";
-import type { NewUserType } from "@mukhtasar/shared";
 import { LoginException, UnVerifiedException } from "#features/auth/domain/error-types.js";
+import { IRequest } from "#features/auth/types";
 
-import { NotFoundException, ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
+import { ResourceExpiredException, UnAuthorizedException, ValidationException } from "#lib/error-handling/error-types.js";
 import { sendVerificationMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
+import { getSecureSessionConfig } from "#lib/session-handler/session-handler.js";
 
 // TODO: Can't we create a new type instead of omitting the password_confirmation everywhere?
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
@@ -71,7 +74,7 @@ async function isPasswordPwned(password: string): Promise<boolean> {
 
     // returns true if at there's at least 1 breached password hash the same as the user password
     const isPwned = res.split("\n").some((hash) => {
-        const [hashSuffix, count] = hash.trim().split(":");
+        const [hashSuffix] = hash.trim().split(":");
         return hashSuffix === password_suffix;
     })
 
@@ -83,8 +86,8 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
     try {
         decodedToken = jwt.verify(token, process.env.EMAIL_VERIFICATION_SECRET_KEY as string) as JwtPayload
         // TODO: how a user can asks for another verification link
-    } catch (error: any) {
-        if (error.name === "TokenExpiredError") {
+    } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
             throw new ResourceExpiredException("This verification link has expired.");
         }
 
@@ -136,7 +139,7 @@ export async function login({ email, password }: { email: string, password: stri
 
 // TODO: the service shouldn't depend on the req, res objects of express
 export function authSession() {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return async (req: IRequest, res: Response, next: NextFunction) => {
         const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
 
         // No cookie? Not authenticated
@@ -148,11 +151,12 @@ export function authSession() {
 
         // No session in Redis (expired or invalidated)?
         if (!session) {
-            res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax"
-            });
+            // Clear cookie on client
+            const sessionConfig = getSecureSessionConfig({
+                key: process.env.AUTH_SESSION_NAME as string
+            })
+
+            res.clearCookie(sessionConfig.key);
 
             throw new UnAuthorizedException();
         }
@@ -163,7 +167,6 @@ export function authSession() {
             throw new UnVerifiedException()
         }
 
-        // @ts-ignore
         req.user = {
             name: user.name,
             email: user.email,

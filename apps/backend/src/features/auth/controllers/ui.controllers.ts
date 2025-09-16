@@ -2,34 +2,32 @@ import { randomUUID } from "node:crypto";
 import type { Request, Response } from "express";
 
 // TODO: a feature import from the main? (something's wrong here)
-import { asyncStore } from "#root/main.js";
 
 import type { NewUserType } from "@mukhtasar/shared";
 import * as authService from "#features/auth/domain/auth.service.js"
+import urlRepository from "#features/url/data-access/url.repository.js";
+import { IRequest } from "#features/auth/types";
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from "#lib/logger/logger.js";
-import urlRepository from "#features/url/data-access/url.repository.js";
+import { getSecureSessionConfig } from "#lib/session-handler/session-handler.js";
 
 // ---------------------- LOGIN ----------------------
-export async function login(req: Request, res: Response) {
-    const start = Date.now();
-
+export async function login(req: IRequest, res: Response) {
     // Validate the data
     const { email, password } = req.body as { email: string, password: string };
     const user = await authService.login({ email, password })
 
-    // @ts-ignore
     req.user = user;
 
     const sessionId = randomUUID()
-    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
-        maxAge: Number(process.env.SESSION_DURATION),
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax"
+    const sessionConfig = getSecureSessionConfig({
+        key: process.env.AUTH_SESSION_NAME as string,
+        value: sessionId,
+        age: Number(process.env.SESSION_DURATION)
     });
+
+    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
         `sessions:${sessionId}`,
@@ -54,42 +52,25 @@ export async function login(req: Request, res: Response) {
         }
     };
 
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore();
-
-    log(LOG_TYPE.INFO, {
-        message: "User login",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId,
-        userEmail: email // ✅ safe to log email (not password!)
-    });
-
     res.json(response);
 }
 
 // ---------------------- REGISTER ----------------------
-export async function signup(req: Request, res: Response) {
-    const start = Date.now();
+export async function signup(req: IRequest, res: Response) {
     const { email, password, name } = req.body as NewUserType;
     const user = await authService.createUser({ email, password, name })
 
-    // @ts-ignore
     req.user = user
 
     const sessionId = randomUUID()
-    // httpOnly: so even if a malicious script managed to land on our server, it can't access the cookie
-    // secure: so the session is only sent over HTTPS (anyway, the server runs only over HTTPS)
-    // sameSite: lax (default value): to prevent CSRF attacks (attackers do something on behalf of users because the user's cookie is sent with the malicious request)
-    res.cookie(process.env.AUTH_SESSION_NAME as string, sessionId, {
-        maxAge: Number(process.env.SESSION_DURATION),
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax"
+
+    const sessionConfig = getSecureSessionConfig({
+        key: process.env.AUTH_SESSION_NAME as string,
+        value: sessionId,
+        age: Number(process.env.SESSION_DURATION)
     });
+
+    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
 
     redisClient.setEx(
         `sessions:${sessionId}`,
@@ -115,20 +96,6 @@ export async function signup(req: Request, res: Response) {
         errorCode: NoException.NoErrorCodeString,
     };
 
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore();
-
-    log(LOG_TYPE.INFO, {
-        message: "User registered",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 201,
-        durationMs,
-        tokenId: store?.tokenId,
-        userEmail: email
-    });
-
     urlRepository.addSampleUrls(Number(user.id));
 
     res.status(201).json(response)
@@ -136,8 +103,6 @@ export async function signup(req: Request, res: Response) {
 
 // ---------------------- VERIFY EMAIL ----------------------
 export async function verify(req: Request, res: Response) {
-    const start = Date.now();
-
     const { token } = req.query as { token: string };
     const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
     const session = await redisClient.get(`sessions:${sessionId}`)
@@ -146,20 +111,6 @@ export async function verify(req: Request, res: Response) {
     if (session) {
         const user = JSON.parse(session);
         if (user.verified) {
-            const durationMs = Date.now() - start;
-            const store = asyncStore.getStore();
-
-            log(LOG_TYPE.INFO, {
-                message: "Email already verified",
-                requestId: store?.requestId,
-                method: req.method,
-                path: req.originalUrl,
-                status: 200,
-                durationMs,
-                tokenId: store?.tokenId,
-                userEmail: user.email
-            });
-
             res.redirect(process.env.WEB_URL as string)
         }
     }
@@ -167,26 +118,13 @@ export async function verify(req: Request, res: Response) {
     const user = await authService.verifyEmail({ token, sessionId })
 
     if (!user) {
-        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax"
-        });
+        // Clear cookie on client
+        const sessionConfig = getSecureSessionConfig({
+            key: process.env.AUTH_SESSION_NAME as string
+        })
+
+        res.clearCookie(sessionConfig.key);
     }
-
-    const durationMs = Date.now() - start;
-    const store = asyncStore.getStore();
-
-    log(LOG_TYPE.INFO, {
-        message: "Email verified",
-        requestId: store?.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        status: 200,
-        durationMs,
-        tokenId: store?.tokenId,
-        userEmail: user?.email
-    });
 
     res.redirect(process.env.WEB_URL as string)
 }
@@ -198,11 +136,11 @@ export async function logout(req: Request, res: Response) {
     }
 
     // Clear cookie on client
-    res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax"
-    });
+    const sessionConfig = getSecureSessionConfig({
+        key: process.env.AUTH_SESSION_NAME as string
+    })
+
+    res.clearCookie(sessionConfig.key);
 
     const response = {
         errors: [],
@@ -214,74 +152,6 @@ export async function logout(req: Request, res: Response) {
     return res.status(200).json(response);
 }
 
-// // ---------------------- FORGOT PASSWORD ----------------------
-// export async function forgotPassword(req: Request, res: Response) {
-//     const start = Date.now();
-//     const { email } = req.body as { email: string };
-
-//     const user = await authService.findUserByEmail(email);
-//     if (!user) {
-//         const durationMs = Date.now() - start;
-//         const store = asyncStore.getStore();
-
-//         log(LOG_TYPE.INFO, {
-//             message: "Forgot password attempt for non-existent user",
-//             requestId: store?.requestId,
-//             method: req.method,
-//             path: req.originalUrl,
-//             status: 200,
-//             durationMs,
-//             tokenId: store?.tokenId,
-//             userEmail: email
-//         });
-
-//         // Return generic response to avoid leaking user existence
-//         return res.json({
-//             errors: [],
-//             data: {
-//                 message: "If the email exists, a password reset link will be sent"
-//             }
-//         });
-//     }
-
-//     const resetToken = randomUUID();
-//     const RESET_TOKEN_DURATION = 1000 * 60 * 60; // 1 hour
-//     await redisClient.setEx(
-//         `reset:${resetToken}`,
-//         RESET_TOKEN_DURATION / 1000,
-//         JSON.stringify({
-//             email: user.email,
-//             userId: user.id
-//         })
-//     );
-
-//     await authService.sendPasswordResetEmail(user.email, resetToken);
-
-//     const response = {
-//         errors: [],
-//         data: {
-//             message: "If the email exists, a password reset link will be sent",
-//             resetToken // Included for testing; in production, this would be sent via email
-//         }
-//     };
-
-//     const durationMs = Date.now() - start;
-//     const store = asyncStore.getStore();
-
-//     log(LOG_TYPE.INFO, {
-//         message: "Password reset requested",
-//         requestId: store?.requestId,
-//         method: req.method,
-//         path: req.originalUrl,
-//         status: 200,
-//         durationMs,
-//         tokenId: store?.tokenId,
-//         userEmail: email
-//     });
-
-//     res.json(response);
-// }
-
 export async function verifyUser(req: Request, res: Response) {
     const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
 
@@ -292,12 +162,12 @@ export async function verifyUser(req: Request, res: Response) {
     const session = await redisClient.get(`sessions:${sessionId}`)
 
     if (!session) {
-        res.clearCookie(process.env.AUTH_SESSION_NAME as string, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax"
-        });
+        // Clear cookie on client
+        const sessionConfig = getSecureSessionConfig({
+            key: process.env.AUTH_SESSION_NAME as string
+        })
 
+        res.clearCookie(sessionConfig.key);
         throw new UnAuthorizedException()
     }
 

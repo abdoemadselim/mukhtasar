@@ -1,6 +1,8 @@
-import { asyncStore } from "#root/main.js";
-import { NextFunction, Request, Response } from "express";
+import { AsyncLocalStorage } from "node:async_hooks";
 import { randomUUID } from "node:crypto";
+import { NextFunction, Request, Response } from "express";
+
+export const asyncStore = new AsyncLocalStorage<{ requestId: string, tokenId: string }>()
 
 /** Attach a requestId for each coming request, so all subsequent logs for
  *  a particular request has the same requestId attached to them (correlated request id)

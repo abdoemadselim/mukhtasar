@@ -12,6 +12,7 @@
 - [Getting Started](#getting-started)
 - [Backend Internals](#backend-internals)
   - [DB Schema](#db-schema)
+- [Design patterns and best practices](#design-patterns-and-best-practices)
 
 ---
 
@@ -315,3 +316,8 @@ Follow these steps to run the project locally:
 
 ### DB Schema
 ![DB ERD](apps/backend/docs//imgs/db%20schema.png)
+
+## Design patterns and best practices
+
+- Passing the arguments down to functions as objects when they are more than one
+  - To avoid passing parameters in a wrong order

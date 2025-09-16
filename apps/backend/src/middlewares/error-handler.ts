@@ -1,9 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
+import { asyncStore } from "#middlewares/routes-context.js";
 
-import { HttpException, InternalServerException, ValidationException } from "../lib/error-handling/error-types.js";
+import { HttpException, InternalServerException, ValidationException } from "#lib/error-handling/error-types.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
-import { asyncStore } from "#root/main.js";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandlerMiddleware = (err: Error | HttpException, req: Request, res: Response, next: NextFunction) => {
     const store = asyncStore.getStore();
 

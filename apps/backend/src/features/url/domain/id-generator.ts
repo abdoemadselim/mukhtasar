@@ -4,7 +4,7 @@ let local_counter = 0;
 const batch_size = 500
 
 async function get_new_batch() {
-    let { batch_start } = await urlRepository.getIdBatch(batch_size);
+    const { batch_start } = await urlRepository.getIdBatch(batch_size);
     batch_start_id = Number(batch_start);
 }
 
@@ -20,7 +20,7 @@ export default async function generate_id(): Promise<number> {
     }
 
     // Update local counter, so no need to call DB
-    let current_id = batch_start_id + local_counter;
+    const current_id = batch_start_id + local_counter;
     local_counter++
 
     // Why machine_id? So it's easier to scale out by adding more machines

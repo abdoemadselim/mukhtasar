@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export type UrlType = {
   id: number;
   alias: string;
@@ -18,4 +20,10 @@ export type UrlInputType = {
   alias: string;
   domain: string;
   original_url: string;
+}
+
+export interface IRequest extends Request {
+    user?: {
+        id: number
+    }
 }

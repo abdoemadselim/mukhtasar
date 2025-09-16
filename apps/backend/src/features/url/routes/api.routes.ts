@@ -14,7 +14,6 @@ import {
     createUrl,
     deleteUrl,
     getShortUrlInfo,
-    getUrlClickCounts,
     updateUrl
 } from "#features/url/controllers/api.controllers.js"
 
@@ -50,11 +49,4 @@ router.patch("/:domain/:alias",
     validateRequest([paramsSchema, toUpdateUrlSchema]),
     updateUrl
 )
-
-// // Get the click count for a URL
-// router.get("/:domain/:alias/count",
-//     authToken(READ_URL_PERMISSION),
-//     validateRequest([paramsSchema]),
-//     getUrlClickCounts
-// )
 export default router;

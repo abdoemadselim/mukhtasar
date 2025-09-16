@@ -5,7 +5,8 @@ import authRoutes from "#features/auth/routes/ui.routes.js"
 import urlRoutes from "#features/url/routes/ui.routes.js"
 import analyticsRoutes from "#features/analytics/routes/ui.routes.js"
 import { authSession } from "#features/auth/domain/auth.service.js"
-import { uiRateLimiter } from "#root/lib/rate-limiting/rate-limiters.js"
+
+import { uiRateLimiter } from "#lib/rate-limiting/rate-limiters.js"
 
 const router = Router()
 
