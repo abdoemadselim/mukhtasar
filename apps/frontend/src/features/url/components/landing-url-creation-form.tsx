@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ShortUrlSchema, ShortUrlType } from "@mukhtasar/shared"
@@ -94,8 +94,8 @@ export default function LandingUrlCreationForm() {
             {/* Success result */}
             {
                 data && (
-                    <>
-                        <Button className="mb-8 px-8 text-lg py-2 cursor-pointer" asChild>
+                    <section className="flex flex-col justify-between items-center">
+                        <Button className="mb-8 px-8 text-lg py-2 mt-7 sm:mt-2 cursor-pointer" asChild>
                             <Link
                                 href="/auth/signup"
                             >
@@ -131,88 +131,97 @@ export default function LandingUrlCreationForm() {
                                 </div>
                             </div>
                         </div>
-                    </>
-                )}
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
-                    <div className="pb-4">
-                        <FormField control={form.control} name="original_url" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل هنا</FormLabel>
-                                <FormControl>
-                                    <Input {...field} className="text-end h-[45px] border-gray-300" placeholder="http://example.com/very-long-url" />
-                                </FormControl>
-                                <div className="min-h-[20px]" >
-                                    <FormMessage />
-                                </div>
-                            </FormItem>
-                        )}>
-                        </FormField>
-                    </div>
-
-                    <div>
-                        <p className="pb-3 text-lg">خصص رابطك</p>
-                        <div className="flex items-center sm:gap-4 md:w-[80%] w-full sm:flex-row flex-col">
-                            <div className="w-full">
-                                <FormField control={form.control} name="alias" render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-muted-foreground pb-3">الاسم المستعار (اختياري)</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} className="text-end border-gray-300 w-full" placeholder="products" />
-                                        </FormControl>
-                                        <div className="min-h-[20px]" >
-                                            <FormMessage />
-                                        </div>
-                                    </FormItem>
-                                )}>
-                                </FormField>
-                            </div>
-
-                            <div className="w-full">
-                                <FormField control={form.control} name="domain" render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-muted-foreground pb-3">النطاق</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger className="w-full border-gray-300">
-                                                    <SelectValue placeholder="mukhtasar.pro" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <div className="min-h-[20px]" >
-                                            <FormMessage />
-                                        </div>
-                                    </FormItem>
-                                )}>
-                                </FormField>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Guest user limit warning */}
-                    {!user && !canCreateUrl && (
-                        <div className="mt-4">
-                            <Alert className="border-amber-200 bg-amber-50">
-                                <AlertCircle className="h-4 w-4 text-amber-600" />
-                                <AlertDescription className="text-amber-800">
-                                    كزائر، يمكنك إنشاء {5 - (form.formState.isSubmitting ? 0 : 0)} روابط مجانية.
-                                    <div className="flex gap-2 items-center">
-                                        <Link href="/auth/signup" className="underline font-medium mr-1">أنشئ حساباً</Link>
-                                        لإنشاء روابط أكثر
+                    </section>
+                )
+            }
+            <div className="w-fit m-auto">
+                {!data &&
+                    <p className="pb-4 text-xl text-right">
+                        جرب مُختصِر هنا:
+                    </p>
+                }
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
+                        <div className="pb-4">
+                            <FormField control={form.control} name="original_url" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} className="text-end h-[45px] border-gray-300" placeholder="http://example.com/very-long-url" />
+                                    </FormControl>
+                                    <div className="min-h-[20px]" >
+                                        <FormMessage />
                                     </div>
-                                </AlertDescription>
-                            </Alert>
+                                </FormItem>
+                            )}>
+                            </FormField>
                         </div>
-                    )}
 
-                    <Button className="mt-10 cursor-pointer w-full md:text-2xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
-                        {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
-                    </Button>
-                </form>
-            </Form>
+                        <div>
+                            <p className="pb-3 text-lg">خصص رابطك</p>
+                            <div className="flex items-center sm:gap-4 md:w-[80%] w-full sm:flex-row flex-col">
+                                <div className="w-full">
+                                    <FormField control={form.control} name="alias" render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-muted-foreground pb-3">الاسم المستعار (اختياري)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} className="text-end border-gray-300 w-full" placeholder="products" />
+                                            </FormControl>
+                                            <div className="min-h-[20px]" >
+                                                <FormMessage />
+                                            </div>
+                                        </FormItem>
+                                    )}>
+                                    </FormField>
+                                </div>
+
+                                <div className="w-full">
+                                    <FormField control={form.control} name="domain" render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-muted-foreground pb-3">النطاق</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger className="w-full border-gray-300">
+                                                        <SelectValue placeholder="mukhtasar.pro" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <div className="min-h-[20px]" >
+                                                <FormMessage />
+                                            </div>
+                                        </FormItem>
+                                    )}>
+                                    </FormField>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Guest user limit warning */}
+                        {!user && !canCreateUrl && (
+                            <div className="mt-4">
+                                <Alert className="border-amber-200 bg-amber-50">
+                                    <AlertCircle className="h-4 w-4 text-amber-600" />
+                                    <AlertDescription className="text-amber-800">
+                                        كزائر، يمكنك إنشاء {5 - (form.formState.isSubmitting ? 0 : 0)} روابط مجانية.
+                                        <div className="flex gap-2 items-center">
+                                            <Link href="/auth/signup" className="underline font-medium mr-1">أنشئ حساباً</Link>
+                                            لإنشاء روابط أكثر
+                                        </div>
+                                    </AlertDescription>
+                                </Alert>
+                            </div>
+                        )}
+
+                        <Button className="mt-10 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
+                            {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
+                        </Button>
+                    </form>
+                </Form>
+
+            </div >
         </>
     )
 }
