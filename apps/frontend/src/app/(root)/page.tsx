@@ -10,10 +10,11 @@ import { getSession } from "@/features/auth/service/auth-session";
 
 export default async function HomePage() {
   const session = await getSession()
+
   if (session) {
     redirect("/dashboard/urls")
   }
-  
+
   return (
     <>
       <HeroSection />
