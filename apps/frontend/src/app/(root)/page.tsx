@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import HeroSection from "@/components/layout/hero-section";
 import dynamic from "next/dynamic";
-import { BadgeQuestionMark, Banknote, Brain, Package, Sparkle } from "lucide-react";
+import { BadgeQuestionMark } from "lucide-react";
 
 const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
 
