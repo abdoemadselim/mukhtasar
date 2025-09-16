@@ -94,35 +94,44 @@ export default function LandingUrlCreationForm() {
             {/* Success result */}
             {
                 data && (
-                    <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
-                        <div className="flex items-center gap-2 mb-4">
-                            <CheckCircle className="h-5 w-5 text-accent-foreground" />
-                            <h3 className="text-lg font-semibold text-primary">تم إنشاء الرابط بنجاح!</h3>
-                        </div>
+                    <>
+                        <Button className="mb-8 px-8 text-lg py-2 cursor-pointer" asChild>
+                            <Link
+                                href="/auth/signup"
+                            >
+                                اشترك معنا
+                            </Link>
+                        </Button>
+                        <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
+                            <div className="flex items-center gap-2 mb-4">
+                                <CheckCircle className="h-5 w-5 text-accent-foreground" />
+                                <h3 className="text-lg font-semibold text-primary">تم إنشاء الرابط بنجاح!</h3>
+                            </div>
 
-                        <div className="space-y-3">
-                            <div>
-                                <label className="text-sm font-medium text-gray-700">الرابط المختصر:</label>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <Input
-                                        value={data.short_url}
-                                        readOnly
-                                        className="bg-white"
-                                    />
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={async () => await handleCopy()}
-                                        className="flex items-center gap-1 cursor-pointer"
-                                    >
-                                        <Copy className="h-4 w-4" />
-                                        نسخ
-                                    </Button>
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700">الرابط المختصر:</label>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <Input
+                                            value={data.short_url}
+                                            readOnly
+                                            className="bg-white"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={async () => await handleCopy()}
+                                            className="flex items-center gap-1 cursor-pointer"
+                                        >
+                                            <Copy className="h-4 w-4" />
+                                            نسخ
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">

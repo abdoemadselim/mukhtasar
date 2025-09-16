@@ -2,6 +2,8 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 
 import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
+import { Button } from "@/components/ui/button";
+import Link from "next/link.js";
 const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
 
 const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-gradient-text"))
@@ -9,7 +11,7 @@ const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-grad
 export default function HeroSection() {
     return (
         <section className="flex flex-col justify-center items-center pb-10 pt-30">
-            <header className="text-center mb-4">
+            <header className="text-center mb-2">
                 <div className="flex justify-center items-center gap-4">
                     <Image
                         src="/logo-lg.webp"
@@ -29,6 +31,7 @@ export default function HeroSection() {
                     <p className="text-base hidden sm:block md:text-md lg:text-xl text-muted-foreground leading-relaxed mb-4">مع روابط قصيرة معبرة تحمل نطاق موقعك</p>
                 </div>
             </header>
+
             <LandingUrlCreationForm />
         </section>
     )
