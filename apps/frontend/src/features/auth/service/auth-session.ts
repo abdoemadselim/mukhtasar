@@ -12,7 +12,6 @@ export async function getSession() {
       cache: "no-store", // always fresh session
     })
 
-
     if (!res.ok) {
       console.warn(`getSession: backend responded with ${res.status}`)
       return null
