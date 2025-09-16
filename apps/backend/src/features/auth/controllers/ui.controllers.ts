@@ -134,7 +134,7 @@ export async function verify(req: Request, res: Response) {
 export async function logout(req: Request, res: Response) {
     const { sessionId } = req.cookies[process.env.AUTH_SESSION_NAME as string];
     if (sessionId) {
-        redisClient.del(`session:${sessionId}`);
+        redisClient.del(`sessions:${sessionId}`);
     }
 
     // Clear cookie on client
@@ -142,7 +142,7 @@ export async function logout(req: Request, res: Response) {
         key: process.env.AUTH_SESSION_NAME as string
     })
 
-    res.clearCookie(sessionConfig.key);
+    res.clearCookie(sessionConfig.key, sessionConfig.options);
 
     const response = {
         errors: [],

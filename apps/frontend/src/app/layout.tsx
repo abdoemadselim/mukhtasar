@@ -75,7 +75,7 @@ export default function RootLayout({
               <Analytics />
             </UrlProvider>
           </AuthProvider>
-          <Toaster position="top-right" richColors />
+          <Toaster position="top-center" richColors />
         </ClientProvider>
       </body>
     </html>
