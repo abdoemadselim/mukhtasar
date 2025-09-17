@@ -9,7 +9,6 @@ addEventListener('fetch', event => {
 async function handleRequest(request, event) {
   const url = new URL(request.url)
   const path = url.pathname
-
   console.log('Worker intercepted:', path)
 
   if (path.startsWith("/_vercel")) {
@@ -70,12 +69,10 @@ async function handleRedirect(request, event) {
     }
 
     console.log('Looking up alias:', alias)
-
     let longUrl = cache.get(alias)
 
     if (!longUrl) {
       const backendUrl = `https://api.mukhtasar.pro/${alias}`
-
       const backendResponse = await fetch(backendUrl, {
         method: 'GET',
         headers: {
@@ -99,8 +96,7 @@ async function handleRedirect(request, event) {
     }
 
     // ✅ Correctly schedule analytics without blocking redirect
-    event.waitUntil(sendAnalytics(alias, request))
-
+    event.waitUntil(sendAnalytics(alias, request, event))
     return Response.redirect(longUrl, 302)
   } catch (error) {
     console.error('Worker error:', error)
@@ -108,13 +104,13 @@ async function handleRedirect(request, event) {
   }
 }
 
-async function sendAnalytics(alias, request) {
+async function sendAnalytics(alias, request, event) {
   const analyticsUrl = `https://api.mukhtasar.pro/ui/analytics/`
 
   await fetch(analyticsUrl, {
     method: 'POST',
     headers: {
-      "Authorization": "Bearer Randompasswordisherenooneknowsabout123",
+      "Authorization": `Bearer ${WORKER_SECRET}`,
       'Content-Type': 'application/json',
       'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
       'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
