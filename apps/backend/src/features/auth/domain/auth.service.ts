@@ -181,7 +181,7 @@ export function authSession() {
 export async function sendResetPasswordMail(email: string) {
     const existent_user = await userRepository.getUserByEmail(email)
     if (!existent_user) {
-        throw new ValidationException({ email: { message: "لا يوجد حساب مسجَّل مسبقًا بهذا البريد الإلكتروني." } })
+        return;
     }
 
     const resetPasswordToken = jwt.sign({

@@ -44,6 +44,7 @@ export default {
         "security",
         "deploy",
         "email",
+        "worker",
         "navbar",
         "bugs",
         "rate-limit"

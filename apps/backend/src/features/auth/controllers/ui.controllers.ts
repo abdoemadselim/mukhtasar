@@ -191,7 +191,7 @@ export async function verifyUser(req: Request, res: Response) {
 export async function sendResetPasswordMail(req: Request, res: Response) {
     const { email } = req.body as { email: string };
 
-    authService.sendResetPasswordMail(email);
+    await authService.sendResetPasswordMail(email);
 
     const response = {
         errors: [],
