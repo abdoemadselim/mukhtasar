@@ -1,10 +1,12 @@
-import { apiClient } from "@/lib/api-client";
+
 import { TokenType } from "@mukhtasar/shared";
+
+import { apiClient } from "@/lib/api-client";
 
 export async function createToken(data: TokenType) {
   return apiClient.post("/token", data, {
     includeCredentials: true,
-    throwOnError: true, // يرمي errors بدل ما يرجع object
+    throwOnError: true,
   });
 }
 

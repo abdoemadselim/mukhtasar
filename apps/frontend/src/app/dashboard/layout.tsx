@@ -30,7 +30,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <AppSidebar variant="inset" side="right" className="pt-4" />
       <SidebarInset className="border-r-1">
         <SiteHeader />
-        {children}
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <div className="flex flex-col">
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

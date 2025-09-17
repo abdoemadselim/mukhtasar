@@ -1,0 +1,32 @@
+import { Suspense } from "react";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
+
+import CreateTokenDialog from "@/features/token/components/create-token-dialog";
+import TokensTable from "@/features/token/components/tokens-table";
+
+export default function TokenContent() {
+    return (
+        <>
+            <div className="flex flex-row-reverse justify-between px-4 lg:px-6 pb-4">
+                <CreateTokenDialog>
+                    <Button size="sm" className="cursor-pointer">
+                        <Plus />
+                        <span className="hidden lg:inline text-md">أنشىء رمز وصول</span>
+                    </Button>
+                </CreateTokenDialog>
+                <div className="flex gap-4 flex-col lg:flex-row lg:items-center">
+                    <h1 className="text-2xl md:text-3xl">رموز وصولك (APIs)</h1>
+                    <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg hidden sm:block" href="https://api.mukhtasar.pro/api/docs"> (API documentation) وثائق المطورين</Link>
+                </div>
+            </div>
+
+            <Suspense fallback={<DataTableSkeleton />}>
+                <TokensTable />
+            </Suspense>
+        </>
+    )
+}
