@@ -19,7 +19,7 @@ export default function TokenContent() {
                     </Button>
                 </CreateTokenDialog>
                 <div className="flex gap-4 flex-col lg:flex-row lg:items-center">
-                    <h1 className="text-2xl md:text-3xl">رموز وصولك (APIs)</h1>
+                    <h1 className="text-2xl md:text-3xl">رموز وصولك (APIs tokens)</h1>
                     <Link className="bg-gray-600 text-white p-1 px-3 rounded-lg hidden sm:block" href="https://api.mukhtasar.pro/api/docs"> (API documentation) وثائق المطورين</Link>
                 </div>
             </div>
