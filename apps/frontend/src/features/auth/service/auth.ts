@@ -9,7 +9,6 @@ export async function signup(data: NewUserType) {
             headers: {
                 "Content-Type": "application/json"
             },
-            // To allow the browser to accept the Set-Cookie response header
             credentials: "include"
         })
 
@@ -41,7 +40,6 @@ export async function login(data: LoginType) {
             headers: {
                 "Content-Type": "application/json"
             },
-            // To allow the browser to accept the Set-Cookie response header
             credentials: "include"
         })
 

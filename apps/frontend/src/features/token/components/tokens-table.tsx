@@ -2,7 +2,7 @@
 
 import { AlertCircleIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { FullTokenType, TokenType } from "@mukhtasar/shared";
+import { FullTokenType } from "@mukhtasar/shared";
 
 import { DataTable } from "@/components/data-table";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -20,7 +20,6 @@ export default function TokensTable() {
     const pageSize = Number(searchParams.get("pageSize")) || 10;
     const { data, isError, isPending, error } = useGetTokens({ page: currentPage, page_size: pageSize })
 
-
     // Prepare the pagination state for tanstack table to work properly
     const paginationState = {
         pageIndex: currentPage - 1, // Why -1? Tanstack table is zero-indexed (so 1st page is 0 not 1)
@@ -31,7 +30,6 @@ export default function TokensTable() {
     if (isPending) {
         return <DataTableSkeleton />
     }
-
 
     return (
         <>

@@ -20,13 +20,12 @@ import { openToaster } from "@/components/ui/sonner"
 
 import { useUpdateUrl } from "@/features/url/hooks/urls-query"
 
-
 type UpdateUrlDialogProps = {
     children: React.ReactNode
     currentUrl: FullUrlType
 }
 
-export function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialogProps) {
+export default function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialogProps) {
     const {
         register,
         handleSubmit,

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from "react"
-import { FullUrlType, ParamsType } from "@mukhtasar/shared"
+import { FullUrlType } from "@mukhtasar/shared"
 
 import { openToaster } from "@/components/ui/sonner"
 import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
@@ -17,7 +17,7 @@ type DeleteConfirmationDialogProps = {
     resource: FullUrlType,
 }
 
-export function DeleteUrlDialog({
+export default function DeleteUrlDialog({
     children,
     title,
     resource,

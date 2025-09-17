@@ -1,6 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createUrl, deleteUrl, getUrls, updateUrl } from "@/features/url/service/urls-service"
 import { FullUrlType, ParamsType, ShortUrlType, ToUpdateUrlType } from "@mukhtasar/shared";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+
+import { createUrl, deleteUrl, getUrls, updateUrl } from "@/features/url/service/urls-service"
 
 export function useGetUrls({ page, page_size }: { page: number, page_size: number }) {
     return useQuery<{ urls: FullUrlType[], total: number }>({
@@ -8,7 +9,7 @@ export function useGetUrls({ page, page_size }: { page: number, page_size: numbe
         queryFn: () => getUrls({ page, page_size }),
         staleTime: 5 * 60 * 1000, // 5 minutes,
         gcTime: 10 * 60 * 1000,
-        retry: false,
+        retry: 2,
         refetchOnWindowFocus: true,
     })
 }
@@ -40,7 +41,7 @@ export function useCreateUrl() {
 export function useUpdateUrl() {
     const queryClient = useQueryClient();
     const { mutateAsync, isError, isPending, error, isSuccess } = useMutation({
-        mutationFn: (toUpdateUrl:  ParamsType & ToUpdateUrlType) => updateUrl(toUpdateUrl),
+        mutationFn: (toUpdateUrl: ParamsType & ToUpdateUrlType) => updateUrl(toUpdateUrl),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["urls"] })
         }

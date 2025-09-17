@@ -29,7 +29,6 @@ export const columns: ColumnDef<FullTokenType>[] = [
     {
         accessorKey: "label",
         header: () => <p className="lg:text-lg">التسمية</p>,
-        enableHiding: false,
         cell: (({ row }) => (
             <p className="lg:text-lg font-medium">{row.original.label}</p>
         ))

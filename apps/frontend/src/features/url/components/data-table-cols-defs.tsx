@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { toast } from "sonner"
+import dynamic from "next/dynamic.js"
 
 import {
   ChartArea,
@@ -23,11 +24,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-import { UpdateUrlDialog } from "@/features/url/components/update-url-dialog"
-import { DeleteUrlDialog } from "@/features/url/components/delete-url-dialog"
 import { openToaster } from "@/components/ui/sonner"
 
+const UpdateUrlDialog = dynamic(() => import("@/features/url/components/update-url-dialog"), {
+  loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
+  ssr: false
+});
+
+const DeleteUrlDialog = dynamic(() => import("@/features/url/components/delete-url-dialog"), {
+  loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
+  ssr: false
+});
 
 export const columns: ColumnDef<FullUrlType>[] = [
   {
@@ -107,15 +114,6 @@ export const columns: ColumnDef<FullUrlType>[] = [
       </div>
     ),
   },
-  // {
-  //   accessorKey: "clicks",
-  //   header: () => <div className="w-full text-right lg:text-lg">عدد النقرات </div>,
-  //   cell: ({ row }) => (
-  //     <div className="text-right lg:text-lg">
-  //       {row.original.click_count}
-  //     </div>
-  //   ),
-  // },
   {
     id: "actions",
     header: () => <p className="lg:text-lg">إجراءات</p>,

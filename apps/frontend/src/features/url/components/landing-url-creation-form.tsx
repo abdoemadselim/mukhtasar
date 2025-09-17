@@ -136,7 +136,7 @@ export default function LandingUrlCreationForm() {
             }
             <div className="w-fit m-auto">
                 {!data &&
-                    <p className="pb-4 text-xl text-right">
+                    <p className="pb-4 text-xl text-right mt-4">
                         جرب مُختصِر هنا:
                     </p>
                 }

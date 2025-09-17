@@ -1,9 +1,8 @@
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { BadgeQuestionMark } from "lucide-react";
 
 import HeroSection from "@/components/layout/hero-section";
-const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
+import { Highlighter } from "@/components/ui/highlighter";
 
 export default function HomePage() {
   return (

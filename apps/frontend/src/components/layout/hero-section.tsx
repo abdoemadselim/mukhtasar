@@ -1,10 +1,10 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
 const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
-
 const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-gradient-text"))
+
+import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
 
 export default function HeroSection() {
     return (
