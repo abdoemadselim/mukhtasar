@@ -25,7 +25,7 @@ import UserActionsDropDown from "@/features/user/components/user-actions-drop-do
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/pages/pricing", label: "خطط الأسعار", active: true },
-  { href: "http://api.mukhtasar.pro/api/docs", label: "API" },
+  { href: `${process.env.NEXT_PUBLIC_API_URL}/api/docs`, label: "API" },
   { href: "/dashboard/urls", label: "الروابط" },
 ]
 
