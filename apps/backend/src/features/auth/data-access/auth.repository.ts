@@ -12,7 +12,7 @@ const authRepository = {
             users(name, email, password)
             VALUES($1, $2, $3)
             RETURNING id, name, email
-        `, [email, password, name])
+        `, [name, email, password])
 
         return result.rows[0]
     },
