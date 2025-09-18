@@ -12,10 +12,10 @@ const domainRepository = {
 
     async getUserDomains(userId: number) {
         const result = await query(`
-            SELECT id, domain_string, date_added
-            FROM domain
+            SELECT id, domain, status, created_at
+            FROM custom_domain
             WHERE user_id = $1
-            ORDER BY date_added DESC
+            ORDER BY created_at DESC
         `, [String(userId)]);
 
         return result.rows;

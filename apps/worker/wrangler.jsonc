@@ -4,7 +4,7 @@
 	"compatibility_date": "2025-08-29",
 	"routes": [
 		"mukhtasar.pro/*",
-		"www.mukhtasar.pro/*"
+		"www.mukhtasar.pro/*",
 	],
 	"observability": {
 		"enabled": true

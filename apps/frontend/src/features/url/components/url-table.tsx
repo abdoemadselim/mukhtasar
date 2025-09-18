@@ -2,10 +2,10 @@
 
 import { AlertCircleIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { FullUrlType } from "@mukhtasar/shared"; 
+import { FullUrlType } from "@mukhtasar/shared";
 
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { DataTable } from "@/components/data-table";
+import { PaginatedDataTable } from "@/components/data-table/paginated-data-table";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 
 import { columns } from "@/features/url/components/data-table-cols-defs";
@@ -39,7 +39,7 @@ export default function UrlTable() {
                     <AlertTitle>{error.message}</AlertTitle>
                 </Alert>
             }
-            <DataTable<FullUrlType> data={data?.urls || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
+            <PaginatedDataTable<FullUrlType> data={data?.urls || []} total={data?.total || 0} pagination={paginationState} columns={columns} />
         </>
     )
 

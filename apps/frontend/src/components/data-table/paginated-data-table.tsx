@@ -34,7 +34,7 @@ import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/p
 
 import Link from "next/link"
 
-export function DataTable<T>({ data, total, pagination, columns }: { data: T[], total: number, pagination: { pageIndex: number, pageSize: number }, columns: ColumnDef<T>[] }) {
+export function PaginatedDataTable<T>({ data, total, pagination, columns }: { data: T[], total: number, pagination: { pageIndex: number, pageSize: number }, columns: ColumnDef<T>[] }) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>({})

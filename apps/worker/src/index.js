@@ -9,19 +9,40 @@ addEventListener('fetch', event => {
 async function handleRequest(request, event) {
   const url = new URL(request.url)
   const path = url.pathname
-  console.log('Worker intercepted:', path)
+  logRequest(path, 'Worker intercepted')
+
+  // Block access to API UI endpoints (Only accessibly through mukhtasar interface)
+  // if (isApiUiPath(path)) {
+  //   logRequest(path, 'Blocking API backend /ui/* access')
+  //   return new Response(null, { status: 404 }) // no body at all
+  // }
+
+  // if (isApiPath(path)) {
+  //   logRequest(path, 'Handling API request - redirects to backend')
+  //   return fetch(request)
+  // }
 
   if (path.startsWith("/_vercel")) {
     return fetch(request)
   }
 
   if (shouldRouteToFrontend(path)) {
-    console.log('Routing to frontend:', path)
+    logRequest(path, 'Routing to frontend')
     return fetch(request)
   }
 
-  console.log('Handling redirect for:', path)
+  logRequest(path, 'Handling redirect for alias')
   return handleRedirect(request, event)
+}
+
+function isApiUiPath(path) {
+  // Block all /ui paths that should not be publicly accessible
+  return path.startsWith('/ui')
+}
+
+function isApiPath(path) {
+  // Block all /ui paths that should not be publicly accessible
+  return path.startsWith('/api');
 }
 
 function shouldRouteToFrontend(path) {
@@ -64,11 +85,13 @@ async function handleRedirect(request, event) {
     const url = new URL(request.url)
     const alias = url.pathname.slice(1)
 
-    if (!alias) {
-      return Response.redirect(url.origin, 302)
+    // Validate alias format early
+    if (!alias || alias.length > 30 || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$/.test(alias)) {
+      logRequest(alias, 'Redirects to not found page for not valid alias')
+      return Response.redirect(`${url.origin}/pages/not-found`, 302)
     }
 
-    console.log('Looking up alias:', alias)
+    logRequest(alias, 'Looking up alias')
     let longUrl = cache.get(alias)
 
     if (!longUrl) {
@@ -99,23 +122,37 @@ async function handleRedirect(request, event) {
     event.waitUntil(sendAnalytics(alias, request, event))
     return Response.redirect(longUrl, 302)
   } catch (error) {
-    console.error('Worker error:', error)
+    logRequest('error', `Worker error`, { error: error.message })
     return fetch(request)
   }
 }
 
 async function sendAnalytics(alias, request, event) {
-  const analyticsUrl = `https://api.mukhtasar.pro/ui/analytics/`
+  try {
+    const analyticsUrl = `https://api.mukhtasar.pro/ui/analytics/`
 
-  await fetch(analyticsUrl, {
-    method: 'POST',
-    headers: {
-      "Authorization": `Bearer ${WORKER_SECRET}`,
-      'Content-Type': 'application/json',
-      'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
-      'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
-      'X-Real-IP': request.headers.get('CF-Connecting-IP') || ''
-    },
-    body: JSON.stringify({ alias })
-  })
+    await fetch(analyticsUrl, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${WORKER_SECRET}`,
+        'Content-Type': 'application/json',
+        'User-Agent': request.headers.get('User-Agent') || 'Cloudflare-Worker',
+        'X-Forwarded-For': request.headers.get('CF-Connecting-IP') || '',
+        'X-Real-IP': request.headers.get('CF-Connecting-IP') || ''
+      },
+      body: JSON.stringify({ alias })
+    })
+  } catch (error) {
+    logRequest('analytics', 'Analytics failed', { error: error.message })
+  }
 }
+
+function logRequest(path, action, details = {}) {
+  console.log(JSON.stringify({
+    timestamp: Date.now(),
+    path,
+    action,
+    ...details
+  }))
+}
+
