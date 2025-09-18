@@ -31,6 +31,7 @@ export default async function Layout({
                 <section className="flex justify-center">
                     {children}
                 </section>
+                <Link href="/" className="text-center mt-6 text-black block text-sm">الذهاب للصفحة الرئيسية</Link>
             </div>
         </>
     );
