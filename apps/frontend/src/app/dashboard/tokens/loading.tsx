@@ -1,6 +1,5 @@
 import { Plus } from "lucide-react";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton"
 
