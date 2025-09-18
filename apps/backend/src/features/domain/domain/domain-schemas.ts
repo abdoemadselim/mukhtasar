@@ -1,4 +1,4 @@
-// import { schemaWrapper } from "#lib/validation/validator-middleware.js";
-// import { newDomainSchema } from "@mukhtasar/shared";
+import { schemaWrapper } from "#lib/validation/validator-middleware.js";
+import { AddDomainSchema } from "@mukhtasar/shared";
 
-// export const paramsSchema = schemaWrapper("body", newDomainSchema);
+export const addDomainSchema = schemaWrapper("body", AddDomainSchema);

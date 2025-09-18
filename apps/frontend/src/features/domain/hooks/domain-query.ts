@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { AddDomainType } from "@mukhtasar/shared";
 
-import { getDomains } from "@/features/domain/service/domain.service"
-import { DomainType } from "../schemas/schema.js";
+import { addDomain, deleteDomain, getDomains } from "@/features/domain/service/domain.service"
+import { DomainType } from "@/features/domain/types.js";
 
 export function useGetDomains() {
     return useQuery<{ domains: DomainType[] }>({
@@ -14,17 +15,29 @@ export function useGetDomains() {
     })
 }
 
-// export function useDeleteUrl({ domain, alias }: ParamsType) {
-//     const queryClient = useQueryClient();
-//     const { mutateAsync, isError, isPending, isSuccess } = useMutation<FullUrlType>({
-//         mutationFn: () => deleteUrl({ domain, alias }),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries({ queryKey: ["urls"] })
-//         }
-//     })
+export function useDeleteDomain(id: number) {
+    const queryClient = useQueryClient();
+    const { mutateAsync, isError, isPending, isSuccess, error } = useMutation<DomainType>({
+        mutationFn: () => deleteDomain(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["domains"] })
+        }
+    })
 
-//     return { mutateAsync, isError, isPending, isSuccess }
-// }
+    return { mutateAsync, isError, isPending, isSuccess, error }
+}
+
+export function useAddDomain() {
+    const queryClient = useQueryClient();
+    const { mutateAsync, isError, isPending, data, isSuccess, error } = useMutation({
+        mutationFn: (domain: AddDomainType) => addDomain(domain),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["domains"] })
+        }
+    })
+
+    return { mutateAsync, isError, isPending, data, isSuccess, error }
+}
 
 // export function useCreateUrl() {
 //     const queryClient = useQueryClient();

@@ -19,6 +19,36 @@ const domainRepository = {
         `, [String(userId)]);
 
         return result.rows;
+    },
+
+    async checkDomainExists(domain: string) {
+        const result = await query(`
+            SELECT id FROM custom_domain
+            WHERE domain = $1
+        `, [domain]);
+
+        return result.rows[0];
+    },
+
+    async addDomain({ domain, userId }: { domain: string, userId: number }) {
+        const result = await query(`
+            INSERT INTO custom_domain (domain, user_id, status)
+            VALUES ($1, $2, 'pending')
+            RETURNING id, domain, status
+        `, [domain, userId]);
+
+        return result.rows[0];
+    },
+
+    async updateDomainStatus({ domainId, status }: { domainId: number, status: string }) {
+        const result = await query(`
+            UPDATE custom_domain
+            SET status = $1, updated_at = NOW()
+            WHERE id = $2
+            RETURNING id, domain, status, updated_at
+        `, [status, domainId]);
+
+        return result.rows[0];
     }
 };
 

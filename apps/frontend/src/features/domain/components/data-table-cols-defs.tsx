@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { DomainType } from "@/features/domain/schemas/schema"
+import { DomainType } from "@/features/domain/types"
 import DomainStatusBadge from "@/features/domain/components/domain-status-badge"
 import { Status } from "@/features/domain/types"
 

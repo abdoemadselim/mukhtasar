@@ -1,174 +1,27 @@
-// import type { ParamsType } from "@mukhtasar/shared";
-
 import domainRepository from "#features/domain/data-access/domain-repository.js";
-
-// import { ConflictException } from "#lib/error-handling/error-types.js";
-// import { toBase62 } from "#lib/base-convertor/base-convertor.js";
-// import { client as redisClient } from "#lib/db/redis-connection.js"
-// import { log, LOG_TYPE } from "#lib/logger/logger.js";
-
-// // Returns the details of a shortened URL
-// export async function getUrlInfo({ domain, alias }: ParamsType) {
-//     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
-
-//     if (!url) {
-//         throw new URLNotFoundException();
-//     }
-//     return url
-// }
-
-// // Create a new short url
-// export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlType>> {
-//     // check if the original url has a short url already
-//     const { domain, alias, original_url, user_id, description = "" } = newUrl as UrlInputType;
-//     const resolvedDomain = domain || process.env.ORIGINAL_DOMAIN as string;
-
-//     // 1. Return existing short URL if original_url already exists
-//     // const existingUrl = await urlRepository.getUrlByOriginalUrl({ original_url });
-//     // if (existingUrl) throw new ConflictException("Original url already exists")
-
-//     // 2. If alias is provided, ensure it’s unique
-//     if (alias) {
-//         const aliasExists = await urlRepository.getUrlByAlias(alias);
-//         if (aliasExists) {
-//             throw new ConflictException("هذا الاسم المستعار غير متوفر.");
-//         }
-
-//         if (BLOCKED_ALIAS.includes(alias)) {
-//             throw new ConflictException("هذا الاسم المستعار غير متوفر.");
-//         }
-//         return saveUrl({ alias, resolvedDomain, original_url, user_id, description });
-//     }
-
-//     // 3. Generate alias when none is provided
-
-//     // 3.1- generate unique id
-//     const uniqueId = await generate_id();
-
-//     // 3.2- convert to base62 for readable URLs
-//     const uniqueIdBase62 = toBase62(uniqueId)
-
-//     // 3.3- construct new URL record
-//     return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
-// }
-
-// export async function deleteUrl({ domain, alias }: ParamsType) {
-//     // 1. Check if url exists
-//     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
-//     if (!url) {
-//         throw new URLNotFoundException();
-//     }
-
-//     // 2. Delete url from DB
-//     await urlRepository.deleteUrl({ alias, domain });
-
-//     // 3. Remove from Redis as well if exists
-//     redisClient.del(`url:${alias}`);
-//     return url;
-// }
-
-// export async function updateUrl({ domain, alias }: ParamsType, original_url: string) {
-//     //1. Check if the URL even exists to update
-//     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
-//     if (!url) {
-//         throw new URLNotFoundException();
-//     }
-
-//     if (url.original_url == original_url) {
-//         return original_url;
-//     }
-
-//     // 2. Update the existing url
-//     const result = await urlRepository.updateUrl({ alias, domain }, original_url)
-
-//     // 3. Delete Redis Entry
-//     redisClient.del(`url:${alias}`);
-
-//     return result;
-// }
-
-// export async function getUrlClickCount({ domain, alias }: ParamsType) {
-//     // 1. Check if the URL even exists
-//     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
-//     if (!url) {
-//         throw new URLNotFoundException();
-//     }
-//     // 2. Get the click count of url
-//     const result = await urlRepository.getUrlClickCounts({ alias, domain })
-
-//     return result;
-// }
-
-// async function saveUrl({
-//     alias,
-//     resolvedDomain,
-//     original_url,
-//     user_id,
-//     description }: {
-//         alias: string;
-//         resolvedDomain: string;
-//         original_url: string;
-//         user_id: number;
-//         description: string;
-//     }) {
-//     const createdUrl = await urlRepository.createUrl({
-//         alias,
-//         domain: resolvedDomain,
-//         original_url,
-//         user_id,
-//         description
-//     });
-
-//     return {
-//         alias,
-//         domain: resolvedDomain,
-//         original_url,
-//         user_id,
-//         description,
-//         created_at: createdUrl.created_at,
-//         short_url: createdUrl.short_url
-//     };
-// }
-
-// export async function getOriginalUrl(alias: string) {
-//     // First, check if the alias URL is in Redis
-//     let url = await redisClient.get(`url:${alias}`);
-
-//     // If not found in Redis, fetch from the database and store in Redis
-//     if (!url) {
-//         const record = await urlRepository.getUrlByAlias(alias);
-
-//         if (!record) throw new URLNotFoundException();
-
-//         url = record.original_url;
-
-//         // Cache in redis for (3 days)
-//         redisClient.setEx(`url:${alias}`, 86400 * 3, url);
-//     }
-
-//     updateAnalytics(alias).catch((error) => {
-//         log(LOG_TYPE.ERROR, { message: "Url click counts update failed", stack: error.stack });
-//     });
-
-//     return url;
-// }
-
-// async function updateAnalytics(alias: string) {
-//     // Increment the click count in Redis (use a counter for clicks)
-//     await redisClient.incr(`clicks:${alias}`);
-
-//     // // Store this URL in a sorted set of most used URLs (sorted by click count)
-//     // // TODO: a cron job should be added to sync db with redis
-//     // await redisClient.zAdd('top_urls', {
-//     //     score: clicks, // Click count as score
-//     //     value: alias,
-//     // });
-
-//     // // Limit the top URLs set to 10000 URLs (remove the last url in the sorted set (1001))
-//     // await redisClient.zRemRangeByRank('top_urls', 10000, -1);
-// }
+import { ValidationException } from "#lib/error-handling/error-types.js";
 
 export async function getUserDomains(user_id: number) {
     const domains = await domainRepository.getUserDomains(user_id);
     return domains;
+}
+
+export async function addDomain({ domain, user_id }: { domain: string, user_id: number }) {
+    // 1. Check if domain already exists (globally)
+    const existingDomain = await domainRepository.checkDomainExists(domain);
+    if (existingDomain) {
+        throw new ValidationException({ domain: { message: "هذا النطاق مستخدم بالفعل." } });
+    }
+
+    // 2. Create the domain with pending status
+    const createdDomain = await domainRepository.addDomain({
+        domain: domain.toLowerCase(),
+        userId: user_id
+    });
+
+    // 3. TODO: Add to DNS verification queue (for background processing)
+    // This could be a Redis queue, database queue, or message queue
+    // await addToVerificationQueue(createdDomain.id, domain);
+
+    return createdDomain;
 }

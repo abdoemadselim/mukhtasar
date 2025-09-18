@@ -8,7 +8,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 
 import { columns } from "@/features/domain/components/data-table-cols-defs";
 import { useGetDomains } from "@/features/domain/hooks/domain-query";
-import { DomainType } from "@/features/domain/schemas/schema";
+import { DomainType } from "@/features/domain/types";
 
 export default function DomainTable() {
     const { data, isError, isPending, error } = useGetDomains()

@@ -170,3 +170,31 @@ export type FullTokenType = TokenType & {
     created_at: string,
     last_used: string
 }
+
+const BLOCKED_DOMAINS = [
+    // Common domains that shouldn't be allowed
+    "google.com", "facebook.com", "twitter.com", "github.com", "youtube.com",
+    "amazon.com", "microsoft.com", "apple.com", "linkedin.com", "instagram.com",
+    "whatsapp.com", "telegram.org", "discord.com", "slack.com", "zoom.us",
+
+    "mukhtasar.pro", "api.mukhtasar.pro",
+    
+    // Other common services
+    "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
+    "bit.ly", "tinyurl.com", "short.link", "t.co"
+];
+
+
+export const AddDomainSchema = zod.object({
+    domain: zod
+        .string("يُرجى إدخال النطاق.")
+        .trim()
+        .min(1, "يُرجى إدخال النطاق.")
+        .regex(/^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$/, "يُرجى إدخال نطاق صحيح.")
+        .refine(
+            (domain) => !BLOCKED_DOMAINS.includes(domain.toLowerCase()),
+            { message: "هذا النطاق غير متاح للاستخدام." }
+        )
+});
+
+export type AddDomainType = zod.infer<typeof AddDomainSchema>;

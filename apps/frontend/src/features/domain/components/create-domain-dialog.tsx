@@ -1,9 +1,9 @@
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ShortUrlSchema, ShortUrlType } from "@mukhtasar/shared"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { AddDomainSchema, AddDomainType } from "@mukhtasar/shared"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -20,137 +20,118 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { openToaster } from "@/components/ui/sonner"
 
-import { useCreateUrl } from "@/features/url/hooks/urls-query"
+import { useAddDomain } from "@/features/domain/hooks/domain-query"
+import DomainInstructionsDialog from "@/features/domain/components/domain-instructions-dialog"
 
 export default function CreateDomainDialog({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
+    const [showDNSInstructions, setShowDNSInstructions] = useState(false)
+    const [createdDomain, setCreatedDomain] = useState("")
+
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
         reset,
-    } = useForm<ShortUrlType>({
-        resolver: zodResolver(ShortUrlSchema),
+        watch
+    } = useForm<AddDomainType>({
+        resolver: zodResolver(AddDomainSchema),
         defaultValues: {
-            original_url: "",
-            alias: "",
             domain: "",
-            description: "",
         },
     })
 
-    const { mutateAsync, isError, isSuccess, error } = useCreateUrl()
+    const { mutateAsync, isError, isSuccess, error } = useAddDomain()
 
-    const onSubmit = async (data: ShortUrlType) => {
+    // Watch domain field for validation
+    const domainValue = watch("domain")
+    const isFormValid = domainValue && !errors.domain
+
+    const onSubmit = async (data: AddDomainType) => {
         await mutateAsync(data)
-
+        setCreatedDomain(data.domain)
         setIsOpen(false)
+        setShowDNSInstructions(true)
         reset()
+        openToaster("تم إضافة النطاق بنجاح. يرجى اتباع التعليمات لإكمال الإعداد.", "success")
     }
 
     useEffect(() => {
         if (isError) {
             openToaster(error?.message as string, "error")
         }
+    }, [isError, error])
 
-        if (isSuccess) {
-            openToaster("تم إنشاء الرابط بنجاح.", "success")
-        }
-    }, [isError, isSuccess, error])
+    const handleClose = () => {
+        setIsOpen(false)
+        reset()
+    }
+
+    const handleDomainInstructionsClose = () => {
+        setShowDNSInstructions(false)
+        setCreatedDomain("")
+    }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                {children}
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] pt-10">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <DialogHeader className="pb-2">
-                        <DialogTitle className="text-right">إنشاء رابط مختصر</DialogTitle>
-                        <DialogDescription className="text-right">
-                            أدخل الرابط الأصلي وقم بتخصيص بيانات الرابط المختصر إذا رغبت.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 pb-6">
-                        {/* Original URL (required) */}
-                        <div className="grid gap-3">
-                            <Label htmlFor="original_url">الرابط الأصلي <span className="text-red-500">*</span></Label>
-                            <Input
-                                {...register("original_url")}
-                                id="original_url"
-                                placeholder="https://example.com/page"
-                            />
+        <>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                    {children}
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px] pt-10">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <DialogHeader className="pb-4">
+                            <DialogTitle className="text-right">إضافة نطاق مخصص</DialogTitle>
+                            <DialogDescription className="text-right">
+                                أدخل النطاق المخصص الذي تريد استخدامه لاختصار الروابط
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 pb-6">
+                            <div className="grid gap-3">
+                                <Label htmlFor="domain">النطاق <span className="text-red-500">*</span></Label>
+                                <Input
+                                    {...register("domain")}
+                                    id="domain"
+                                    placeholder="example.com"
+                                    dir="ltr"
+                                />
 
-                            {errors?.original_url && (
-                                <div id="label-error" aria-live="polite" aria-atomic="true">
-                                    <p className="text-sm text-red-500" role="alert">
-                                        {errors.original_url.message}
-                                    </p>
-                                </div>
-                            )}
+                                {errors?.domain && (
+                                    <div id="domain-error" aria-live="polite" aria-atomic="true">
+                                        <p className="text-sm text-red-500" role="alert">
+                                            {errors.domain.message}
+                                        </p>
+                                    </div>
+                                )}
+
+                                <p className="text-xs text-muted-foreground text-right">
+                                    تأكد من أنك تملك هذا النطاق وتستطيع تعديل إعدادات DNS الخاصة به
+                                </p>
+                            </div>
                         </div>
+                        <DialogFooter className="sm:justify-start">
+                            <DialogClose asChild>
+                                <Button variant="outline" className="cursor-pointer" onClick={handleClose}>
+                                    إلغاء
+                                </Button>
+                            </DialogClose>
+                            <Button
+                                type="submit"
+                                className="cursor-pointer"
+                                disabled={isSubmitting || !isFormValid}
+                            >
+                                {isSubmitting ? "جاري الإضافة..." : "إضافة النطاق"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
 
-                        {/* Optional description */}
-                        <div className="grid gap-3">
-                            <Label htmlFor="description">الوصف (اختياري)</Label>
-                            <Input
-                                id="description"
-                                {...register("description")}
-                                placeholder="أدخل وصفاً للرابط"
-                            />
-                            {errors?.description && (
-                                <div id="label-error" aria-live="polite" aria-atomic="true">
-                                    <p className="text-sm text-red-500" role="alert">
-                                        {errors.description.message}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Optional alias */}
-                        <div className="grid gap-3">
-                            <Label htmlFor="alias">الاسم المستعار (اختياري).</Label>
-                            <Input
-                                id="alias"
-                                {...register("alias")}
-                                placeholder="مثال: my-link"
-                            />
-
-                            {errors?.alias && (
-                                <div id="label-error" aria-live="polite" aria-atomic="true">
-                                    <p className="text-sm text-red-500" role="alert">
-                                        {errors.alias.message}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Optional domain */}
-                        <div className="grid gap-3">
-                            <Label htmlFor="domain">النطاق (اختياري)</Label>
-                            <Input
-                                id="domain"
-                                {...register("domain")}
-                                placeholder="مثال: short.me"
-                            />
-
-                            {errors?.domain && (
-                                <div id="label-error" aria-live="polite" aria-atomic="true">
-                                    <p className="text-sm text-red-500" role="alert">
-                                        {errors.domain.message}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <DialogFooter className="sm:justify-start">
-                        <DialogClose asChild>
-                            <Button variant="outline" className="cursor-pointer">إلغاء</Button>
-                        </DialogClose>
-                        <Button type="submit" className="cursor-pointer" disabled={isSubmitting}>{isSubmitting ? "جاري الإنشاء..." : "إنشاء الرابط"}</Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog >
+            <DomainInstructionsDialog
+                isOpen={showDNSInstructions}
+                onClose={handleDomainInstructionsClose}
+                domain={createdDomain}
+            />
+        </>
     )
 }
