@@ -142,7 +142,7 @@ export default function LandingUrlCreationForm() {
                 }
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
-                        <div className="pb-4">
+                        <div className="pb-2">
                             <FormField control={form.control} name="original_url" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل</FormLabel>
@@ -159,7 +159,7 @@ export default function LandingUrlCreationForm() {
 
                         <div>
                             <p className="pb-3 text-lg">خصص رابطك</p>
-                            <div className="flex items-center sm:gap-4 md:w-[80%] w-full sm:flex-row flex-col">
+                            <div className="flex items-center sm:gap-4  w-full sm:flex-row flex-col">
                                 <div className="w-full">
                                     <FormField control={form.control} name="alias" render={({ field }) => (
                                         <FormItem>
@@ -215,7 +215,7 @@ export default function LandingUrlCreationForm() {
                             </div>
                         )}
 
-                        <Button className="mt-10 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
+                        <Button className="mt-4 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
                             {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
                         </Button>
                     </form>
