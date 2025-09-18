@@ -22,7 +22,7 @@ import { openToaster } from "@/components/ui/sonner"
 
 import { useCreateUrl } from "@/features/url/hooks/urls-query"
 
-export default function CreateUrlDialog({ children }: { children: React.ReactNode }) {
+export default function CreateDomainDialog({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
     const {
         register,

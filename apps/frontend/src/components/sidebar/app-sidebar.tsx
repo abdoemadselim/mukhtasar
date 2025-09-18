@@ -32,11 +32,11 @@ const items = [
     url: "/dashboard/tokens",
     icon: Lock,
   },
-  // {
-  //   title: "نطاق خاص",
-  //   url: "/dashboard/domains",
-  //   icon: Globe,
-  // },
+  {
+    title: "نطاق خاص",
+    url: "/dashboard/domains",
+    icon: Globe,
+  },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
