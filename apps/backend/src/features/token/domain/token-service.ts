@@ -118,7 +118,7 @@ export async function updateToken({
     tokenId,
     userId,
     updates
-}: { tokenId: string, userId: number, updates: Partial<Omit<TokenInput, "userId">> }) {
+}: { tokenId: number, userId: number, updates: Partial<Omit<TokenInput, "userId">> }) {
     const token = await tokenRepository.getTokenById(tokenId);
     if (!token) throw new NotFoundException("This token doesn't exist");
 
@@ -128,7 +128,7 @@ export async function updateToken({
     return updated;
 }
 
-export async function deleteToken({ userId, tokenId }: { userId: number, tokenId: string }) {
+export async function deleteToken({ userId, tokenId }: { userId: number, tokenId: number }) {
     const token = await tokenRepository.getTokenById(tokenId);
     if (!token) throw new NotFoundException("This token doesn't exist");
 
@@ -141,4 +141,31 @@ export async function deleteToken({ userId, tokenId }: { userId: number, tokenId
 export async function getTokensPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
     const { tokens, total } = await tokenRepository.getTokensPage({ user_id, page, page_size })
     return { tokens, total };
+}
+
+export async function regenerateToken({ tokenId, userId }: { tokenId: number, userId: number }) {
+    const token = await tokenRepository.getTokenById(tokenId);
+    if (!token) throw new NotFoundException("رمز الوصول هذا غير موجود.");
+
+    if (token.user_id !== userId) throw new UnAuthorizedException();
+
+    // Delete the old token
+    await tokenRepository.deleteToken(tokenId);
+
+    // Generate new token with same label and permissions
+    const rawToken = randomBytes(32).toString("hex");
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+
+    await tokenRepository.createToken({
+        tokenHash,
+        can_create: token.can_create,
+        can_update: token.can_update,
+        can_delete: token.can_delete,
+        label: token.label,
+        user_id: userId,
+    });
+
+    return {
+        rawToken,
+    };
 }

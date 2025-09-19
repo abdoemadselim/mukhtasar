@@ -141,7 +141,7 @@ export default function LandingUrlCreationForm() {
                     </p>
                 }
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[38vw] w-[80vw] rounded-lg">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[45vw] w-[80vw] rounded-xl">
                         <div className="pb-2">
                             <FormField control={form.control} name="original_url" render={({ field }) => (
                                 <FormItem>

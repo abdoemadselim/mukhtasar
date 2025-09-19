@@ -1,22 +1,17 @@
 import type { Response } from "express";
 
 import * as tokenService from "#features/token/domain/token-service.js"
-
-import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
 import { IRequest } from "#features/token/types";
 
+import { NoException } from "#lib/error-handling/error-types.js";
 
 export async function generateToken(req: IRequest, res: Response) {
     const { label, can_create, can_update, can_delete } = req.body;
 
     const user_id = req.user?.id;
 
-    if (!user_id) {
-        throw new UnAuthorizedException()
-    }
-
     const token = await tokenService.generateToken({
-        user_id,
+        user_id: user_id as number,
         label,
         can_create,
         can_update,
@@ -38,9 +33,8 @@ export async function updateToken(req: IRequest, res: Response) {
     const { label, can_create, can_update, can_delete } = req.body;
 
     const userId = req.user?.id;
-    if (!userId) throw new UnAuthorizedException();
 
-    const updatedToken = await tokenService.updateToken({ tokenId: tokenId as string, userId, updates: { label, can_create, can_delete, can_update } });
+    const updatedToken = await tokenService.updateToken({ tokenId: Number(tokenId), userId: userId as number, updates: { label, can_create, can_delete, can_update } });
 
     const response = {
         data: { token: updatedToken },
@@ -56,9 +50,8 @@ export async function deleteToken(req: IRequest, res: Response) {
     const { tokenId } = req.params;
 
     const userId = req.user?.id;
-    if (!userId) throw new UnAuthorizedException();
 
-    const deletedToken = await tokenService.deleteToken({ tokenId: tokenId as string, userId });
+    const deletedToken = await tokenService.deleteToken({ tokenId: Number(tokenId), userId: userId as number });
 
     const response = {
         data: { token: deletedToken },
@@ -90,4 +83,22 @@ export async function getTokensPage(req: IRequest, res: Response) {
     }
 
     res.json(response);
+}
+
+export async function regenerateToken(req: IRequest, res: Response) {
+    const { tokenId } = req.params;
+    const userId = req.user?.id;
+
+    const regeneratedToken = await tokenService.regenerateToken({ tokenId: Number(tokenId), userId: userId as number });
+
+    const response = {
+        data: {
+            token: regeneratedToken
+        },
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    };
+
+    res.status(201).json(response);
 }

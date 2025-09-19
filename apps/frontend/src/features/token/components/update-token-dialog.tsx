@@ -21,7 +21,6 @@ import { openToaster } from '@/components/ui/sonner';
 
 import { useUpdateToken } from '@/features/token/hooks/tokens-query';
 
-
 type UpdateTokenDialogProps = {
     children: React.ReactNode
     currentToken: ToUpdateTokenType & { id: number }

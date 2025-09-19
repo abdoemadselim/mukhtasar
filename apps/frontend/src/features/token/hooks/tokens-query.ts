@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { FullTokenType, TokenType } from "@mukhtasar/shared"
 
-import { createToken, deleteToken, getTokens, updateToken } from "@/features/token/service/tokens-service"
+import { createToken, deleteToken, getTokens, regenerateToken, updateToken } from "@/features/token/service/tokens-service"
 
 export function useGetTokens({ page, page_size }: { page: number, page_size: number }) {
     return useQuery<{ tokens: FullTokenType[], total: number }>({
@@ -48,4 +48,16 @@ export function useCreateToken() {
     })
 
     return { mutateAsync, isError, isPending, error, data, isSuccess }
+}
+
+export function useRegenerateToken() {
+    const queryClient = useQueryClient();
+    const { mutateAsync, isError, isPending, error, data, isSuccess, reset } = useMutation({
+        mutationFn: (tokenId: number) => regenerateToken(tokenId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tokens"] })
+        }
+    })
+
+    return { mutateAsync, isError, isPending, error, data, isSuccess, reset }
 }

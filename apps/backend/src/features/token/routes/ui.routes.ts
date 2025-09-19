@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { deleteToken, generateToken, getTokensPage, updateToken } from "#features/token/controllers/ui.controllers.js";
+import { deleteToken, generateToken, getTokensPage, regenerateToken, updateToken } from "#features/token/controllers/ui.controllers.js";
 import { tokenParams, tokenSchema, toUpdateTokenSchema } from "#features/token/data-access/token-schemas.js";
 
 import validateRequest from "#lib/validation/validator-middleware.js";
@@ -32,6 +32,13 @@ router.delete(
 router.get(
     "/",
     getTokensPage
+)
+
+// Regenerate token
+router.post(
+    "/:tokenId/regenerate",
+    validateRequest([tokenParams]),
+    regenerateToken
 )
 
 export default router;

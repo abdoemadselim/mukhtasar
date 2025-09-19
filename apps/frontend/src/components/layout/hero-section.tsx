@@ -8,7 +8,7 @@ import LandingUrlCreationForm from "@/features/url/components/landing-url-creati
 
 export default function HeroSection() {
     return (
-        <section className="pt-30">
+        <section className="pt-10">
             <header className="text-center mb-2 flex flex-col justify-center items-center">
                 <div className="flex justify-center items-center gap-4">
                     <Image

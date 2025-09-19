@@ -2,7 +2,7 @@ import { query } from "#lib/db/db-connection.js";
 import type { Token, TokenInput, TokenWithUrlType } from "#features/token/types";
 
 const tokenRepository = {
-    async getTokenWithUrl({ token_hash, alias}: {token_hash: string, alias: string}): Promise<TokenWithUrlType | undefined> {
+    async getTokenWithUrl({ token_hash, alias }: { token_hash: string, alias: string }): Promise<TokenWithUrlType | undefined> {
         const result = await query(
             `SELECT api_token.id, api_token.user_id, can_create, can_update, can_delete, alias, domain
              FROM api_token JOIN url
@@ -70,7 +70,7 @@ const tokenRepository = {
         return { tokens: result[0].rows, total: Number(result[1].rows[0].total) };
     },
 
-    async getTokenById(tokenId: string): Promise<Token | undefined> {
+    async getTokenById(tokenId: number): Promise<Token | undefined> {
         const result = await query(
             `SELECT id, user_id, label, can_create, can_update, can_delete, created_at
              FROM api_token
@@ -86,7 +86,7 @@ const tokenRepository = {
         tokenId,
         userId,
         updates
-    }: { tokenId: string, userId: number, updates: Partial<Omit<TokenInput, "userId">> }): Promise<Token> {
+    }: { tokenId: number, userId: number, updates: Partial<Omit<TokenInput, "userId">> }): Promise<Token> {
         const fields: string[] = [];
         const values: TokenInput[keyof TokenInput][] = [];
         let i = 1;
@@ -111,7 +111,7 @@ const tokenRepository = {
         return result.rows[0];
     },
 
-    async deleteToken(tokenId: string): Promise<Token> {
+    async deleteToken(tokenId: number): Promise<Token> {
         const result = await query(
             `
                 DELETE

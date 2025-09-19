@@ -1,12 +1,10 @@
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
 
-import { Highlighter } from "@/components/ui/highlighter";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
 import { Button } from "@/components/ui/button";
 
 import DomainTable from "@/features/domain/components/domain-table";
-
 import CreateDomainDialog from "@/features/domain/components/create-domain-dialog";
 
 export default function DomainContent() {

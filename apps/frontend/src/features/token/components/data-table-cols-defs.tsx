@@ -5,7 +5,8 @@ import {
     Check,
     X,
     Settings,
-    Delete
+    Delete,
+    RefreshCw
 } from "lucide-react"
 
 import {
@@ -24,6 +25,7 @@ import { Badge } from "@/components/ui/badge"
 
 import UpdateTokenDialog from "@/features/token/components/update-token-dialog"
 import { DeleteTokenDialog } from "@/features/token/components/delete-token-dialog"
+import { RegenerateTokenDialog } from "@/features/token/components//regenerate-token-dialog"
 
 export const columns: ColumnDef<FullTokenType>[] = [
     {
@@ -107,11 +109,11 @@ export const columns: ColumnDef<FullTokenType>[] = [
                             size="icon"
                         >
                             <MoreVertical />
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">افتح القائمة</span>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="flex flex-col gap-2 py-2">
-                        <DropdownMenuItem asChild >
+                    <DropdownMenuContent align="end" className="flex flex-col py-2">
+                        <DropdownMenuItem asChild>
                             <UpdateTokenDialog
                                 currentToken={row.original}
                             >
@@ -134,6 +136,16 @@ export const columns: ColumnDef<FullTokenType>[] = [
                                     <Delete size={16} />
                                 </Button>
                             </DeleteTokenDialog>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <RegenerateTokenDialog
+                                currentToken={row.original}
+                            >
+                                <Button variant="ghost" className="w-full text-end flex h-fit py-1 justify-end px-2 items-center text-sm">
+                                    إعادة إنشاء
+                                    <RefreshCw size={16} />
+                                </Button>
+                            </RegenerateTokenDialog>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

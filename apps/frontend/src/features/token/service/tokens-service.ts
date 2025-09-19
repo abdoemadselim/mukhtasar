@@ -49,3 +49,10 @@ export async function updateToken({ id, can_create, can_update, can_delete, labe
     includeCredentials: true
   });
 }
+
+export async function regenerateToken(token_id: number) {
+  return apiClient.post(`/token/${token_id}/regenerate`, null, {
+    includeCredentials: true,
+    throwOnError: true,
+  });
+}
