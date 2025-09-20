@@ -147,7 +147,7 @@ export default function LandingUrlCreationForm() {
                                 <FormItem>
                                     <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل</FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="text-end h-[45px] border-gray-300" placeholder="http://example.com/very-long-url" />
+                                        <Input {...field} className="text-end h-[45px] focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="http://example.com/very-long-url" />
                                     </FormControl>
                                     <div className="min-h-[20px]" >
                                         <FormMessage />
@@ -163,9 +163,9 @@ export default function LandingUrlCreationForm() {
                                 <div className="w-full">
                                     <FormField control={form.control} name="alias" render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-muted-foreground pb-3">الاسم المستعار (اختياري)</FormLabel>
+                                            <FormLabel className="text-muted-foreground pb-2">الاسم المستعار (اختياري)</FormLabel>
                                             <FormControl>
-                                                <Input {...field} className="text-end border-gray-300 w-full" placeholder="products" />
+                                                <Input {...field} className="text-end border-gray-300 w-full focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="products" />
                                             </FormControl>
                                             <div className="min-h-[20px]" >
                                                 <FormMessage />
@@ -178,14 +178,14 @@ export default function LandingUrlCreationForm() {
                                 <div className="w-full">
                                     <FormField control={form.control} name="domain" render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-muted-foreground pb-3">النطاق</FormLabel>
+                                            <FormLabel className="text-muted-foreground pb-2">النطاق</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
-                                                    <SelectTrigger className="w-full border-gray-300">
+                                                    <SelectTrigger className="w-full focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
                                                         <SelectValue placeholder="mukhtasar.pro" />
                                                     </SelectTrigger>
                                                 </FormControl>
-                                                <SelectContent>
+                                                <SelectContent className="active:border-2 focus-visible:border-blue-600 focus-visible:border-2">
                                                     <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
                                                 </SelectContent>
                                             </Select>
