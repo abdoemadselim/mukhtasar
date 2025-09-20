@@ -145,7 +145,7 @@ export default function LandingUrlCreationForm() {
                         <div className="pb-2">
                             <FormField control={form.control} name="original_url" render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="pb-3 text-lg">ادخل رابطك الطويل</FormLabel>
+                                    <FormLabel className="pb-1 text-lg">ادخل رابطك الطويل</FormLabel>
                                     <FormControl>
                                         <Input {...field} className="text-end h-[45px] focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="http://example.com/very-long-url" />
                                     </FormControl>
