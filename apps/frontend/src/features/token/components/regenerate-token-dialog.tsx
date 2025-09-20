@@ -19,6 +19,7 @@ import { openToaster } from "@/components/ui/sonner"
 
 import { useRegenerateToken } from "@/features/token/hooks/tokens-query"
 import { TokenSuccessDialog } from "@/features/token/components/token-success-dialog"
+import { useQueryClient } from "@tanstack/react-query"
 
 type RegenerateTokenDialogProps = {
     currentToken: FullTokenType
@@ -30,12 +31,17 @@ export function RegenerateTokenDialog({ currentToken, children }: RegenerateToke
     const [showSuccessDialog, setShowSuccessDialog] = useState(false)
 
     const { mutateAsync, isError, isPending, data, isSuccess } = useRegenerateToken()
+    const queryClient = useQueryClient();
 
     const handleTokenRegenerate = async () => {
         await mutateAsync(currentToken.id)
-
         setIsOpen(false)
         setShowSuccessDialog(true)
+    }
+
+    const handleSuccessClose = () => {
+        setShowSuccessDialog(false)
+        queryClient.invalidateQueries({ queryKey: ["tokens"] })
     }
 
     useEffect(() => {
@@ -115,7 +121,7 @@ export function RegenerateTokenDialog({ currentToken, children }: RegenerateToke
 
             <TokenSuccessDialog
                 isOpen={showSuccessDialog}
-                onClose={() => setShowSuccessDialog(false)}
+                onClose={handleSuccessClose}
                 token={data?.token?.rawToken || ""}
             />
         </>

@@ -36,6 +36,7 @@ export default {
         'db',
         'config',
         'test',
+        'token',
         'readme',
         'lib',
         "doc",

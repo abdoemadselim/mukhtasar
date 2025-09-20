@@ -51,12 +51,8 @@ export function useCreateToken() {
 }
 
 export function useRegenerateToken() {
-    const queryClient = useQueryClient();
     const { mutateAsync, isError, isPending, error, data, isSuccess, reset } = useMutation({
         mutationFn: (tokenId: number) => regenerateToken(tokenId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["tokens"] })
-        }
     })
 
     return { mutateAsync, isError, isPending, error, data, isSuccess, reset }

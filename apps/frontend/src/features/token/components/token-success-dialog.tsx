@@ -25,6 +25,7 @@ export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialo
     const [showToken, setShowToken] = useState(false)
     const [copied, setCopied] = useState(false)
 
+    console.log(isOpen)
     const handleCopy = async () => {
         await navigator.clipboard.writeText(token)
         setCopied(true)
@@ -41,7 +42,7 @@ export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialo
     const maskedToken = token.replace(/(.{4}).*(.{4})/, '$1' + '•'.repeat(token.length) + '$2')
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
+        <Dialog open={isOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader className="text-center space-y-3">
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
@@ -130,6 +131,6 @@ export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialo
                     </Button>
                 </DialogFooter>
             </DialogContent>
-        </Dialog>
+        </ Dialog>
     )
 }
