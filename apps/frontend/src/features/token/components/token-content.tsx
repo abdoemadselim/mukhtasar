@@ -11,7 +11,7 @@ import TokensTable from "@/features/token/components/tokens-table";
 export default function TokenContent() {
     return (
         <>
-            <div className="flex flex-row-reverse justify-between px-4 lg:px-6 pb-4">
+            <div className="flex flex-row-reverse justify-between px-4 lg:px-6 pb-3">
                 <CreateTokenDialog>
                     <Button size="sm" className="cursor-pointer">
                         <Plus />
