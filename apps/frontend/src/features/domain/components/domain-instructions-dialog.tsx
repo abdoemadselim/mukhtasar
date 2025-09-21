@@ -79,6 +79,31 @@ export default function DomainInstructionsDialog({ isOpen, onClose, domain }: Do
 
                         <div className="grid gap-3">
                             <Label htmlFor="record-value" className="text-right font-semibold">
+                                الدومين الخاص بك
+                            </Label>
+                            <div className="flex items-center gap-2">
+                                <div className="flex">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleCopyRecord(domain)}
+                                        className="h-10 w-10"
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                    </Button>
+                                    <Input
+                                        value={domain}
+                                        readOnly
+                                        className="font-mono bg-gray-100"
+                                        dir="ltr"
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div className="grid gap-3">
+                            <Label htmlFor="record-value" className="text-right font-semibold">
                                 القيمة (Value/Target)
                             </Label>
                             <div className="flex items-center gap-2">

@@ -178,7 +178,7 @@ const BLOCKED_DOMAINS = [
     "whatsapp.com", "telegram.org", "discord.com", "slack.com", "zoom.us",
 
     "mukhtasar.pro", "api.mukhtasar.pro",
-    
+
     // Other common services
     "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
     "bit.ly", "tinyurl.com", "short.link", "t.co"
@@ -190,7 +190,7 @@ export const AddDomainSchema = zod.object({
         .string("يُرجى إدخال النطاق.")
         .trim()
         .min(1, "يُرجى إدخال النطاق.")
-        .regex(/^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$/, "يُرجى إدخال نطاق صحيح.")
+        .regex(/^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?(?:\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?)*\.[a-zA-Z]{2,}$/, "يُرجى إدخال نطاق أو CNAME صحيح.")
         .refine(
             (domain) => !BLOCKED_DOMAINS.includes(domain.toLowerCase()),
             { message: "هذا النطاق غير متاح للاستخدام." }

@@ -2,10 +2,6 @@
 import { apiClient } from "@/lib/api-client";
 import { AddDomainType } from "@mukhtasar/shared";
 
-// export async function createUrl(data: ShortUrlType) {
-//     return apiClient.post('/url', data, { throwOnError: true, includeCredentials: true });
-// }
-
 export async function getDomains() {
     const endpoint = `/domain`;
 
@@ -16,9 +12,9 @@ export async function getDomains() {
 }
 
 export async function addDomain(data: AddDomainType) {
-    return apiClient.post('/domain', data, { 
-        throwOnError: true, 
-        includeCredentials: true 
+    return apiClient.post('/domain', data, {
+        throwOnError: true,
+        includeCredentials: true
     });
 }
 
@@ -32,9 +28,9 @@ export async function deleteDomain(id: number) {
     });
 }
 
-// export async function updateUrl({ domain, alias, original_url }: ParamsType & ToUpdateUrlType) {
-//     return apiClient.patch(`/url/${domain}/${alias}`, { original_url }, {
-//         throwOnError: true,
-//         includeCredentials: true
-//     });
-// }
+export async function refreshDomain(domainId?: number) {
+    return apiClient.post(`/domain/${domainId}/refresh`, {
+        throwOnError: true,
+        includeCredentials: true
+    });
+}

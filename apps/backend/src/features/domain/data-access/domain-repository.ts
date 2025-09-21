@@ -40,6 +40,16 @@ const domainRepository = {
         return result.rows[0];
     },
 
+    async getDomainById(domainId: number) {
+        const result = await query(`
+            SELECT id, domain, status, created_at, user_id
+            FROM custom_domain
+            WHERE id = $1
+        `, [domainId]);
+
+        return result.rows[0];
+    },
+
     async updateDomainStatus({ domainId, status }: { domainId: number, status: string }) {
         const result = await query(`
             UPDATE custom_domain
@@ -49,7 +59,7 @@ const domainRepository = {
         `, [status, domainId]);
 
         return result.rows[0];
-    }
+    },
 };
 
 export default domainRepository;

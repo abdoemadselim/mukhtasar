@@ -15,6 +15,7 @@ import {
 import { DomainType } from "@/features/domain/types"
 import DomainStatusBadge from "@/features/domain/components/domain-status-badge"
 import { Status } from "@/features/domain/types"
+import RefreshDomainStatusButton from "@/features/domain/components/refresh-domain-status-button"
 
 export const columns: ColumnDef<DomainType>[] = [
   {
@@ -45,6 +46,11 @@ export const columns: ColumnDef<DomainType>[] = [
         <DomainStatusBadge status={row.original.status as Status} />
       </div>
     ),
+  },
+  {
+    id: "refresh",
+    header: () => <p className="lg:text-lg">تحديث</p>,
+    cell: ({ row }) => <RefreshDomainStatusButton domainId={row.original.id} />,
   },
   {
     id: "actions",

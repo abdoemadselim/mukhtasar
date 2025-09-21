@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AddDomainType } from "@mukhtasar/shared";
 
-import { addDomain, deleteDomain, getDomains } from "@/features/domain/service/domain.service"
+import { addDomain, deleteDomain, getDomains, refreshDomain } from "@/features/domain/service/domain.service"
 import { DomainType } from "@/features/domain/types.js";
 
 export function useGetDomains() {
@@ -39,26 +39,14 @@ export function useAddDomain() {
     return { mutateAsync, isError, isPending, data, isSuccess, error }
 }
 
-// export function useCreateUrl() {
-//     const queryClient = useQueryClient();
-//     const { mutateAsync, isError, isPending, data, isSuccess, error } = useMutation({
-//         mutationFn: (url: ShortUrlType) => createUrl(url),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries({ queryKey: ["urls"] })
-//         }
-//     })
+export function useRefreshDomain() {
+    const queryClient = useQueryClient();
+    const { mutateAsync, isError, isPending, error } = useMutation({
+        mutationFn: (domainId?: number) => refreshDomain(domainId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["domains"] })
+        }
+    })
 
-//     return { mutateAsync, isError, isPending, data, isSuccess, error }
-// }
-
-// export function useUpdateUrl() {
-//     const queryClient = useQueryClient();
-//     const { mutateAsync, isError, isPending, error, isSuccess } = useMutation({
-//         mutationFn: (toUpdateUrl: ParamsType & ToUpdateUrlType) => updateUrl(toUpdateUrl),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries({ queryKey: ["urls"] })
-//         }
-//     })
-
-//     return { mutateAsync, isError, isPending, error, isSuccess }
-// }
+    return { mutateAsync, isError, isPending, error }
+}
