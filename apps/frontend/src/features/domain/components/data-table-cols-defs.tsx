@@ -1,6 +1,6 @@
 'use client'
 
-import { MoreVertical } from "lucide-react"
+import { Delete, MoreVertical } from "lucide-react"
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
@@ -16,6 +16,7 @@ import { DomainType } from "@/features/domain/types"
 import DomainStatusBadge from "@/features/domain/components/domain-status-badge"
 import { Status } from "@/features/domain/types"
 import RefreshDomainStatusButton from "@/features/domain/components/refresh-domain-status-button"
+import DeleteDomainDialog from "@/features/domain/components/delete-domain-dialog"
 
 export const columns: ColumnDef<DomainType>[] = [
   {
@@ -68,11 +69,22 @@ export const columns: ColumnDef<DomainType>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem
-            onClick={(e) => e.preventDefault()}
-            className="block w-full text-right"
-          >
-            {/* You can add DeleteConfirmationDialog here later */}
+          <DropdownMenuItem asChild>
+            <DeleteDomainDialog
+              domain={row.original}
+              title="حذف النطاق"
+              description="هذا الإجراء سيحذف النطاق نهائياً ولن تتمكن من استخدامه في اختصار الروابط."
+              confirmationText={row.original.domain}
+              confirmationLabel="اكتب اسم النطاق لتأكيد الحذف:"
+            >
+              <Button
+                variant="ghost"
+                className="w-full text-end h-fit py-1 flex gap-2 text-red-600 justify-end px-2 items-center text-sm hover:text-red-600 cursor-pointer"
+              >
+                حذف النطاق
+                <Delete size={16} />
+              </Button>
+            </DeleteDomainDialog>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

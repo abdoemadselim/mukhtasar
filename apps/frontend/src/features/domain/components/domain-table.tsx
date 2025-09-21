@@ -13,7 +13,6 @@ import { DomainType } from "@/features/domain/types";
 export default function DomainTable() {
     const { data, isError, isPending, error } = useGetDomains()
 
-    // Handle loading state
     if (isPending) {
         return <DataTableSkeleton />
     }

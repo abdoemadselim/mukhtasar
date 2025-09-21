@@ -60,6 +60,16 @@ const domainRepository = {
 
         return result.rows[0];
     },
+
+    async deleteDomain({ domainId, userId }: { domainId: number, userId: number }) {
+        const result = await query(`
+            DELETE FROM custom_domain
+            WHERE id = $1 AND user_id = $2
+            RETURNING id, domain, status
+        `, [domainId, userId]);
+
+        return result.rows[0];
+    },
 };
 
 export default domainRepository;

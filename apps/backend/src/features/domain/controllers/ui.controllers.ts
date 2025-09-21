@@ -72,3 +72,25 @@ export async function refreshDomain(req: IRequest, res: Response) {
 
     res.json(response)
 }
+
+// ---------------------- Delete Domain ----------------------
+export async function deleteDomain(req: IRequest, res: Response) {
+    //1- prepare the data for the service
+    const userId = req.user?.id;
+    const { domainId } = req.params;
+
+    //2- pass the data to the service
+    const result = await domainService.deleteDomain(userId as number, Number(domainId));
+
+    //3- prepare the response
+    const response = {
+        data: {
+            domain: result
+        },
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    }
+
+    res.json(response)
+}

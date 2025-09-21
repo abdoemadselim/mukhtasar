@@ -42,8 +42,7 @@ export function DeleteConfirmationDialog<T>({
         setInputValue("")
     }
 
-    const handleDeleteToken = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleDeleteToken = () => {
         if (inputValue === confirmationText) {
             deleteResourceMutation()
             setIsOpen(false)

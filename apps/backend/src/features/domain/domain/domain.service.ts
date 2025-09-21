@@ -109,19 +109,6 @@ function getDomainTarget() {
     return process.env.DOMAIN_TARGET || 'domains.mukhtasar.pro';
 }
 
-// export async function checkAndUpdateDomainStatus(domainId: number, domain: string) {
-//     const targetDomain = getDomainTarget();
-//     const verification = await verifyDomainRecord(domain, domain.domain_type, targetDomain);
-
-//     const newStatus = verification.isValid ? 'active' : 'failed';
-
-//     return {
-//         status: newStatus,
-//         verification: verification,
-//         lastChecked: new Date()
-//     };
-// }
-
 export async function refreshDomain(user_id: number, domainId: number) {
     // Verify user owns the domain
     const domain = await domainRepository.getDomainById(domainId);
@@ -153,4 +140,24 @@ export async function refreshDomain(user_id: number, domainId: number) {
         verification: verification,
         updated_at: updatedDomain.updated_at
     };
+}
+
+export async function deleteDomain(user_id: number, domainId: number) {
+    // Verify user owns the domain
+    const domain = await domainRepository.getDomainById(domainId);
+    if (!domain || domain.user_id !== user_id) {
+        throw new ValidationException({ domain: { message: "النطاق غير موجود." } });
+    }
+
+    // Delete the domain
+    const deletedDomain = await domainRepository.deleteDomain({
+        domainId: domain.id,
+        userId: user_id
+    });
+
+    if (!deletedDomain) {
+        throw new ValidationException({ domain: { message: "فشل في حذف النطاق." } });
+    }
+
+    return deletedDomain;
 }
