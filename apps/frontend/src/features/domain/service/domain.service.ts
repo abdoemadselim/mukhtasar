@@ -20,16 +20,14 @@ export async function addDomain(data: AddDomainType) {
 
 export async function deleteDomain(id: number) {
     return apiClient.delete("/domain", {
-        body: JSON.stringify({
-            id
-        }),
-        throwOnError: true, // This will throw errors instead of returning error objects
+        body: { id },
+        throwOnError: true,
         includeCredentials: true
     });
 }
 
 export async function refreshDomain(domainId?: number) {
-    return apiClient.post(`/domain/${domainId}/refresh`, {
+    return apiClient.post(`/domain/${domainId}/refresh`, null, {
         throwOnError: true,
         includeCredentials: true
     });

@@ -11,13 +11,13 @@ export async function getUserDomains(user_id: number) {
 
     const targetDomain = getDomainTarget();
     const updatedDomains = [];
-
     updatedDomains.push(...domains)
 
     for (const domain of domains) {
         // Check CNAME for each domain
-        const verification = await verifyDomainCNAME(
+        const verification = await verifyDomainRecord(
             domain.domain,
+            domain.domain_type,
             targetDomain
         );
 
@@ -33,50 +33,74 @@ export async function getUserDomains(user_id: number) {
             updatedDomains.push({ ...domain, status: newStatus, updated_at: updated.updated_at });
         }
     }
+
+    return updatedDomains;
 }
 
-export async function addDomain({ domain, user_id }: { domain: string, user_id: number }) {
+export async function addDomain({ domain, user_id, domain_type }: { domain: string, user_id: number, domain_type: string }) {
     // 1. Check if domain already exists (globally)
     const existingDomain = await domainRepository.checkDomainExists(domain);
     if (existingDomain) {
         throw new ValidationException({ domain: { message: "هذا النطاق مستخدم بالفعل." } });
     }
 
+    // 2. Validate domain_type
+    if (!['domain', 'subdomain'].includes(domain_type)) {
+        throw new ValidationException({ domain_type: { message: "نوع النطاق غير صالح." } });
+    }
+
     // 2. Create the domain with pending status
     const createdDomain = await domainRepository.addDomain({
         domain: domain.toLowerCase(),
-        userId: user_id
+        userId: user_id,
+        domainType: domain_type
     });
 
     return createdDomain;
 }
 
-export async function verifyDomainCNAME(domain: string, expectedTarget: string) {
+export async function verifyDomainRecord(domain: string, domainType: string, expectedTarget: string) {
     try {
-        // user domain: go.minimoapp.pro 
-        // CNAME go.minimoapp.pro ---content---> domains.mukhtasar.pro
-        console.log(domain);
-        const records = await dns.resolveNs(domain);
+        if (domainType === 'domain') {
+            // For root domains, check A records
+            const records = await dns.resolve4(domain);
+            const expectedIP = process.env.SERVER_IP || '167.99.123.456'; // Your server IP
 
-        console.log(records)
-        // Check if any CNAME record matches our expected target
-        const isValid = records.some(record =>
-            record.toLowerCase() === expectedTarget.toLowerCase()
-        );
+            const isValid = records.some(record =>
+                record === expectedIP
+            );
 
-        return {
-            isValid,
-            records,
-            timestamp: new Date(),
-            error: null
-        };
+            return {
+                isValid,
+                records,
+                timestamp: new Date(),
+                error: null,
+                recordType: 'A'
+            };
+        } else {
+            // For subdomains, check CNAME records
+            const records = await dns.resolveCname(domain);
+
+            const isValid = records.some(record =>
+                record.toLowerCase() === expectedTarget.toLowerCase()
+            );
+
+            return {
+                isValid,
+                records,
+                timestamp: new Date(),
+                error: null,
+                recordType: 'CNAME'
+            };
+        }
     } catch (error: any) {
         // DNS resolution failed
         return {
             isValid: false,
             records: [],
             error: error.message,
-            timestamp: new Date()
+            timestamp: new Date(),
+            recordType: domainType === 'domain' ? 'A' : 'CNAME'
         };
     }
 }
@@ -85,18 +109,18 @@ function getDomainTarget() {
     return process.env.DOMAIN_TARGET || 'domains.mukhtasar.pro';
 }
 
-export async function checkAndUpdateDomainStatus(domainId: number, domain: string) {
-    const targetDomain = getDomainTarget();
-    const verification = await verifyDomainCNAME(domain, targetDomain);
+// export async function checkAndUpdateDomainStatus(domainId: number, domain: string) {
+//     const targetDomain = getDomainTarget();
+//     const verification = await verifyDomainRecord(domain, domain.domain_type, targetDomain);
 
-    const newStatus = verification.isValid ? 'active' : 'failed';
+//     const newStatus = verification.isValid ? 'active' : 'failed';
 
-    return {
-        status: newStatus,
-        verification: verification,
-        lastChecked: new Date()
-    };
-}
+//     return {
+//         status: newStatus,
+//         verification: verification,
+//         lastChecked: new Date()
+//     };
+// }
 
 export async function refreshDomain(user_id: number, domainId: number) {
     // Verify user owns the domain
@@ -108,8 +132,9 @@ export async function refreshDomain(user_id: number, domainId: number) {
     const targetDomain = getDomainTarget();
 
     // Verify CNAME
-    const verification = await verifyDomainCNAME(
+    const verification = await verifyDomainRecord(
         domain.domain,
+        domain.domain_type,
         targetDomain
     );
 

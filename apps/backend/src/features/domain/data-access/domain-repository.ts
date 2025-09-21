@@ -5,18 +5,18 @@ const domainRepository = {
         const result = await query(`
             SELECT id FROM domain
             WHERE user_id = $1 AND domain_string = $2
-        `, [String(userId), domain]);
+        `, [userId, domain]);
 
         return result.rows[0];
     },
 
     async getUserDomains(userId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at
+            SELECT id, domain, status, created_at, domain_type
             FROM custom_domain
             WHERE user_id = $1
             ORDER BY created_at DESC
-        `, [String(userId)]);
+        `, [userId]);
 
         return result.rows;
     },
@@ -30,19 +30,19 @@ const domainRepository = {
         return result.rows[0];
     },
 
-    async addDomain({ domain, userId }: { domain: string, userId: number }) {
+    async addDomain({ domain, userId, domainType }: { domain: string, userId: number, domainType: string }) {
         const result = await query(`
-            INSERT INTO custom_domain (domain, user_id, status)
-            VALUES ($1, $2, 'pending')
-            RETURNING id, domain, status
-        `, [domain, userId]);
+            INSERT INTO custom_domain (domain, user_id, status, domain_type)
+            VALUES ($1, $2, 'pending', $3)
+            RETURNING id, domain, status, domain_type
+        `, [domain, userId, domainType]);
 
         return result.rows[0];
     },
 
     async getDomainById(domainId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at, user_id
+            SELECT id, domain, status, created_at, user_id, domain_type
             FROM custom_domain
             WHERE id = $1
         `, [domainId]);
