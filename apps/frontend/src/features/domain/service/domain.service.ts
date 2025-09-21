@@ -1,12 +1,17 @@
 
-import { apiClient } from "@/lib/api-client";
 import { AddDomainType } from "@mukhtasar/shared";
+import { apiClient } from "@/lib/api-client";
 
 export async function getDomains() {
-    const endpoint = `/domain`;
+    return apiClient.get('/domain', {
+        throwOnError: true,
+        includeCredentials: true
+    });
+}
 
-    return apiClient.get(endpoint, {
-        throwOnError: true, // This will throw errors instead of returning error objects
+export async function getActiveDomains() {
+    return apiClient.get('/domain/active', {
+        throwOnError: true,
         includeCredentials: true
     });
 }

@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 
 import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
+
 import { getSession } from "@/features/auth/service/auth-session";
 
 export default async function NavLayout({
@@ -17,6 +19,7 @@ export default async function NavLayout({
         <>
             <Navbar />
             {children}
+            <Footer />
         </>
     );
 }

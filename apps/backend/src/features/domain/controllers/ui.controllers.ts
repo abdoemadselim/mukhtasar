@@ -25,6 +25,27 @@ export async function getUserDomains(req: IRequest, res: Response) {
     res.json(response)
 }
 
+// ---------------------- Get User Active Domains ----------------------
+export async function getUserActiveDomains(req: IRequest, res: Response) {
+    //1- prepare the data for the service
+    const userId = req.user?.id;
+
+    //2- pass the data to the service
+    const domains = await domainService.getUserActiveDomains(userId as number);
+
+    //3- prepare the response
+    const response = {
+        data: {
+            domains
+        },
+        errors: [],
+        code: NoException.NoErrorCode,
+        errorCode: NoException.NoErrorCodeString,
+    }
+
+    res.json(response)
+}
+
 // ---------------------- Register New Domain ----------------------
 export async function addDomain(req: IRequest, res: Response) {
     //1- prepare the data for the service

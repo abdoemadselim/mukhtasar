@@ -1,4 +1,4 @@
-export type Status = "pending" | "ssl_provisioning" | "active" | "failed";
+export type Status = "pending" | "active" | "failed";
 
 export type DomainType = {
     id: number,

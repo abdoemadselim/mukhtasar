@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { ChevronUp, Globe, Link as LinkIcon, Lock, LogOut, User2 } from "lucide-react"
+import { ChartArea, ChevronUp, Folder, Globe, Link as LinkIcon, Lock, LogOut, QrCode, Settings, User2 } from "lucide-react"
 
 import {
   Sidebar,
@@ -28,14 +28,34 @@ const items = [
     icon: LinkIcon,
   },
   {
-    title: "API (رمز الوصول)",
+    title: "رموز  الوصول (API Tokens)",
     url: "/dashboard/tokens",
     icon: Lock,
   },
   // {
-  //   title: "نطاق خاص",
+  //   title: "الأنطقة الخاصة (domains)",
   //   url: "/dashboard/domains",
   //   icon: Globe,
+  // },
+  // {
+  //   title: "الباركود (QR Codes)",
+  //   url: "/dashboard/qr-codes",
+  //   icon: QrCode,
+  // },
+  // {
+  //   title: "إحصاءات الروابط",
+  //   url: "/dashboard/analytics",
+  //   icon: ChartArea,
+  // },
+  // {
+  //   title: "الحملات التسويقية",
+  //   url: "/dashboard/campaigns",
+  //   icon: Folder,
+  // },
+  // {
+  //   title: "الإعدادات",
+  //   url: "/dashboard/settings",
+  //   icon: Settings,
   // },
 ]
 

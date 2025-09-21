@@ -11,7 +11,6 @@ export async function getUserDomains(user_id: number) {
 
     const targetDomain = getDomainTarget();
     const updatedDomains = [];
-    updatedDomains.push(...domains)
 
     for (const domain of domains) {
         // Check CNAME for each domain
@@ -31,10 +30,17 @@ export async function getUserDomains(user_id: number) {
                 status: newStatus
             });
             updatedDomains.push({ ...domain, status: newStatus, updated_at: updated.updated_at });
+        } else {
+            updatedDomains.push({ ...domain });
         }
     }
 
     return updatedDomains;
+}
+
+export async function getUserActiveDomains(user_id: number) {
+    const domains = await domainRepository.getUserActiveDomains(user_id);
+    return domains;
 }
 
 export async function addDomain({ domain, user_id, domain_type }: { domain: string, user_id: number, domain_type: string }) {
@@ -161,3 +167,4 @@ export async function deleteDomain(user_id: number, domainId: number) {
 
     return deletedDomain;
 }
+

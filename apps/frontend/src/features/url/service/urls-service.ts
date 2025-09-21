@@ -30,3 +30,7 @@ export async function updateUrl({ domain, alias, original_url }: ParamsType & To
         includeCredentials: true
     });
 }
+
+export async function getActiveDomains() {
+    return apiClient.get("/domain/")
+}

@@ -60,7 +60,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
     useEffect(() => {
         if (isError) {
             openToaster(error?.message as string, "error")
-        }
+        }   
     }, [isError, error])
 
     const handleClose = () => {

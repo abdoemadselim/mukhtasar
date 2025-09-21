@@ -11,21 +11,9 @@ async function handleRequest(request, event) {
   const path = url.pathname
   logRequest(path, 'Worker intercepted')
 
-  // Block access to API UI endpoints (Only accessibly through mukhtasar interface)
-  // if (isApiUiPath(path)) {
-  //   logRequest(path, 'Blocking API backend /ui/* access')
-  //   return new Response(null, { status: 404 }) // no body at all
-  // }
-
-  // if (isApiPath(path)) {
-  //   logRequest(path, 'Handling API request - redirects to backend')
-  //   return fetch(request)
-  // }
-
   if (path.startsWith("/_vercel")) {
-    return fetch(request)
+    return fetch(request.url)
   }
-
   if (shouldRouteToFrontend(path)) {
     logRequest(path, 'Routing to frontend')
     return fetch(request)
@@ -33,16 +21,6 @@ async function handleRequest(request, event) {
 
   logRequest(path, 'Handling redirect for alias')
   return handleRedirect(request, event)
-}
-
-function isApiUiPath(path) {
-  // Block all /ui paths that should not be publicly accessible
-  return path.startsWith('/ui')
-}
-
-function isApiPath(path) {
-  // Block all /ui paths that should not be publicly accessible
-  return path.startsWith('/api');
 }
 
 function shouldRouteToFrontend(path) {

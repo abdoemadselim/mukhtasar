@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createUrl, deleteUrl, getUrls, updateUrl } from "@/features/url/service/urls-service"
 
 export function useGetUrls({ page, page_size }: { page: number, page_size: number }) {
-    return useQuery<{ urls: FullUrlType[], total: number }>({
+    const { data, isError, isPending, isSuccess } = useQuery<{ urls: FullUrlType[], total: number }>({
         queryKey: ["urls", page, page_size],
         queryFn: () => getUrls({ page, page_size }),
         staleTime: 5 * 60 * 1000, // 5 minutes,
@@ -12,6 +12,8 @@ export function useGetUrls({ page, page_size }: { page: number, page_size: numbe
         retry: 2,
         refetchOnWindowFocus: true,
     })
+
+    return { data, isError, isPending, isSuccess };
 }
 
 export function useDeleteUrl({ domain, alias }: ParamsType) {

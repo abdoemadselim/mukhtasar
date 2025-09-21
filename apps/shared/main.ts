@@ -111,7 +111,7 @@ export const ParamsSchema = zod.object({
 export const ShortUrlSchema = zod.object({
     original_url: urlSchema,
     alias: aliasSchema.optional().or(zod.literal("")),
-    domain: domainSchema.optional().or(zod.literal("")),
+    domain: domainSchema.or(zod.literal("")),
     description: zod.optional(zod.string().trim().max(300, "يجب ألا يتجاوز الوصف 300 حرف.")),
 })
 

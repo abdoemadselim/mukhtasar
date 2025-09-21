@@ -1,15 +1,13 @@
 {
-	"name": "mukhtasar-dev-worker",
+	"name": "mukhtasar-worker",
 	"main": "src/index.js",
 	"compatibility_date": "2025-09-18",
 	"routes": [
-		"dev.mukhtasar.pro/*"
+		"www.mukhtasar.pro/*",
+		"domains.mukhtasar.pro/*",
+		"mukhtasar.pro/*"
 	],
 	"observability": {
 		"enabled": true
-	},
-	"vars": {
-		"API_BASE": "https://mukhtasar-dev.onrender.com",
-		"ENV": "development"
 	}
 }

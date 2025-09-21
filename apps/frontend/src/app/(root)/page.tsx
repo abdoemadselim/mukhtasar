@@ -18,7 +18,7 @@ export default function HomePage() {
 
         <div className="flex flex-col lg:flex-row gap-10 items-center justify-center mt-20 px-6">
 
-          <div className="sm:text-2xl lg:text-3xl text-xl flex justify-center flex-col items-center max-w-[550px] text-gray-800 bg-gray-100 rounded-2xl p-5 py-6">
+          <div className="sm:text-2xl lg:text-3xl text-xl parent flex justify-center flex-col items-center max-w-[550px] text-gray-800 bg-gray-100 rounded-2xl p-5 py-6 hover:bg-gray-200">
             <Image
               src="/customer.png"
               alt="Customer icon"
@@ -31,7 +31,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="sm:text-2xl lg:text-3xl text-xl flex justify-center flex-col items-center max-w-[550px] text-gray-800 bg-gray-100 rounded-2xl p-5 py-6">
+          <div className="sm:text-2xl lg:text-3xl text-xl flex justify-center flex-col items-center max-w-[550px] text-gray-800 bg-gray-100 rounded-2xl p-5 py-6 hover:bg-gray-200">
             <Image
               src="/slider.png"
               alt="Slider icon"
