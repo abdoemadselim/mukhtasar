@@ -36,7 +36,7 @@ export default function UrlTable() {
             {isError &&
                 <Alert variant="destructive" className="w-fit px-6 mr-6">
                     <AlertCircleIcon />
-                    <AlertTitle>{error.message}</AlertTitle>
+                    <AlertTitle>{error?.message}</AlertTitle>
                 </Alert>
             }
             <PaginatedDataTable<FullUrlType> data={data?.urls || []} total={data?.total || 0} pagination={paginationState} columns={columns} />

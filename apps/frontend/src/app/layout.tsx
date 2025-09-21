@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import "@/app/globals.css";
-import { cairo } from "@/app/fonts";
+import { cairo } from "@/fonts/fonts";
 
 import { ClientProvider } from "@/context/client-provider";
 import { Toaster } from "@/components/ui/sonner";
