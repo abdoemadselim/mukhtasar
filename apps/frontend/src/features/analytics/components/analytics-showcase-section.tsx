@@ -16,18 +16,16 @@ import Link from "next/link"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Highlighter } from "@/components/ui/highlighter"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
 const analyticsFeatures = [
     {
         icon: MousePointer,
-        title: "إجمالي النقرات",
-        description: "عدد النقرات الكلي مع متوسط النقرات اليومية لكل رابط",
+        title: "إجمالي  الزوار ",
+        description: "عدد الزيارات الكلية مع متوسط الزيارات اليومية لكل رابط",
         gradient: "from-blue-600 to-cyan-600",
         bgGradient: "from-blue-50 to-cyan-50",
-        shadowColor: "shadow-blue-500/25",
-        category: "أساسية"
+        shadowColor: "shadow-blue-500/25"
     },
     {
         icon: Users,
@@ -35,8 +33,7 @@ const analyticsFeatures = [
         description: "عدد الزوار الجدد الذين زاروا روابطك",
         gradient: "from-purple-600 to-pink-600",
         bgGradient: "from-purple-50 to-pink-50",
-        shadowColor: "shadow-purple-500/25",
-        category: "متقدمة"
+        shadowColor: "shadow-purple-500/25"
     },
     {
         icon: BarChart3,
@@ -44,8 +41,7 @@ const analyticsFeatures = [
         description: "رسوم بيانية تفاعلية لتتبع أداء روابطك خلال فترات زمنية مختلفة",
         gradient: "from-emerald-600 to-teal-600",
         bgGradient: "from-emerald-50 to-teal-50",
-        shadowColor: "shadow-emerald-500/25",
-        category: "تفاعلية"
+        shadowColor: "shadow-emerald-500/25"
     },
     {
         icon: Globe,
@@ -54,7 +50,6 @@ const analyticsFeatures = [
         gradient: "from-orange-600 to-red-600",
         bgGradient: "from-orange-50 to-red-50",
         shadowColor: "shadow-orange-500/25",
-        category: "جغرافية"
     },
     {
         icon: Smartphone,
@@ -63,7 +58,6 @@ const analyticsFeatures = [
         gradient: "from-violet-600 to-purple-600",
         bgGradient: "from-violet-50 to-purple-50",
         shadowColor: "shadow-violet-500/25",
-        category: "تقنية"
     },
     {
         icon: Activity,
@@ -72,7 +66,6 @@ const analyticsFeatures = [
         gradient: "from-indigo-600 to-blue-600",
         bgGradient: "from-indigo-50 to-blue-50",
         shadowColor: "shadow-indigo-500/25",
-        category: "تقنية"
     },
     {
         icon: Clock,
@@ -81,7 +74,6 @@ const analyticsFeatures = [
         gradient: "from-amber-600 to-orange-600",
         bgGradient: "from-amber-50 to-orange-50",
         shadowColor: "shadow-amber-500/25",
-        category: "زمنية"
     },
     {
         icon: Map,
@@ -90,7 +82,6 @@ const analyticsFeatures = [
         gradient: "from-rose-600 to-pink-600",
         bgGradient: "from-rose-50 to-pink-50",
         shadowColor: "shadow-rose-500/25",
-        category: "مرجعية"
     },
     {
         icon: Calendar,
@@ -99,7 +90,6 @@ const analyticsFeatures = [
         gradient: "from-green-600 to-emerald-600",
         bgGradient: "from-green-50 to-emerald-50",
         shadowColor: "shadow-green-500/25",
-        category: "زمنية"
     }
 ]
 
@@ -138,14 +128,6 @@ export default function AnalyticsShowcaseSection() {
                             <div className="absolute inset-[1px] bg-slate-900/95 backdrop-blur-xl rounded-xl"></div>
 
                             <CardContent className="relative p-8 text-center">
-                                {/* Category Badge */}
-                                <Badge
-                                    variant="secondary"
-                                    className="absolute top-4 right-4 bg-white/10 text-white/80 border-white/20 text-xs"
-                                >
-                                    {feature.category}
-                                </Badge>
-
                                 {/* Animated Icon Container */}
                                 <div className={`relative w-20 h-20 mx-auto mb-8 rounded-2xl bg-gradient-to-r ${feature.gradient} p-0.5 group-hover:scale-110 transition-transform duration-500`}>
                                     <div className="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center">
