@@ -6,16 +6,14 @@ const links = [
         title: 'عن مُختصِر',
         href: '/pages/about',
     },
-    {
-        title: 'خطط الأسعار',
-        href: '/pages/pricing',
-    },
-    /*
+    // {
+    //     title: 'خطط الأسعار',
+    //     href: '/pages/pricing',
+    // },
     {
         title: 'روابطك',
         href: '/dashboard/urls',
     },
-    */
 ]
 
 export default function Footer() {
