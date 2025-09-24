@@ -7,7 +7,7 @@ export async function getSession() {
   if (!token) return null
 
   try {
-    const res = await fetch(`${process.env.API_URL}/auth/me`, {
+    const res = await fetch(`${process.env.API_URL}/ui/auth/me`, {
       headers: { Cookie: `mukhtasar-session=${token}` },
       cache: "no-store", // always fresh session
     })
