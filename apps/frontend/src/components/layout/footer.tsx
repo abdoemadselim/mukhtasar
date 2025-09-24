@@ -10,10 +10,12 @@ const links = [
         title: 'خطط الأسعار',
         href: '/pages/pricing',
     },
+    /*
     {
         title: 'روابطك',
         href: '/dashboard/urls',
     },
+    */
 ]
 
 export default function Footer() {
