@@ -55,7 +55,7 @@ async function handleApiRequest(request, event) {
 function validateAliasFormat(alias) {
   if (!alias || alias.length > 30 || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$/.test(alias)) {
     logRequest(alias, 'Redirects to not found page for not valid alias')
-    return Response.redirect(`${url.origin}/pages/not-found`, 302)
+    return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
   }
 }
 
@@ -70,10 +70,10 @@ async function handleCustomDomain(request, event, domain) {
     return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
   }
 
-  redirectUrl(path)
+  return redirectUrl(path, event, request, domain)
 }
 
-async function redirectUrl(path) {
+async function redirectUrl(path, event, request, domain = "mukhtasar.pro") {
   // Extract alias from path (remove leading slash)
   const alias = path.slice(1).split('/')[0] // Take only first path segment
 
@@ -105,7 +105,7 @@ async function redirectUrl(path) {
       longUrl = data.data.url
       cache.set(cacheKey, longUrl)
     } else {
-      return Response.redirect(`${url.origin}/pages/not-found`, 302)
+      return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
     }
   }
 
@@ -159,7 +159,7 @@ async function handleRedirect(request, event, domain) {
   const url = new URL(request.url)
   const path = url.pathname
 
-  redirectUrl(path)
+  return redirectUrl(path, event, request, domain)
 }
 
 async function sendAnalytics(alias, request, event, domain = 'mukhtasar.pro') {
