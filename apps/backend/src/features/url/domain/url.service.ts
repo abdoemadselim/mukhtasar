@@ -135,13 +135,13 @@ async function saveUrl({
     };
 }
 
-export async function getOriginalUrl(alias: string) {
+export async function getOriginalUrl({ domain, alias }: { domain: string, alias: string }) {
     // First, check if the alias URL is in Redis
-    let url = await redisClient.get(`url:${alias}`);
+    let url = await redisClient.get(`url:${alias}-${domain}`);
 
     // If not found in Redis, fetch from the database and store in Redis
     if (!url) {
-        const record = await urlRepository.getUrlByAlias(alias);
+        const record = await urlRepository.getUrlByAliasAndDomain({ domain, alias });
 
         if (!record) throw new URLNotFoundException();
 

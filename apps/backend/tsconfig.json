@@ -1,17 +1,34 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "src/lib/email/templates/error-handling", "src/**/*.mmdb"],
-  "exclude": ["node_modules", "dist"],
+  "include": [
+    "src",
+    "src/lib/email/templates/error-handling",
+    "src/**/*.mmdb"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "src",
     "rootDir": "./src",
     "paths": {
-      "#root/*": ["*"],
-      "#features/*": ["features/*"],
-      "#lib/*": ["lib/*"],
-      "#routes/*": ["routes/*"],
-      "#middlewares/*": ["middlewares/*"]
+      "#root/*": [
+        "*"
+      ],
+      "#features/*": [
+        "features/*"
+      ],
+      "#lib/*": [
+        "lib/*"
+      ],
+      "#routes/*": [
+        "routes/*"
+      ],
+      "#middlewares/*": [
+        "middlewares/*"
+      ]
     }
   }
 }

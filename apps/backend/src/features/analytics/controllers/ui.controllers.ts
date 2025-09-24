@@ -224,15 +224,15 @@ export async function createAnalyticsEvent(req: Request, res: Response) {
     };
 
     const alias = req.body.alias;
+    const domain = req.body.domain;
 
     // Errors happening here is out of request (won't be caught by the error handler, thus cause app crash)
     // Why not just awaiting? this would block the redirection 
     // TODO: create a redis queue, and a worker that consumes the jobs from the queue 
-    analyticsService.updateAnalytics({ analyticsEvent, url_alias: alias })
+    analyticsService.updateAnalytics({ analyticsEvent, alias: alias, domain })
         .catch((error) => {
             log(LOG_TYPE.ERROR, { message: "Analytics update failed", stack: error.stack });
         })
-
 
     // 4- send the response
     res.json(response);

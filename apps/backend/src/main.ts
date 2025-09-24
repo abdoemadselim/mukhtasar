@@ -1,5 +1,6 @@
+
 // Setup newrelic for monitoring
-import 'newrelic';
+// import 'newrelic';
 
 // Setup dotenv for injecting env variables
 import "dotenv/config"

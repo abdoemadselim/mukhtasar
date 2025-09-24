@@ -50,13 +50,12 @@ export async function getUserActiveDomains(req: IRequest, res: Response) {
 export async function addDomain(req: IRequest, res: Response) {
     //1- prepare the data for the service
     const userId = req.user?.id;
-    const { domain, domain_type } = req.body;
+    const { domain } = req.body;
 
     //2- pass the data to the service
     const createdDomain = await domainService.addDomain({
         domain,
         user_id: userId as number,
-        domain_type: domain_type || 'subdomain'
     });
 
     //3- prepare the response

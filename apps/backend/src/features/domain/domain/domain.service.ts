@@ -1,3 +1,4 @@
+import { createCustomHostname } from './cloudflare.service.js';
 import dns from 'dns/promises';
 
 import domainRepository from "#features/domain/data-access/domain-repository.js";
@@ -16,7 +17,6 @@ export async function getUserDomains(user_id: number) {
         // Check CNAME for each domain
         const verification = await verifyDomainRecord(
             domain.domain,
-            domain.domain_type,
             targetDomain
         );
 
@@ -43,62 +43,47 @@ export async function getUserActiveDomains(user_id: number) {
     return domains;
 }
 
-export async function addDomain({ domain, user_id, domain_type }: { domain: string, user_id: number, domain_type: string }) {
-    // 1. Check if domain already exists (globally)
+export async function addDomain({ domain, user_id }: { domain: string, user_id: number }) {
+    // 1. Check if domain already exists
     const existingDomain = await domainRepository.checkDomainExists(domain);
     if (existingDomain) {
         throw new ValidationException({ domain: { message: "هذا النطاق مستخدم بالفعل." } });
     }
 
-    // 2. Validate domain_type
-    if (!['domain', 'subdomain'].includes(domain_type)) {
-        throw new ValidationException({ domain_type: { message: "نوع النطاق غير صالح." } });
-    }
+    // 2. Create custom hostname in Cloudflare
+    const cloudflareHostname = await createCustomHostname(domain.toLowerCase());
 
-    // 2. Create the domain with pending status
+    // 3. Create the domain in database with Cloudflare ID
     const createdDomain = await domainRepository.addDomain({
         domain: domain.toLowerCase(),
         userId: user_id,
-        domainType: domain_type
+        cloudflare_hostname_id: cloudflareHostname.id
     });
 
-    return createdDomain;
+    return {
+        id: createdDomain.id,
+        status: createdDomain.status,
+        ssl_status: cloudflareHostname.ssl.status,
+        domain_target: process.env.FALLBACK_ORIGIN
+    };
 }
 
-export async function verifyDomainRecord(domain: string, domainType: string, expectedTarget: string) {
+export async function verifyDomainRecord(domain: string, expectedTarget: string) {
     try {
-        if (domainType === 'domain') {
-            // For root domains, check A records
-            const records = await dns.resolve4(domain);
-            const expectedIP = process.env.SERVER_IP || '167.99.123.456'; // Your server IP
+        // For subdomains, check CNAME records
+        const records = await dns.resolveCname(domain);
 
-            const isValid = records.some(record =>
-                record === expectedIP
-            );
+        const isValid = records.some(record =>
+            record.toLowerCase() === expectedTarget.toLowerCase()
+        );
 
-            return {
-                isValid,
-                records,
-                timestamp: new Date(),
-                error: null,
-                recordType: 'A'
-            };
-        } else {
-            // For subdomains, check CNAME records
-            const records = await dns.resolveCname(domain);
-
-            const isValid = records.some(record =>
-                record.toLowerCase() === expectedTarget.toLowerCase()
-            );
-
-            return {
-                isValid,
-                records,
-                timestamp: new Date(),
-                error: null,
-                recordType: 'CNAME'
-            };
-        }
+        return {
+            isValid,
+            records,
+            timestamp: new Date(),
+            error: null,
+            recordType: 'CNAME'
+        };
     } catch (error: any) {
         // DNS resolution failed
         return {
@@ -106,13 +91,12 @@ export async function verifyDomainRecord(domain: string, domainType: string, exp
             records: [],
             error: error.message,
             timestamp: new Date(),
-            recordType: domainType === 'domain' ? 'A' : 'CNAME'
         };
     }
 }
 
 function getDomainTarget() {
-    return process.env.DOMAIN_TARGET || 'domains.mukhtasar.pro';
+    return process.env.FALLBACK_ORIGIN || 'domains.mukhtasar.pro';
 }
 
 export async function refreshDomain(user_id: number, domainId: number) {
@@ -127,7 +111,6 @@ export async function refreshDomain(user_id: number, domainId: number) {
     // Verify CNAME
     const verification = await verifyDomainRecord(
         domain.domain,
-        domain.domain_type,
         targetDomain
     );
 

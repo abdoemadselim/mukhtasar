@@ -12,7 +12,7 @@ const domainRepository = {
 
     async getUserDomains(userId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at, domain_type
+            SELECT id, domain, status, created_at
             FROM custom_domain
             WHERE user_id = $1
             ORDER BY created_at DESC
@@ -23,7 +23,7 @@ const domainRepository = {
 
     async getUserActiveDomains(userId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at, domain_type
+            SELECT id, domain, status, created_at
             FROM custom_domain
             WHERE user_id = $1 AND status = 'active'
             ORDER BY created_at DESC
@@ -41,22 +41,22 @@ const domainRepository = {
         return result.rows[0];
     },
 
-    async addDomain({ domain, userId, domainType }: { domain: string, userId: number, domainType: string }) {
+    async addDomain({ domain, userId, cloudflare_hostname_id }: { domain: string, userId: number, cloudflare_hostname_id: string }) {
         const result = await query(`
-            INSERT INTO custom_domain (domain, user_id, status, domain_type)
+           INSERT INTO custom_domain (domain, user_id, status, cloudflare_hostname_id)
             VALUES ($1, $2, 'pending', $3)
-            RETURNING id, domain, status, domain_type
-        `, [domain, userId, domainType]);
+            RETURNING id, domain, status, cloudflare_hostname_id
+        `, [domain, userId, cloudflare_hostname_id]);
 
         return result.rows[0];
     },
 
     async getDomainById(domainId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at, user_id, domain_type
+            SELECT id, domain, status, created_at, user_id
             FROM custom_domain
             WHERE id = $1
-        `, [domainId]);
+            `, [domainId]);
 
         return result.rows[0];
     },
@@ -67,7 +67,7 @@ const domainRepository = {
             SET status = $1, updated_at = NOW()
             WHERE id = $2
             RETURNING id, domain, status, updated_at
-        `, [status, domainId]);
+            `, [status, domainId]);
 
         return result.rows[0];
     },
@@ -77,7 +77,7 @@ const domainRepository = {
             DELETE FROM custom_domain
             WHERE id = $1 AND user_id = $2
             RETURNING id, domain, status
-        `, [domainId, userId]);
+            `, [domainId, userId]);
 
         return result.rows[0];
     },

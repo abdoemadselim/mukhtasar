@@ -17,8 +17,11 @@ type ClicksOverTimeParams = AnalyticsParams & {
 
 type RefererStatsParams = AnalyticsParams
 
-export async function updateAnalytics({ analyticsEvent, url_alias }: { analyticsEvent: Omit<AnalyticsEventInput, "url_id">, url_alias: string }) {
-    const url = await urlRepository.getUrlByAlias(url_alias)
+export async function updateAnalytics({ analyticsEvent, alias, domain }: { analyticsEvent: Omit<AnalyticsEventInput, "url_id">, alias: string, domain: string }) {
+    const url = await urlRepository.getUrlByAliasAndDomain({ domain, alias })
+    if (!url) {
+        throw new URLNotFoundException()
+    }
 
     const fullAnalyticsEvent = {
         ...analyticsEvent,

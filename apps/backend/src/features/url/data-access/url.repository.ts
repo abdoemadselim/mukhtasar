@@ -36,7 +36,7 @@ const urlRepository = {
 
     async getUrlByAliasAndDomain({ alias, domain }: ParamsType): Promise<UrlType | undefined> {
         const result = await query(
-            "SELECT alias, domain, original_url, short_url FROM url WHERE alias = $1 AND domain = $2",
+            "SELECT id, alias, domain, original_url, short_url FROM url WHERE alias = $1 AND domain = $2",
             [alias, domain]
         );
 

@@ -69,7 +69,7 @@ function createServer() {
     // ------- App Routes -------------------
     app.use("/api", apiRoutes)
     app.use("/ui", uiRoutes)
-    app.use("/", publicRoutes)
+    app.use("/public", publicRoutes)
 
     // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
     app.use("*splash", () => {

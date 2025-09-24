@@ -4,12 +4,12 @@ import { NoException } from "#lib/error-handling/error-types.js";
 
 export async function getOriginalUrl(req: Request, res: Response) {
     // 1- prepare the data for the service
-    const { alias } = req.params;
+    const { alias, domain = process.env.ORIGINAL_DOMAIN as string } = req.params;
 
     // 2- pass the prepared data to the service
-    const original_url = await urlService.getOriginalUrl(alias);
+    const original_url = await urlService.getOriginalUrl({ domain, alias });
 
-     // 3- prepare the response
+    // 3- prepare the response
     const response = {
         data: {
             url: original_url,

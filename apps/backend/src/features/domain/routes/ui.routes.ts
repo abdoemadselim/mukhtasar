@@ -12,7 +12,7 @@ router.get("/", authSession(), getUserDomains)
 router.get("/active", authSession(), getUserActiveDomains)
 
 router.post("/",
-    authSession(),
+    // authSession(),
     validateRequest([addDomainSchema]),
     addDomain
 )
