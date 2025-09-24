@@ -26,7 +26,7 @@ import UserActionsDropDown from "@/features/user/components/user-actions-drop-do
 const navigationLinks = [
   { href: "/pages/pricing", label: "خطط الأسعار", active: true },
   { href: `${process.env.NEXT_PUBLIC_API_URL}/api/docs`, label: "API" },
-  { href: "/dashboard/urls", label: "الروابط" },
+/*  { href: "/dashboard/urls", label: "الروابط" },*/
 ]
 
 export default function Navbar() {
