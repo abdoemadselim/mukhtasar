@@ -11,6 +11,8 @@ async function handleRequest(request, event) {
   const path = url.pathname
   const domain = url.hostname
 
+  console.log(request.url);
+
   logRequest(path, 'Worker intercepted')
 
   // Handle API subdomain
@@ -65,7 +67,7 @@ async function handleCustomDomain(request, event, domain) {
   // Root path (/) should redirect to the main site or show an error
   if (path === '/' || path === '') {
     logRequest('/', 'Custom domain root access', { domain })
-    return Response.redirect(`https://mukhtasar.pro`, 302)
+    return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
   }
 
   redirectUrl(path)

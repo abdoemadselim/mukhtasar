@@ -12,7 +12,7 @@ const domainRepository = {
 
     async getUserDomains(userId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at
+            SELECT id, cloudflare_hostname_id, domain, status, created_at
             FROM custom_domain
             WHERE user_id = $1
             ORDER BY created_at DESC
@@ -53,7 +53,7 @@ const domainRepository = {
 
     async getDomainById(domainId: number) {
         const result = await query(`
-            SELECT id, domain, status, created_at, user_id
+            SELECT id, domain, status, created_at, user_id, cloudflare_hostname_id
             FROM custom_domain
             WHERE id = $1
             `, [domainId]);

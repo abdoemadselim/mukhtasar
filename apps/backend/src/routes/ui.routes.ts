@@ -15,6 +15,6 @@ router.use("/token", uiRateLimiter(15, 250), authSession(), tokenRoutes)
 router.use("/auth", authRoutes)
 router.use("/url", uiRateLimiter(15, 250), urlRoutes)
 router.use("/analytics", uiRateLimiter(15, 250), analyticsRoutes)
-router.use("/domain", uiRateLimiter(15, 50), domainRoutes)
+router.use("/domain", uiRateLimiter(15, 100), domainRoutes)
 
 export default router;

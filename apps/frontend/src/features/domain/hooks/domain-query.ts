@@ -54,8 +54,12 @@ export function useAddDomain() {
 }
 
 export function useRefreshDomain() {
+    const queryClient = useQueryClient();
     const { mutateAsync, isError, isPending, error } = useMutation({
         mutationFn: (domainId: number) => refreshDomain(domainId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["domains"] })
+        }
     })
 
     return { mutateAsync, isError, isPending, error }

@@ -29,7 +29,7 @@ export default function DomainInstructionsDialog({
     domain,
     domainType
 }: DomainInstructionsDialogProps) {
-    const targetDomain = process.env.NEXT_PUBLIC_FALLBACK_ORIGIN || "custom-hostnames.yourapp.com"
+    const targetDomain = process.env.NEXT_PUBLIC_FALLBACK_ORIGIN || "domains.mukhtasar.pro"
 
     const handleCopyRecord = async (text: string) => {
         await navigator.clipboard.writeText(text)

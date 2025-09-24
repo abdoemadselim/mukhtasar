@@ -5,10 +5,10 @@ const cloudflareClient = new Cloudflare({
 });
 
 export async function createCustomHostname(hostname: string): Promise<Cloudflare.CustomHostnames.CustomHostnameCreateResponse> {
-    const zoneId = process.env.CLOUDFLARE_ZONE_ID as string;
+    const zone_id = process.env.CLOUDFLARE_ZONE_ID as string;
 
     const response = await cloudflareClient.customHostnames.create({
-        zone_id: zoneId,
+        zone_id,
         hostname,
         ssl: {
             method: 'http',
@@ -32,32 +32,28 @@ export async function createCustomHostname(hostname: string): Promise<Cloudflare
     };
 }
 
-// export async function getCustomHostnameStatus(hostnameId: string): Promise<CloudflareCustomHostname> {
-//     const zoneId = process.env.CLOUDFLARE_ZONE_ID as string;
+export async function getCustomHostnameStatus(hostnameId: string): Promise<Cloudflare.CustomHostnames.CustomHostnameGetResponse> {
+    const zone_id = process.env.CLOUDFLARE_ZONE_ID as string;
 
-//     try {
-//         const response = await cloudflare.customHostnames.get(zoneId, hostnameId);
+    const response = await cloudflareClient.customHostnames.get(hostnameId, {
+        zone_id
+    });
 
-//         return {
-//             id: response.result.id,
-//             hostname: response.result.hostname,
-//             status: response.result.status as any,
-//             ssl: {
-//                 status: response.result.ssl.status as any,
-//                 validation_errors: response.result.ssl.validation_errors
-//             }
-//         };
-//     } catch (error: any) {
-//         throw new Error(`Failed to get custom hostname status: ${error.message}`);
-//     }
-// }
+    return {
+        id: response.id,
+        hostname: response.hostname,
+        status: response.status,
+        ssl: {
+            status: response.ssl.status,
+            validation_errors: response.ssl.validation_errors
+        }
+    };
+}
 
-// export async function deleteCustomHostname(hostnameId: string): Promise<void> {
-//     const zoneId = process.env.CLOUDFLARE_ZONE_ID as string;
+export async function deleteCustomHostname(hostnameId: string): Promise<void> {
+    const zone_id = process.env.CLOUDFLARE_ZONE_ID as string;
 
-//     try {
-//         await cloudflare.customHostnamesForAZone.delete(zoneId, hostnameId);
-//     } catch (error: any) {
-//         throw new Error(`Failed to delete custom hostname: ${error.message}`);
-//     }
-// }
+    await cloudflareClient.customHostnames.delete(hostnameId, {
+        zone_id
+    });
+}
