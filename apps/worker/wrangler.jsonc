@@ -3,9 +3,10 @@
 	"main": "src/index.js",
 	"compatibility_date": "2025-09-18",
 	"routes": [
-		"www.mukhtasar.pro/*",
-		"domains.mukhtasar.pro/*",
-		"mukhtasar.pro/*"
+		{
+			"pattern": "*",
+			"zone_name": "mukhtasar.pro"
+		}
 	],
 	"observability": {
 		"enabled": true

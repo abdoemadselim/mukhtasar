@@ -195,7 +195,6 @@ export const AddDomainSchema = zod.object({
             (domain) => !BLOCKED_DOMAINS.includes(domain.toLowerCase()),
             { message: "هذا النطاق غير متاح للاستخدام." }
         ),
-    domain_type: zod.enum(["domain", "subdomain"])
 });
 
 export type AddDomainType = zod.infer<typeof AddDomainSchema>;
