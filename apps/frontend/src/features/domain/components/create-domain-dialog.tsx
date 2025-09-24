@@ -1,10 +1,8 @@
-// Update apps/frontend/src/features/domain/components/create-domain-dialog.tsx
-
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { AddDomainSchema, AddDomainType } from "@mukhtasar/shared"
 
 import { Button } from "@/components/ui/button"
@@ -21,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { openToaster } from "@/components/ui/sonner"
-import { Checkbox } from "@/components/ui/checkbox"
 
 import { useAddDomain } from "@/features/domain/hooks/domain-query"
 import DomainInstructionsDialog from "@/features/domain/components/domain-instructions-dialog"
@@ -35,19 +32,15 @@ export default function CreateDomainDialog({ children }: { children: React.React
         handleSubmit,
         formState: { errors, isSubmitting },
         reset,
-        control,
-        watch,
         getValues
     } = useForm<AddDomainType>({
         resolver: zodResolver(AddDomainSchema),
         defaultValues: {
             domain: "",
-            domain_type: "subdomain",
         },
     })
 
     const { mutateAsync, isError, error } = useAddDomain()
-    const watchedDomainType = watch("domain_type")
 
     const onSubmit = async (data: AddDomainType) => {
         await mutateAsync(data)
@@ -60,7 +53,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
     useEffect(() => {
         if (isError) {
             openToaster(error?.message as string, "error")
-        }   
+        }
     }, [isError, error])
 
     const handleClose = () => {
@@ -84,7 +77,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
                         <DialogHeader className="pb-4">
                             <DialogTitle className="text-right">إضافة نطاق مخصص</DialogTitle>
                             <DialogDescription className="text-right">
-                                أدخل النطاق المخصص الذي تريد استخدامه لاختصار الروابط
+                                أدخل النطاق المخصص الذي تريد استخدامه لاختصار الروابط. سيتم إصدار شهادة SSL تلقائياً.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 pb-6">
@@ -93,7 +86,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
                                 <Input
                                     {...register("domain")}
                                     id="domain"
-                                    placeholder="example.com"
+                                    placeholder="example.com أو go.example.com"
                                     dir="ltr"
                                 />
 
@@ -104,68 +97,10 @@ export default function CreateDomainDialog({ children }: { children: React.React
                                         </p>
                                     </div>
                                 )}
-                            </div>
 
-                            {/* Domain Type Selection */}
-                            <div className="grid gap-3">
-                                <Label className="text-sm font-medium">نوع النطاق</Label>
-
-                                {/* Subdomain Checkbox */}
-                                <div className="flex items-center gap-3">
-                                    <Controller
-                                        name="domain_type"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Checkbox
-                                                checked={field.value === "subdomain"}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) field.onChange("subdomain")
-                                                }}
-                                                id="is_subdomain"
-                                            />
-                                        )}
-                                    />
-                                    <Label htmlFor="is_subdomain" className="text-sm">
-                                        نطاق فرعي (Subdomain)
-                                    </Label>
-                                </div>
-
-                                {/* Domain Checkbox */}
-                                <div className="flex items-center gap-3">
-                                    <Controller
-                                        name="domain_type"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Checkbox
-                                                checked={field.value === "domain"}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) field.onChange("domain")
-                                                }}
-                                                id="is_domain"
-                                            />
-                                        )}
-                                    />
-                                    <Label htmlFor="is_domain" className="text-sm">
-                                        نطاق رئيسي (Domain)
-                                    </Label>
-                                </div>
-
-                                {/* Dynamic Helper Text */}
                                 <p className="text-xs text-muted-foreground text-right">
-                                    {watchedDomainType === "domain"
-                                        ? "مثال: example.com - ستحتاج إلى إعداد A Record"
-                                        : "مثال: go.example.com - ستحتاج إلى إعداد CNAME Record"
-                                    }
+                                    يمكنك استخدام نطاق رئيسي (example.com) أو نطاق فرعي (go.example.com)
                                 </p>
-
-                                {/* Domain Type Validation Error */}
-                                {errors?.domain_type && (
-                                    <div aria-live="polite" aria-atomic="true">
-                                        <p className="text-sm text-red-500" role="alert">
-                                            {errors.domain_type.message}
-                                        </p>
-                                    </div>
-                                )}
                             </div>
 
                             <p className="text-xs text-muted-foreground text-right">
@@ -191,7 +126,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
             </Dialog>
 
             <DomainInstructionsDialog
-                domainType={getValues("domain_type") as "domain" | "subdomain"}
+                domainType="subdomain" // Always subdomain for Cloudflare
                 isOpen={showDNSInstructions}
                 onClose={handleDomainInstructionsClose}
                 domain={getValues("domain")}

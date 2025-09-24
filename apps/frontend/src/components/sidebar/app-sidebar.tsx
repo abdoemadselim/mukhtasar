@@ -32,11 +32,11 @@ const items = [
     url: "/dashboard/tokens",
     icon: Lock,
   },
-  // {
-  //   title: "الأنطقة الخاصة (domains)",
-  //   url: "/dashboard/domains",
-  //   icon: Globe,
-  // },
+  {
+    title: "الأنطقة الخاصة (domains)",
+    url: "/dashboard/domains",
+    icon: Globe,
+  },
   // {
   //   title: "الباركود (QR Codes)",
   //   url: "/dashboard/qr-codes",

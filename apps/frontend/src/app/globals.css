@@ -47,6 +47,11 @@
   --color-color-1: var(--color-1);
   --animate-shine: shine var(--duration) infinite linear;
 
+  /* Custom color mappings */
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-green: var(--accent-green);
+  --color-surface-elevated: var(--surface-elevated);
+
   @keyframes shine {
     0% {
       background-position: 0% 0%;
@@ -100,6 +105,11 @@
   --color-3: oklch(69.6% 0.165 251);
   --color-4: oklch(80.2% 0.134 225);
   --color-5: oklch(90.7% 0.231 133);
+
+  /* Custom colors for pricing */
+  --accent-blue: oklch(0.5 0.15 240);
+  --accent-green: oklch(0.5 0.15 140);
+  --surface-elevated: oklch(0.99 0 0);
 }
 
 .dark {

@@ -1,5 +1,3 @@
-// Create new file: apps/frontend/src/features/domain/components/domain-instructions-dialog.tsx
-
 'use client'
 
 import { Copy } from "lucide-react"
@@ -31,109 +29,77 @@ export default function DomainInstructionsDialog({
     domain,
     domainType
 }: DomainInstructionsDialogProps) {
-    const targetDomain = process.env.NEXT_PUBLIC_DOMAIN_TARGET || "domains.mukhtasar.pro"
-    const ipAddress = process.env.NEXT_PUBLIC_IP_ADDRESS || "167.99.123.456" // Replace with your actual IP
+    const targetDomain = process.env.NEXT_PUBLIC_FALLBACK_ORIGIN || "custom-hostnames.yourapp.com"
 
     const handleCopyRecord = async (text: string) => {
         await navigator.clipboard.writeText(text)
         openToaster("تم نسخ القيمة إلى الحافظة", "success")
     }
 
-    const isDomain = domainType === "domain"
-
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[700px]">
                 <DialogHeader className="pb-4 pt-6">
                     <DialogTitle className="text-right text-xl font-semibold">
-                        إعداد سجل DNS للنطاق
+                        إعداد CNAME للنطاق المخصص
                     </DialogTitle>
                     <DialogDescription className="text-right text-sm text-muted-foreground">
-                        {isDomain
-                            ? "يجب إضافة سجل A في إعدادات النطاق لديك لتفعيل النطاق المخصص"
-                            : "يجب إضافة سجل CNAME في إعدادات النطاق لديك لتفعيل النطاق الفرعي المخصص"
-                        }
+                        يجب إضافة سجل CNAME واحد فقط في إعدادات النطاق لديك. سيتم إصدار شهادة SSL تلقائياً.
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-6">
                     {/* Instructions */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-right">
-                        <h3 className="font-semibold text-blue-800 mb-2">خطوات الإعداد:</h3>
+                        <h3 className="font-semibold text-blue-800 mb-2">خطوات الإعداد البسيطة:</h3>
                         <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                             <li>اذهب إلى لوحة تحكم النطاق الخاص بك</li>
                             <li>ابحث عن قسم إدارة DNS أو DNS Management</li>
-                            <li>أضف سجل {isDomain ? 'A' : 'CNAME'} جديد بالقيم الموجودة بالأسفل</li>
+                            <li>أضف سجل CNAME بالقيم الموجودة بالأسفل</li>
                             <li>احفظ التغييرات</li>
+                            <li>انتظر بضع دقائق لإصدار شهادة SSL التلقائية</li>
                         </ol>
                     </div>
 
                     {/* DNS Record Details */}
                     <div className="space-y-4">
                         <div className="grid gap-3">
-                            <Label htmlFor="record-type" className="text-right font-semibold">
-                                نوع السجل (Record Type)
-                            </Label>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => handleCopyRecord(isDomain ? "A" : "CNAME")}
-                                    className="h-10 w-10"
-                                >
-                                    <Copy className="h-4 w-4" />
-                                </Button>
-                                <Input
-                                    value={isDomain ? "A" : "CNAME"}
-                                    readOnly
-                                    className="font-mono bg-gray-100"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid gap-3">
                             <Label htmlFor="hostname" className="text-right font-semibold">
-                                {isDomain ? "المضيف (Hostname)" : "النطاق الفرعي (Subdomain)"}
+                                المضيف (Host/Name)
                             </Label>
                             <div className="flex items-center gap-2">
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => handleCopyRecord(isDomain ? "@" : domain.split('.')[0])}
+                                    onClick={() => handleCopyRecord(domain)}
                                     className="h-10 w-10"
                                 >
                                     <Copy className="h-4 w-4" />
                                 </Button>
                                 <Input
-                                    value={isDomain ? "@" : domain.split('.')[0]}
+                                    value={domain}
                                     readOnly
                                     className="font-mono bg-gray-100"
                                     dir="ltr"
                                 />
                             </div>
-                            <p className="text-xs text-muted-foreground text-right">
-                                {isDomain
-                                    ? 'الرمز "@" يعني النطاق الرئيسي'
-                                    : `أدخل فقط الجزء قبل النقطة الأولى من ${domain}`
-                                }
-                            </p>
                         </div>
 
                         <div className="grid gap-3">
                             <Label htmlFor="record-value" className="text-right font-semibold">
-                                {isDomain ? "عنوان IP" : "القيمة (Points To)"}
+                                يشير إلى (Points To / Target)
                             </Label>
                             <div className="flex items-center gap-2">
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => handleCopyRecord(isDomain ? ipAddress : targetDomain)}
+                                    onClick={() => handleCopyRecord(targetDomain)}
                                     className="h-10 w-10"
                                 >
                                     <Copy className="h-4 w-4" />
                                 </Button>
                                 <Input
-                                    value={isDomain ? ipAddress : targetDomain}
+                                    value={targetDomain}
                                     readOnly
                                     className="font-mono bg-gray-100"
                                     dir="ltr"
@@ -156,12 +122,12 @@ export default function DomainInstructionsDialog({
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="p-2 font-mono bg-blue-100 rounded">{isDomain ? "A" : "CNAME"}</td>
+                                        <td className="p-2 font-mono bg-blue-100 rounded">CNAME</td>
                                         <td className="p-2 font-mono bg-yellow-100 rounded" dir="ltr">
-                                            {isDomain ? "@" : domain.split('.')[0]}
+                                            {domain}
                                         </td>
                                         <td className="p-2 font-mono bg-green-100 rounded" dir="ltr">
-                                            {isDomain ? ipAddress : targetDomain}
+                                            {targetDomain}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -172,8 +138,8 @@ export default function DomainInstructionsDialog({
                     {/* Warning */}
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-right">
                         <p className="text-sm text-yellow-800">
-                            <strong>ملاحظة مهمة:</strong> قد يستغرق انتشار تغييرات DNS من بضع دقائق إلى 48 ساعة.
-                            {isDomain && " تأكد من حذف أي سجلات A أخرى موجودة للنطاق."}
+                            <strong>ملاحظة:</strong> سيتم إصدار شهادة SSL تلقائياً خلال بضع دقائق من إضافة سجل CNAME.
+                            لا تحتاج لأي إعدادات إضافية.
                         </p>
                     </div>
                 </div>

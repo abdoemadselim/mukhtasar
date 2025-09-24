@@ -3,7 +3,7 @@ import { type LoginType } from "@mukhtasar/shared"
 
 export async function signup(data: NewUserType) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ui/auth/signup`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -34,7 +34,7 @@ export async function signup(data: NewUserType) {
 
 export async function login(data: LoginType) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uiauth/login`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -68,7 +68,7 @@ export async function login(data: LoginType) {
 
 export async function logout() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uiauth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -95,7 +95,7 @@ export async function logout() {
 
 export async function requestPasswordReset(email: string) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/password-reset-mail`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uiauth/password-reset-mail`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -121,7 +121,7 @@ export async function requestPasswordReset(email: string) {
 
 export async function resetPassword({ password, password_confirmation, token }: { password: string, password_confirmation: string, token: string }) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uiauth/reset-password`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
