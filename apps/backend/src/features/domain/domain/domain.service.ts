@@ -1,9 +1,9 @@
-import { createCustomHostname, deleteCustomHostname, getCustomHostnameStatus } from './cloudflare.service.js';
+import { createCustomHostname, deleteCustomHostname, getCustomHostnameStatus } from '#features/domain/domain/cloudflare.service.js';
 import dns from 'dns/promises';
 
 import domainRepository from "#features/domain/data-access/domain-repository.js";
 import { ValidationException } from "#lib/error-handling/error-types.js";
-import { log, LOG_TYPE } from '#root/lib/logger/logger.js';
+import { log, LOG_TYPE } from '#lib/logger/logger.js';
 
 export async function getUserDomains(user_id: number) {
     const domains = await domainRepository.getUserDomains(user_id);
