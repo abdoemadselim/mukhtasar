@@ -1,5 +1,3 @@
-'use client'
-
 import {
     MousePointer,
     Users,
@@ -11,7 +9,6 @@ import {
     Map,
     Activity
 } from "lucide-react"
-import { useState } from "react"
 import Link from "next/link"
 
 import { Card, CardContent } from "@/components/ui/card"
@@ -95,8 +92,6 @@ const analyticsFeatures = [
 
 
 export default function AnalyticsShowcaseSection() {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
     return (
         <section className="py-20 px-6 bg-gradient-to-b from-gray-50 to-white">
             <div className="max-w-7xl mx-auto">
@@ -118,10 +113,7 @@ export default function AnalyticsShowcaseSection() {
                     {analyticsFeatures.map((feature, index) => (
                         <Card
                             key={index}
-                            className={`group relative overflow-hidden border-0 bg-white/5 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-white/10 ${hoveredIndex === index ? 'shadow-2xl shadow-purple-500/25' : ''
-                                }`}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
+                            className="group hover:shadow-2xl hover:shadow-purple-500/25 relative overflow-hidden border-0 bg-white/5 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-white/10"
                         >
                             {/* Gradient Border */}
                             <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}></div>
@@ -148,9 +140,9 @@ export default function AnalyticsShowcaseSection() {
 
                                 {/* Hover Effect Indicators */}
                                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                                    <div className={`w-2 h-2 rounded-full bg-white/30 transition-all duration-500 ${hoveredIndex === index ? 'bg-white scale-125' : ''}`}></div>
-                                    <div className={`w-2 h-2 rounded-full bg-white/20 transition-all duration-500 delay-100 ${hoveredIndex === index ? 'bg-white/70 scale-110' : ''}`}></div>
-                                    <div className={`w-2 h-2 rounded-full bg-white/10 transition-all duration-500 delay-200 ${hoveredIndex === index ? 'bg-white/50 scale-105' : ''}`}></div>
+                                    <div className="w-2 h-2 rounded-full bg-white/30 transition-all duration-500 group-hover:bg-white group-hover:scale-125"></div>
+                                    <div className="w-2 h-2 rounded-full bg-white/20 transition-all duration-500 delay-100 group-hover:bg-white/70 group-hover:scale-110"></div>
+                                    <div className="w-2 h-2 rounded-full bg-white/10 transition-all duration-500 delay-200 group-hover:bg-white/50 group-hover:scale-105"></div>
                                 </div>
                             </CardContent>
                         </Card>
