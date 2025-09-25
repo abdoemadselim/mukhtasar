@@ -86,7 +86,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
                                 <Input
                                     {...register("domain")}
                                     id="domain"
-                                    placeholder="example.com أو go.example.com"
+                                    placeholder="go.yourdomain.com"
                                     dir="ltr"
                                 />
 
@@ -99,7 +99,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
                                 )}
 
                                 <p className="text-xs text-muted-foreground text-right">
-                                    يمكنك استخدام نطاق رئيسي (example.com) أو نطاق فرعي (go.example.com)
+                                    يمكنك استخدام نطاق فرعي (go.yourdomain.com)
                                 </p>
                             </div>
 

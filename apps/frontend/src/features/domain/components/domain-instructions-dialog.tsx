@@ -39,14 +39,26 @@ export default function DomainInstructionsDialog({
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[700px]">
-                <DialogHeader className="pb-4 pt-6">
+                <DialogHeader className="pt-6">
                     <DialogTitle className="text-right text-xl font-semibold">
                         إعداد CNAME للنطاق المخصص
                     </DialogTitle>
                     <DialogDescription className="text-right text-sm text-muted-foreground">
-                        يجب إضافة سجل CNAME واحد فقط في إعدادات النطاق لديك. سيتم إصدار شهادة SSL تلقائياً.
+                        يجب إضافة سجل CNAME  في إعدادات النطاق لديك. سيتم إصدار شهادة SSL تلقائياً.
                     </DialogDescription>
                 </DialogHeader>
+
+                {/* Contact Us Section */}
+                <p className="text-sm text-gray-700 pb-4">
+                    إذا واجهت أي مشكلة، يمكنك{" "}
+                    <a
+                        href="mailto:support@mukhtasar.pro"
+                        className="text-blue-600 hover:underline font-medium"
+                    >
+                        التواصل معنا
+                    </a>{" "}
+                    وسنساعدك في الإعداد.
+                </p>
 
                 <div className="space-y-6">
                     {/* Instructions */}
@@ -67,23 +79,45 @@ export default function DomainInstructionsDialog({
                             <Label htmlFor="hostname" className="text-right font-semibold">
                                 المضيف (Host/Name)
                             </Label>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => handleCopyRecord(domain)}
-                                    className="h-10 w-10"
-                                >
-                                    <Copy className="h-4 w-4" />
-                                </Button>
-                                <Input
-                                    value={domain}
-                                    readOnly
-                                    className="font-mono bg-gray-100"
-                                    dir="ltr"
-                                />
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleCopyRecord(domain.split('.')[0])}
+                                        className="h-10 w-10"
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                    </Button>
+                                    <Input
+                                        value={domain.split('.')[0]} // just "go"
+                                        readOnly
+                                        className="font-mono bg-gray-100"
+                                        dir="ltr"
+                                    />
+                                </div>
+                                <p className="text-xs text-muted-foreground text-right">
+                                    إذا لم يقبل مزود DNS الجزء القصير، استخدم النطاق الكامل:
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleCopyRecord(domain)}
+                                        className="h-10 w-10"
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                    </Button>
+                                    <Input
+                                        value={domain} // full "go.example.com"
+                                        readOnly
+                                        className="font-mono bg-gray-100"
+                                        dir="ltr"
+                                    />
+                                </div>
                             </div>
                         </div>
+
 
                         <div className="grid gap-3">
                             <Label htmlFor="record-value" className="text-right font-semibold">
@@ -124,7 +158,7 @@ export default function DomainInstructionsDialog({
                                     <tr>
                                         <td className="p-2 font-mono bg-blue-100 rounded">CNAME</td>
                                         <td className="p-2 font-mono bg-yellow-100 rounded" dir="ltr">
-                                            {domain}
+                                            {domain.split('.')[0]}
                                         </td>
                                         <td className="p-2 font-mono bg-green-100 rounded" dir="ltr">
                                             {targetDomain}

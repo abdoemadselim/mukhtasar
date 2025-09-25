@@ -17,7 +17,7 @@ export default function DomainContent() {
                 </Highlighter>
                 <CreateDomainDialog>
                     <Button size="sm" className="cursor-pointer">
-                        <Plus className="w-5 h-5"/>
+                        <Plus />
                         <span className="hidden lg:inline text-md">اضف نطاق</span>
                     </Button>
                 </CreateDomainDialog>
