@@ -1,7 +1,7 @@
 'use client'
 
+import { useState } from 'react';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, LoginType } from '@mukhtasar/shared'
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -12,9 +12,12 @@ import { Label } from '@/components/ui/label'
 
 import { login } from '@/features/auth/service/auth'
 import { useAuth } from '@/features/auth/context/auth-context'
+import { Eye, EyeClosed } from 'lucide-react';
 
 export default function LoginForm() {
-    const router = useRouter()
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
     const { checkAuth } = useAuth()
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<LoginType>({
         resolver: zodResolver(LoginSchema)
@@ -82,14 +85,24 @@ export default function LoginForm() {
                                 كلمة السر
                             </Label>
                         </div>
-                        <Input
-                            {...register("password")}
-                            type="password"
-                            name="password"
-                            id="password"
-                            className="input sz-md variant-mixed"
-                            aria-invalid={errors.password ? "true" : "false"}
-                        />
+                        <div className="relative">
+                            <Input
+                                {...register("password")}
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                className="input sz-md variant-mixed pr-8"
+                                aria-invalid={errors.password ? "true" : "false"}
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                onClick={() => setShowPassword(prev => !prev)}
+                                tabIndex={-1}
+                            >
+                                {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
+                            </button>
+                        </div>
 
                         <div id="password-error" aria-live="polite" aria-atomic="true">
                             {errors?.password &&

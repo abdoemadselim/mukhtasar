@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,10 +14,13 @@ import { Label } from '@/components/ui/label'
 import { signup } from '@/features/auth/service/auth'
 import { useAuth } from '@/features/auth/context/auth-context';
 import { Alert, AlertTitle } from '@/components/ui/alert';
-import { AlertCircleIcon } from 'lucide-react';
+import { AlertCircleIcon, Eye, EyeClosed } from 'lucide-react';
 
 export default function SignUpForm() {
     const { checkAuth } = useAuth()
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
     const router = useRouter()
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<NewUserType>({
         resolver: zodResolver(NewUserSchema)
@@ -107,14 +111,24 @@ export default function SignUpForm() {
                                 كلمة السر
                             </Label>
                         </div>
-                        <Input
-                            {...register("password")}
-                            type="password"
-                            name="password"
-                            id="password"
-                            className="input sz-md variant-mixed"
-                            aria-invalid={errors.password ? "true" : "false"}
-                        />
+                        <div className="relative">
+                            <Input
+                                {...register("password")}
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                className="input sz-md variant-mixed pr-8"
+                                aria-invalid={errors.password ? "true" : "false"}
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                onClick={() => setShowPassword(prev => !prev)}
+                                tabIndex={-1}
+                            >
+                                {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
+                            </button>
+                        </div>
 
                         <div id="password-error" aria-live="polite" aria-atomic="true">
                             {errors?.password &&
@@ -134,15 +148,26 @@ export default function SignUpForm() {
                                 تأكيد كلمة السر
                             </Label>
                         </div>
-                        <Input
-                            {...register("password_confirmation")}
-                            type="password"
-                            name="password_confirmation"
-                            id="password_confirmation"
-                            className="input sz-md variant-mixed"
-                            disabled={isSubmitting}
-                            aria-invalid={errors.password_confirmation ? "true" : "false"}
-                        />
+                        <div className="relative">
+                            <Input
+                                {...register("password_confirmation")}
+                                type={showConfirmPassword ? "text" : "password"}
+                                name="password_confirmation"
+                                id="password_confirmation"
+                                className="input sz-md variant-mixed pr-8"
+                                disabled={isSubmitting}
+                                aria-invalid={errors.password_confirmation ? "true" : "false"}
+                            />
+
+                            <button
+                                type="button"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                onClick={() => setShowConfirmPassword(prev => !prev)}
+                                tabIndex={-1}
+                            >
+                                {showConfirmPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
+                            </button>
+                        </div>
 
                         <div aria-live="polite" aria-atomic="true">
                             {errors?.password_confirmation &&
