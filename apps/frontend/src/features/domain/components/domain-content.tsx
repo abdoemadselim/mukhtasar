@@ -13,11 +13,11 @@ export default function DomainContent() {
         <>
             <div className="flex justify-between items-center px-6 pt-2 pb-3">
                 <Highlighter action="underline" strokeWidth={1} color="blue">
-                    <h1 className="text-3xl">الأنطقة الخاصة بك (domains)</h1>
+                    <h1 className="text-xl md:text-3xl">الأنطقة الخاصة بك (domains)</h1>
                 </Highlighter>
                 <CreateDomainDialog>
                     <Button size="sm" className="cursor-pointer">
-                        <Plus />
+                        <Plus className="w-5 h-5"/>
                         <span className="hidden lg:inline text-md">اضف نطاق</span>
                     </Button>
                 </CreateDomainDialog>
