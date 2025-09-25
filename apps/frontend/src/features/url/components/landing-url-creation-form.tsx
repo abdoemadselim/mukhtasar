@@ -103,10 +103,19 @@ export default function LandingUrlCreationForm() {
                             </Link>
                         </Button>
                         <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
-                            <div className="flex items-center gap-2 mb-4">
+                            <div className="flex items-center gap-2">
                                 <CheckCircle className="h-5 w-5 text-accent-foreground" />
                                 <h3 className="text-lg font-semibold text-primary">تم إنشاء الرابط بنجاح!</h3>
                             </div>
+                            <div className="flex items-center gap-2 mb-4 mt-2">
+                                <AlertCircle className="h-4 w-4 text-amber-600" />
+                                <h4 className="text-sm font-semibold text-amber-800">هذا رابط مؤقت للتجربة.</h4>
+                                <p className="text-sm text-accent-foreground">
+                                    <Link href="/auth/signup" className="underline font-medium">أنشئ حساباً مجانياً</Link>
+                                    {" "}للحصول على روابط دائمة.
+                                </p>
+                            </div>
+
 
                             <div className="space-y-3">
                                 <div>

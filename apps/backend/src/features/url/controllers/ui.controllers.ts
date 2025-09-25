@@ -1,18 +1,17 @@
 import type { Request, Response } from "express";
 
 import * as urlService from "#features/url/domain/url.service.js";
-import domainRepository from "#features/domain/data-access/domain-repository.js";
 import urlRepository from "#features/url/data-access/url.repository.js";
 import { IRequest } from "#features/url/types.js";
 
-import { NoException, ValidationException } from "#lib/error-handling/error-types.js";
+import { NoException } from "#lib/error-handling/error-types.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
 export async function createUrl(req: Request, res: Response) {
     // 1- prepare the data for the service
     const { original_url, alias, domain, description = "" } = req.body;
 
-    // Get user info if available (from session-based auth, not token-based)
+    // 2- Get user info if available
     const sessionId = req.cookies[process.env.AUTH_SESSION_NAME as string];
     let user = null;
 
@@ -23,40 +22,19 @@ export async function createUrl(req: Request, res: Response) {
         }
     }
 
-    // 2- Domain authorization logic
-    const originalDomain = process.env.ORIGINAL_DOMAIN as string;
-    let resolvedDomain = domain || originalDomain;
-
-    if (!user) {
-        // Guest users can only use the original domain
-        if (domain && domain !== originalDomain) {
-            // TODO: do we have to pass the shape of errors everywhere
-            // TODO: shouldn't it be handled internally in the Exception class
-            throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
-        }
-        resolvedDomain = originalDomain;
-    } else {
-        // Authenticated users can use original domain or their own domains
-        if (domain && domain !== originalDomain) {
-            const userOwnsDomain = await domainRepository.checkUserOwnsDomain({ userId: user.id, domain });
-            if (!userOwnsDomain) {
-                throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
-            }
-        }
-    }
-
+    // 3- Prepare data for the service
     const newUrl = {
         original_url,
         alias,
-        domain: resolvedDomain,
+        domain,
         description,
         user_id: user?.id || null // null for guest users
     };
 
-    // 3- pass the prepared data to the service
+    // 4- pass the prepared data to the service
     const url = await urlService.createUrl(newUrl);
 
-    // 4- prepare the response
+    // 5- prepare the response
     const response = {
         data: {
             short_url: url.short_url,
@@ -64,7 +42,8 @@ export async function createUrl(req: Request, res: Response) {
             domain: url.domain,
             original_url: url.original_url,
             created_at: url.created_at,
-            description: url.description
+            description: url.description,
+            is_temporary: url.is_temporary
         },
         errors: [],
         code: NoException.NoErrorCode,
