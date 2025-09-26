@@ -155,7 +155,7 @@ export default function AnalyticsShowcaseSection() {
                         <p className="text-lg text-gray-700 mb-4">
                             🚀 <strong>جميع هذه الإحصائيات متاحة مجاناً</strong> لكل رابط تقوم بإنشائه
                         </p>
-                        <Button className="px-8 text-lg py-2 mt-7 sm:mt-2 cursor-pointer" asChild>
+                        <Button className="inline-flex cursor-pointer items-center px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg" asChild>
                             <Link
                                 href="/auth/signup"
                             >

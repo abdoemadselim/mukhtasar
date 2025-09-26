@@ -169,7 +169,10 @@ export async function sendContactNotificationMail({
         ],
     };
 
-    await sgMail.send(msg);
+    await sgMail.send(msg)
+        .catch((error) => {
+            log(LOG_TYPE.ERROR, { message: "Failed to contact notification mail.", error: error })
+        })
 
     const store = asyncStore.getStore();
     log(LOG_TYPE.INFO, {

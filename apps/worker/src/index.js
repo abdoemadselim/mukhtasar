@@ -11,8 +11,6 @@ async function handleRequest(request, event) {
   const path = url.pathname
   const domain = url.hostname
 
-  console.log(request.url);
-
   logRequest(path, 'Worker intercepted')
 
   // Handle API subdomain
@@ -45,10 +43,35 @@ async function handleRequest(request, event) {
 async function handleApiRequest(request, event) {
   const url = new URL(request.url)
   const path = url.pathname
+  const method = request.method
 
   logRequest(path, 'API request', { domain: 'api.mukhtasar.pro' })
 
-  // Simply pass the request through to the backend
+  // For DELETE and PATCH requests on URLs, we need to handle cache invalidation
+  const urlPattern = /^\/(?:api|ui)\/url\/([^\/]+)\/([^\/]+)$/
+  const match = path.match(urlPattern)
+  if (match && (method === 'DELETE' || method === 'PATCH')) {
+    const domain = match[1]
+    const alias = match[2]
+
+    // Forward the request to backend first
+    const response = await fetch(request)
+
+    // If the backend operation was successful, invalidate cache
+    if (response.ok) {
+      const cacheKey = `${domain}:${alias}`
+      cache.delete(cacheKey)
+      logRequest(alias, 'Cache invalidated after backend operation', {
+        domain,
+        method,
+        cacheKey
+      })
+    }
+
+    return response
+  }
+
+  // Simply pass other requests through to the backend
   return fetch(request)
 }
 
@@ -82,7 +105,7 @@ async function redirectUrl(path, event, request, domain = "mukhtasar.pro") {
   logRequest(alias, 'Looking up alias ', { domain })
 
   // Use domain-specific cache key
-  const cacheKey = `${domain}:${alias}`
+  const cacheKey = `${domain}-${alias}`
   let longUrl = cache.get(cacheKey)
 
   if (!longUrl) {

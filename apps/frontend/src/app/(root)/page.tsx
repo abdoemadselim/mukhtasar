@@ -4,7 +4,7 @@ import { BadgeQuestionMark } from "lucide-react";
 import HeroSection from "@/components/layout/hero-section";
 import { Highlighter } from "@/components/ui/highlighter";
 import AnalyticsShowcaseSection from "@/features/analytics/components/analytics-showcase-section";
-import ContactUs from "@/components/contact/contact-us";
+import ContactUs from "@/features/contact/components/contact-us";
 
 export default function HomePage() {
   return (
