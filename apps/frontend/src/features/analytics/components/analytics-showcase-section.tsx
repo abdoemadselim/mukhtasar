@@ -93,7 +93,7 @@ const analyticsFeatures = [
 
 export default function AnalyticsShowcaseSection() {
     return (
-        <section className="py-20 px-6">
+        <section className="py-20 px-6" id="more-analytics">
             <div className="max-w-7xl mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-16">

@@ -60,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://api.mukhtasar.pro" />
       </head>

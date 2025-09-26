@@ -75,7 +75,7 @@ export default function ContactSection() {
                                                 <FormControl>
                                                     <Input
                                                         {...field}
-                                                        className="w-full px-4 py-3 border rounded-lg focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 transition-colors"
+                                                        className="w-full px-4 py-3 border-1 border-gray-400 rounded-md focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 transition-colors"
                                                         placeholder="اسمك الكريم"
                                                     />
                                                 </FormControl>
@@ -96,7 +96,7 @@ export default function ContactSection() {
                                                     <Input
                                                         {...field}
                                                         type="email"
-                                                        className="w-full px-4 py-3 border rounded-lg focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 transition-colors"
+                                                        className="w-full px-4 py-3 border border-gray-400 rounded-md focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 transition-colors"
                                                         placeholder="your@email.com"
                                                     />
                                                 </FormControl>
@@ -118,7 +118,7 @@ export default function ContactSection() {
                                                 <Textarea
                                                     {...field}
                                                     rows={6}
-                                                    className="min-h-[150px] w-full px-4 py-3 border focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 rounded-lg transition-colors resize-vertical"
+                                                    className="min-h-[150px] w-full px-4 py-3 border-1 border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2 rounded-md transition-colors resize-vertical"
                                                     placeholder="أخبرنا بما تفكر فيه... اقتراحاتك، أفكارك، أو أي مشاكل تواجهها. كل كلمة مهمة لنا!"
                                                 />
                                             </FormControl>
@@ -132,7 +132,7 @@ export default function ContactSection() {
                                 <Button
                                     type="submit"
                                     disabled={isPending || form.formState.isSubmitting}
-                                    className="inline-flex cursor-pointer items-center px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                                    className="inline-flex cursor-pointer items-center py-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                                 >
                                     {isPending || form.formState.isSubmitting ? (
                                         <>

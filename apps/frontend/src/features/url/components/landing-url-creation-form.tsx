@@ -20,7 +20,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { openToaster } from "@/components/ui/sonner";
 
-import { useAuth } from "@/features/auth/context/auth-context";
 import { useCreateUrl } from "@/features/url/hooks/urls-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { getUrls } from "@/features/url/service/urls-service";
@@ -114,7 +113,7 @@ export default function LandingUrlCreationForm() {
                                         <Input
                                             value={data.short_url}
                                             readOnly
-                                            className="bg-white"
+                                            className="bg-white border-gray-400 rounded-lg"
                                         />
                                         <Button
                                             type="button"
@@ -146,7 +145,7 @@ export default function LandingUrlCreationForm() {
                                 <FormItem>
                                     <FormLabel className="pb-1 text-lg">ادخل رابطك الطويل</FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="text-end h-[45px] focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="http://example.com/very-long-url" />
+                                        <Input {...field} className="text-end h-[45px] rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="http://example.com/very-long-url" />
                                     </FormControl>
                                     <div className="min-h-[20px]" >
                                         <FormMessage />
@@ -164,7 +163,7 @@ export default function LandingUrlCreationForm() {
                                         <FormItem>
                                             <FormLabel className="text-muted-foreground pb-2">الاسم المستعار (اختياري)</FormLabel>
                                             <FormControl>
-                                                <Input {...field} className="text-end border-gray-300 w-full focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="products" />
+                                                <Input {...field} className="text-end w-full rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="products" />
                                             </FormControl>
                                             <div className="min-h-[20px]" >
                                                 <FormMessage />
@@ -179,12 +178,12 @@ export default function LandingUrlCreationForm() {
                                         <FormItem>
                                             <FormLabel className="text-muted-foreground pb-2">النطاق</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger className="w-full focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
+                                                <FormControl className="">
+                                                    <SelectTrigger className="w-full  rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
                                                         <SelectValue placeholder="mukhtasar.pro" />
                                                     </SelectTrigger>
                                                 </FormControl>
-                                                <SelectContent className="active:border-2 focus-visible:border-blue-600 focus-visible:border-2">
+                                                <SelectContent >
                                                     <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
                                                 </SelectContent>
                                             </Select>

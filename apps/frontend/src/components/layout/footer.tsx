@@ -18,7 +18,7 @@ const links = [
 
 export default function Footer() {
     return (
-        <footer className="py-8 md:py-16 bg-gray-50">
+        <footer className="py-8 md:py-16">
             <div className="mx-auto max-w-5xl px-6">
                 <Link
                     href="/"
