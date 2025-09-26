@@ -16,7 +16,6 @@ import { Eye, EyeClosed } from 'lucide-react';
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const { checkAuth } = useAuth()
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<LoginType>({
@@ -39,11 +38,9 @@ export default function LoginForm() {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 mx-4 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
+        >
             <div className="p-8 pt-2 pb-6 md:w-[500px] w-[85vw] sm:w-[450px]">
-                <div>
-                    <h1 className="mb-1 mt-4 text-xl text-center text-primary font-semibold">تسجيل الدخول</h1>
-                </div>
+
                 <div id="root-error" aria-live="polite" aria-atomic="true" className='text-center'>
                     {errors?.root &&
                         <p className="mt-2 text-sm text-red-500" role="alert">
@@ -51,8 +48,6 @@ export default function LoginForm() {
                         </p>
                     }
                 </div>
-                <hr className="my-4 border-dashed" />
-
                 <div className="space-y-6 ">
                     <div className="space-y-2">
                         <Label
@@ -77,7 +72,7 @@ export default function LoginForm() {
                         </div>
                     </div>
 
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 mb-5">
                         <div className="flex items-center justify-between">
                             <Label
                                 htmlFor="password"
@@ -115,7 +110,7 @@ export default function LoginForm() {
                     <Button
                         asChild
                         variant="link"
-                        className="px-2">
+                        className="px-2 pt-0 pb-0">
                         <Link href="/auth/reset-password">هل نسيت كلمة السر؟</Link>
                     </Button>
                     <Button className="w-full cursor-pointer text-md" type="submit" disabled={isSubmitting}>

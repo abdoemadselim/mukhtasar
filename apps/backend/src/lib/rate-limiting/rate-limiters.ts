@@ -55,3 +55,15 @@ export function uiRateLimiter(windowInMin: number, limit: number) {
         }),
     });
 }
+
+export function contactRateLimiter(windowInMin: number, limit: number) {
+    return rateLimit({
+        ...rateLimitingConfig(windowInMin, limit),
+        keyGenerator: (req) => ipKeyGenerator(req.ip as string),
+        handler: () => { throw new RateLimitingException() },
+        store: new RedisStore({
+            sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+            prefix: "rl-contact:"
+        }),
+    });
+}

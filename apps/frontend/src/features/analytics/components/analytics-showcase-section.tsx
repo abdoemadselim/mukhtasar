@@ -93,11 +93,11 @@ const analyticsFeatures = [
 
 export default function AnalyticsShowcaseSection() {
     return (
-        <section className="py-20 px-6 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-20 px-6">
             <div className="max-w-7xl mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+                    <h2 className="sm:text-4xl text-3xl lg:text-5xl font-bold mb-6">
                         <Highlighter action="underline" strokeWidth={2} color="blue">
                             إحصائيات تفصيلية لكل رابط
                         </Highlighter>

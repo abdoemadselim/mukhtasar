@@ -17,18 +17,15 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { openToaster } from "@/components/ui/sonner";
 
 import { useAuth } from "@/features/auth/context/auth-context";
-import { useUrl } from "@/features/url/context/urls-context";
 import { useCreateUrl } from "@/features/url/hooks/urls-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { getUrls } from "@/features/url/service/urls-service";
 
 export default function LandingUrlCreationForm() {
-    const { user } = useAuth();
-    const { canCreateUrl, incrementUrlCount } = useUrl();
     const form = useForm<ShortUrlType>({
         resolver: zodResolver(ShortUrlSchema),
         defaultValues: {
@@ -52,17 +49,7 @@ export default function LandingUrlCreationForm() {
     }, [queryClient])
 
     const onSubmit: SubmitHandler<ShortUrlType> = async (data) => {
-        // Check guest user limits
-        if (!user && !canCreateUrl) {
-            form.setError("root", { message: "لقد وصلت الحد الأقصى من الروابط المسموحة.." });
-            return;
-        }
-
         await mutateAsync(data)
-
-        if (!user) {
-            incrementUrlCount()
-        }
     }
 
     useEffect(() => {
@@ -95,11 +82,14 @@ export default function LandingUrlCreationForm() {
             {
                 data && (
                     <section className="flex flex-col justify-between items-center">
-                        <Button className="mb-8 px-8 text-lg py-2 mt-7 sm:mt-2 cursor-pointer" asChild>
+                        <Button
+                            asChild
+                            className="inline-flex cursor-pointer mb-6 items-center px-10 py-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                        >
                             <Link
                                 href="/auth/signup"
                             >
-                                اشترك الآن مجانًا
+                                اشترك حالاً وأجعل الرابط ملكك
                             </Link>
                         </Button>
                         <div className="bg-primary-foreground border mb-5 border-green-200 p-6 rounded-lg sm:w-[70vw] xl:w-[38vw] w-[80vw]">
@@ -208,23 +198,7 @@ export default function LandingUrlCreationForm() {
                             </div>
                         </div>
 
-                        {/* Guest user limit warning */}
-                        {!user && !canCreateUrl && (
-                            <div className="mt-4">
-                                <Alert className="border-amber-200 bg-amber-50">
-                                    <AlertCircle className="h-4 w-4 text-amber-600" />
-                                    <AlertDescription className="text-amber-800">
-                                        كزائر، يمكنك إنشاء {5 - (form.formState.isSubmitting ? 0 : 0)} روابط مجانية.
-                                        <div className="flex gap-2 items-center">
-                                            <Link href="/auth/signup" className="underline font-medium mr-1">أنشئ حساباً</Link>
-                                            لإنشاء روابط أكثر
-                                        </div>
-                                    </AlertDescription>
-                                </Alert>
-                            </div>
-                        )}
-
-                        <Button className="mt-4 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={(!user && !canCreateUrl) || form.formState.isSubmitting}>
+                        <Button className="mt-4 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
                         </Button>
                     </form>

@@ -119,3 +119,62 @@ export async function sendResetMail({
         tokenId: store?.tokenId,
     });
 }
+
+export async function sendContactNotificationMail({
+    senderName,
+    senderEmail,
+    message,
+}: {
+    senderName: string;
+    senderEmail: string;
+    message: string;
+}) {
+    // 1. Load the contact notification template
+    const templatePath = path.join(
+        process.cwd(),
+        "templates",
+        "contact-notification.html"
+    );
+    let htmlTemplate = await fs.readFile(templatePath, "utf8");
+
+    // 2. Replace placeholders
+    htmlTemplate = htmlTemplate
+        .replace(/{{senderName}}/g, senderName)
+        .replace(/{{senderEmail}}/g, senderEmail)
+        .replace(/{{message}}/g, message.replace(/\n/g, '<br>'));
+
+    // 3. Send email to admin
+    const msg = {
+        to: process.env.CONTACT_EMAIL || 'support@mukhtasar.pro',
+        from: "مُختصِر <noreply@mukhtasar.pro>",
+        replyTo: senderEmail,
+        subject: `رسالة جديدة من ${senderName} - مُختصِر`,
+        html: htmlTemplate,
+        trackingSettings: {
+            clickTracking: { enable: false, enableText: false },
+            openTracking: { enable: false },
+        },
+        attachments: [
+            {
+                content: (
+                    await fs.readFile(
+                        path.join(process.cwd(), "public", "logo-lg.png")
+                    )
+                ).toString("base64"),
+                filename: "logo.png",
+                type: "image/png",
+                disposition: "inline",
+                content_id: "logo_cid",
+            },
+        ],
+    };
+
+    await sgMail.send(msg);
+
+    const store = asyncStore.getStore();
+    log(LOG_TYPE.INFO, {
+        message: "Sent contact notification email successfully.",
+        requestId: store?.requestId,
+        senderEmail: senderEmail,
+    });
+}

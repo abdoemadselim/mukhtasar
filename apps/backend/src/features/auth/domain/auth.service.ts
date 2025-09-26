@@ -217,3 +217,30 @@ export async function resetPassword({ password, token }: { password: string, tok
 
     return user;
 }
+
+export async function authWithGoogle(code: string) {
+    // Exchange the authorization code with (id_token, access_token)
+    const google_auth_url = "https://oauth2.googleapis.com/token"
+
+    // Required body data for oauth 2.0
+    const values = {
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID as string,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET as string,
+        redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URL as string,
+        code,
+        grant_type: "authorization_code"
+    }
+
+    const bodyData = new URLSearchParams(values);
+    const result = await fetch(google_auth_url, {
+        method: "POST",
+        body: bodyData.toString(),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
+
+    // Result should contain (id_token, access_token)
+    const oauth_result = await result.json();
+    return oauth_result;
+}

@@ -198,3 +198,15 @@ export const AddDomainSchema = zod.object({
 });
 
 export type AddDomainType = zod.infer<typeof AddDomainSchema>;
+
+export const ContactMessageSchema = zod.object({
+    name: zod.string()
+        .min(2, "الاسم يجب أن يكون على الأقل حرفين")
+        .max(100, "الاسم طويل جداً"),
+    email: zod.email("البريد الإلكتروني غير صحيح"),
+    message: zod.string()
+        .min(10, "الرسالة يجب أن تكون على الأقل 10 أحرف")
+        .max(2000, "الرسالة طويلة جداً")
+});
+
+export type ContactMessageType = zod.infer<typeof ContactMessageSchema>;

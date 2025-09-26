@@ -74,8 +74,8 @@ async function createUrlWithAlias({
         description: string;
     }) {
     // Check both permanent URLs and temporary URLs
-    const aliasExists = await urlRepository.getUrlByAlias(alias);
-    const tempUrlExists = await redisClient.get(`temp_url:${alias}-${resolvedDomain}`);
+    const aliasExists = await urlRepository.getUrlByAliasAndDomain({ alias, domain: resolvedDomain });
+    const tempUrlExists = await redisClient.get(`temp_url:${resolvedDomain}-${alias}`);
 
     if (aliasExists || tempUrlExists) {
         throw new ConflictException("هذا الاسم المستعار غير متوفر.");
@@ -109,7 +109,7 @@ async function saveUrl({
         description
     });
 
-    redisClient.setEx(`url:${alias}-${resolvedDomain}`, 86400 * 3, original_url);
+    redisClient.setEx(`url:${resolvedDomain}-${alias}`, 86400 * 3, original_url);
 
     return {
         alias,
@@ -132,7 +132,7 @@ async function saveTemporaryUrl({
 }) {
     const short_url = `https://${resolvedDomain}/${alias}`;
 
-    await redisClient.setEx(`temp_url:${alias}-${resolvedDomain}`, 300, original_url); // 5 minutes = 300 seconds
+    await redisClient.setEx(`temp_url:${resolvedDomain}-${alias}`, 300, original_url); // 5 minutes = 300 seconds
 
     return {
         alias,
@@ -154,7 +154,7 @@ export async function deleteUrl({ domain, alias }: ParamsType) {
     await urlRepository.deleteUrl({ alias, domain });
 
     // 3. Remove from Redis as well if exists
-    redisClient.del(`url:${alias}`);
+    redisClient.del(`url:${domain}-${alias}`);
     return url;
 }
 
@@ -173,7 +173,7 @@ export async function updateUrl({ domain, alias }: ParamsType, original_url: str
     const result = await urlRepository.updateUrl({ alias, domain }, original_url)
 
     // 3. Delete Redis Entry
-    redisClient.del(`url:${alias}`);
+    redisClient.del(`url:${domain}-${alias}`);
 
     return result;
 }
@@ -192,7 +192,7 @@ export async function getUrlClickCount({ domain, alias }: ParamsType) {
 
 export async function getOriginalUrl({ domain, alias }: { domain: string, alias: string }) {
     // First, check if it's a temporary URL in Redis (Not Logged-in Users)
-    const tempUrl = await redisClient.get(`temp_url:${alias}-${domain}`);
+    const tempUrl = await redisClient.get(`temp_url:${domain}-${alias}`);
     if (tempUrl) {
         return tempUrl;
     }
@@ -200,7 +200,7 @@ export async function getOriginalUrl({ domain, alias }: { domain: string, alias:
     console.log(tempUrl)
 
     // Then check permanent URLs (Logged-in Users)
-    let url = await redisClient.get(`url:${alias}-${domain}`);
+    let url = await redisClient.get(`url:${domain}-${alias}`);
 
     if (!url) {
         const record = await urlRepository.getUrlByAliasAndDomain({ domain, alias });
@@ -208,7 +208,7 @@ export async function getOriginalUrl({ domain, alias }: { domain: string, alias:
         if (!record) throw new URLNotFoundException();
 
         url = record.original_url;
-        redisClient.setEx(`url:${alias}-${domain}`, 86400 * 3, url);
+        redisClient.setEx(`url:${domain}-${alias}`, 86400 * 3, url);
     }
 
     return url;

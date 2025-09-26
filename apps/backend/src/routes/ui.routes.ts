@@ -5,8 +5,9 @@ import authRoutes from "#features/auth/routes/ui.routes.js"
 import urlRoutes from "#features/url/routes/ui.routes.js"
 import analyticsRoutes from "#features/analytics/routes/ui.routes.js"
 import domainRoutes from "#features/domain/routes/ui.routes.js"
-import { authSession } from "#features/auth/domain/auth.service.js"
+import contactRoutes from "#features/contact/routes/ui.routes.js"
 
+import { authSession } from "#features/auth/domain/auth.service.js"
 import { uiRateLimiter } from "#lib/rate-limiting/rate-limiters.js"
 
 const router = Router()
@@ -16,5 +17,6 @@ router.use("/auth", authRoutes)
 router.use("/url", uiRateLimiter(15, 250), urlRoutes)
 router.use("/analytics", uiRateLimiter(15, 250), analyticsRoutes)
 router.use("/domain", uiRateLimiter(15, 100), domainRoutes)
+router.use("/contact", contactRoutes)
 
 export default router;

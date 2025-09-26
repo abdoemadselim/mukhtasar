@@ -204,10 +204,13 @@ export async function sendResetPasswordMail(req: Request, res: Response) {
 }
 
 export async function resetPassword(req: Request, res: Response) {
+    //1- Prepare the data for service
     const { password, token } = req.body as { password: string, token: string };
 
+    //2- Send the data to service
     await authService.resetPassword({ password, token });
 
+    //3- Prepare the response
     const response = {
         errors: [],
         code: NoException.NoErrorCode,
@@ -215,5 +218,18 @@ export async function resetPassword(req: Request, res: Response) {
         data: {}
     };
 
+    //4- Send the response
     res.json(response);
+}
+
+export async function authWithGoogle(req: Request, res: Response) {
+    //1- Prepare the data for service and get the authorization code from redirect url 
+    const { code } = req.query as { code: string };
+
+    //2- Send the data to service
+    await authService.authWithGoogle(code);
+    
+
+    //3- Prepare the response
+    res.send("hello")
 }

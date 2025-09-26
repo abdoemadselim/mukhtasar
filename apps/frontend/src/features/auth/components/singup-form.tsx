@@ -40,13 +40,8 @@ export default function SignUpForm() {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="bg-card m-auto h-fit rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="p-8 pt-2 pb-6 md:w-[500px] w-[85vw] sm:w-[450px]">
-                <div>
-                    <h1 className="mb-1 mt-4 text-xl text-center text-primary font-semibold">أنشىء حسابك المجاني</h1>
-                </div>
                 <div id="root-error" aria-live="polite" aria-atomic="true" className='text-center'>
                     {errors?.root &&
                         <Alert variant="destructive" className="mb-4">
@@ -55,7 +50,6 @@ export default function SignUpForm() {
                         </Alert>
                     }
                 </div>
-                <hr className="my-4 border-dashed" />
 
                 <div className="space-y-6 ">
                     <div className="space-y-2">

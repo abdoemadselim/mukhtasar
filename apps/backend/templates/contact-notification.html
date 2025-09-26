@@ -1,0 +1,55 @@
+<!-- templates/contact-notification.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رسالة جديدة - مُختصِر</title>
+</head>
+
+<body
+    style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; direction: rtl;">
+    <div
+        style="max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <!-- Header -->
+        <div
+            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+            <img src="cid:logo_cid" alt="مُختصِر" style="width: 60px; height: 60px; margin-bottom: 20px;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">رسالة جديدة من العملاء</h1>
+            <p style="color: #e2e8f0; margin: 10px 0 0 0; font-size: 16px;">تم استلام رسالة جديدة عبر نموذج التواصل</p>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+            <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                <h3 style="color: #334155; margin: 0 0 10px 0; font-size: 18px;">معلومات المرسل:</h3>
+                <p style="margin: 5px 0; color: #64748b;"><strong>الاسم:</strong> {{senderName}}</p>
+                <p style="margin: 5px 0; color: #64748b;"><strong>البريد الإلكتروني:</strong> {{senderEmail}}</p>
+            </div>
+
+            <div style="background: #f1f5f9; border-radius: 8px; padding: 20px;">
+                <h3 style="color: #334155; margin: 0 0 15px 0; font-size: 18px;">الرسالة:</h3>
+                <div
+                    style="background: white; padding: 15px; border-radius: 6px; border-right: 4px solid #3b82f6; line-height: 1.6; color: #475569;">
+                    {{message}}
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="mailto:{{senderEmail}}"
+                    style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">الرد
+                    على الرسالة</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+            <p style="color: #64748b; margin: 0; font-size: 14px;">
+                تم إرسال هذه الرسالة من نموذج التواصل في موقع مُختصِر
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
