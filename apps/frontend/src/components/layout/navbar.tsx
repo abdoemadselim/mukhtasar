@@ -17,10 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-import { useAuth } from "@/features/auth/context/auth-context"
-import UserActionsDropDown from "@/features/user/components/user-actions-drop-down"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -30,12 +26,11 @@ const navigationLinks = [
 ]
 
 export default function Navbar() {
-  const { user, isLoading } = useAuth()
   const pathname = usePathname();
 
   return (
-    <header className="px-4 md:px-6 pt-4">
-      <div className="container mx-auto bg-white px-10 rounded-xl">
+    <header className="px-4 md:px-6 pt-4 ">
+      <div className="container mx-auto bg-white shadow-sm px-10 rounded-xl">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Left side */}
           <div className="flex items-center gap-2">
@@ -127,35 +122,12 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            {isLoading ? (
-              // Loading skeleton
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-16 bg-gray-200 animate-pulse rounded"></div>
-                <div className="h-8 w-8 bg-gray-200 animate-pulse rounded-full"></div>
-              </div>
-            ) : user ? (
-              <>
-
-                <UserActionsDropDown >
-                  <div className="flex gap-4 items-center">
-                    <span>{user.name}</span>
-                    <Avatar>
-                      <AvatarImage src="/avatar.webp" />
-                      <AvatarFallback>{user.name}</AvatarFallback>
-                    </Avatar>
-                  </div>
-                </UserActionsDropDown>
-              </>
-            ) : (
-              <>
-                <Button asChild variant="ghost" size="sm" className="text-md">
-                  <Link href="/auth/login">سجل دخول</Link>
-                </Button>
-                <Button asChild size="sm" className="text-md">
-                  <Link href="/auth/signup">اشتراك</Link>
-                </Button>
-              </>
-            )}
+            <Button asChild variant="ghost" size="sm" className="text-md">
+              <Link href="/auth/login">سجل دخول</Link>
+            </Button>
+            <Button asChild size="sm" className="text-md">
+              <Link href="/auth/signup">اشتراك</Link>
+            </Button>
           </div>
         </div>
       </div>
