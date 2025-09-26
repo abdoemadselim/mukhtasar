@@ -33,7 +33,7 @@ export function Highlighter({
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 2,
-  padding = 2,
+  padding = 6,
   multiline = true,
 }: HighlighterProps) {
   const elementRef = useRef<HTMLSpanElement>(null);
