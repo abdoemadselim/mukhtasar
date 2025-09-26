@@ -42,7 +42,6 @@
   "dependencies": {
     "@maxmind/geoip2-node": "^6.1.0",
     "@mukhtasar/shared": "workspace:*",
-    "@sendgrid/mail": "^8.1.5",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cloudflare": "^5.1.0",
