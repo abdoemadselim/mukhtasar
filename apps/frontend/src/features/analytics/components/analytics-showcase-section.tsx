@@ -12,7 +12,7 @@ import {
 import Link from "next/link"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Highlighter } from "@/components/ui/highlighter"
+import Highlighter from "@/components/ui/highlighter"
 import { Button } from "@/components/ui/button"
 
 const analyticsFeatures = [

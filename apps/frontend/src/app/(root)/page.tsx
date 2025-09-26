@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { BadgeQuestionMark } from "lucide-react";
+import dynamic from "next/dynamic";
 
 import HeroSection from "@/components/layout/hero-section";
-import { Highlighter } from "@/components/ui/highlighter";
+const Highlighter = dynamic(() => import('@/components/ui/highlighter'))
+
 import AnalyticsShowcaseSection from "@/features/analytics/components/analytics-showcase-section";
 import ContactUs from "@/features/contact/components/contact-us";
 
@@ -10,7 +12,7 @@ export default function HomePage() {
   return (
     <main>
       <HeroSection />
-      <section className="text-center pb-50 pt-15 mt-38 relative mx-auto bg-white">
+      <section className="text-center pb-40 pt-30 mt-38 relative mx-auto bg-white">
         <h2 className="text-4xl lg:text-5xl font-bold mb-4">
           <Highlighter action="underline" strokeWidth={2} color="red">
             <BadgeQuestionMark className="inline-block ml-2 mb-1" size={42} />

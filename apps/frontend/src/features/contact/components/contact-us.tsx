@@ -8,7 +8,7 @@ import { ContactMessageSchema, ContactMessageType } from '@mukhtasar/shared';
 import { Send, MessageCircle } from 'lucide-react';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Highlighter } from '@/components/ui/highlighter';
+import Highlighter from '@/components/ui/highlighter';
 import { openToaster } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import { Textarea } from "@/components/ui/textarea"

@@ -117,7 +117,7 @@ export function PaginatedDataTable<T>({ data, total, pagination, columns }: { da
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80">
+                    className="relative data-[dragging=true]:z-10 data-[dragging=true]:opacity-80">
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

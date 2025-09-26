@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { openToaster } from "@/components/ui/sonner"
+import { LinkPreview } from "@/components/ui/link-preview"
 
 const UpdateUrlDialog = dynamic(() => import("@/features/url/components/update-url-dialog"), {
   loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
@@ -67,7 +68,7 @@ export const columns: ColumnDef<FullUrlType>[] = [
       return (
         <div className="flex items-center gap-2" >
           <div className="text-primary cursor-pointer underline lg:text-md" dir="ltr">
-            <Link target="_blank" href={row.original.short_url}>{row.original.short_url}</Link>
+            <LinkPreview url={row.original.original_url}>{row.original.short_url}</LinkPreview>
             <Button variant="ghost" className="cursor-pointer" onClick={handleCopy}>
               <Copy size={20} className="text-red-400" />
             </Button>

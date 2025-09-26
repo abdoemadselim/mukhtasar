@@ -1,8 +1,8 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-const Highlighter = dynamic(() => import('@/components/ui/highlighter').then((comp) => comp.Highlighter))
-const AnimatedGradientText = dynamic(() => import("@/components/ui/animated-gradient-text"))
+import Highlighter from '@/components/ui/highlighter'
+import AnimatedGradientText from "@/components/ui/animated-gradient-text"
 
 import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export default function HeroSection() {
                     فهم أعمق لزوار موقعك = استهداف أدق  =
                     <Highlighter strokeWidth={2} color="#22C55E">نمو أسرع لشركتك!</Highlighter>
                     <p className="text-base md:text-md lg:text-xl text-muted-foreground leading-relaxed hidden sm:block">مع إحصائيات مُختصِر الدقيقة: نوع الجهاز، الدولة، المتصفح، مصدر الزيارة،
-                        <Link href="#more-analytics" className="underline text-blue-700"> وأكثر.</Link></p>
+                        <Link href="#more-analytics" className="underline text-blue-400"> وأكثر.</Link></p>
 
                     <p className="pt-4 hidden sm:block"> كل روابطك تتكلم عنك</p>
                     <p className="text-base hidden sm:block md:text-md lg:text-xl text-muted-foreground leading-relaxed mb-4">مع روابط قصيرة معبرة تحمل نطاق موقعك</p>
