@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import SignUpForm from "@/features/auth/components/singup-form";
-import SocialMediaAuth from "@/features/auth/components/social-media-auth";
+import SocialMediaAuth from "@/features/auth/components/oauth";
 
 export default function SignUpPage() {
     return (

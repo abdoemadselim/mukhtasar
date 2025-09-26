@@ -48,7 +48,7 @@ export default function HomePage() {
       </section>
 
       <AnalyticsShowcaseSection />
-      {/* <ContactUs /> */}
+      <ContactUs />
     </main>
   )
 }

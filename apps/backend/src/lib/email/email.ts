@@ -2,12 +2,31 @@ import dotenv from "dotenv"
 dotenv.config()
 import { asyncStore } from '#middlewares/routes-context.js';
 import path from "path"
-import sgMail from '@sendgrid/mail'
 import fs from 'fs/promises'
+import nodemailer from "nodemailer";
 
 import { log, LOG_TYPE } from "#lib/logger/logger.js"
+// Create transporter for Hostinger SMTP
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com', // Hostinger SMTP server
+    port: parseInt(process.env.SMTP_PORT || '587'), // Usually 587 for TLS or 465 for SSL
+    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USER, // Your Hostinger email address
+        pass: process.env.SMTP_PASSWORD, // Your email password or app password
+    },
+    tls: {
+        rejectUnauthorized: false // Allow self-signed certificates if needed
+    }
+});
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
+transporter.verify((error) => {
+    if (error) {
+        log(LOG_TYPE.ERROR, { message: "SMTP connection failed", error });
+    } else {
+        log(LOG_TYPE.INFO, { message: "SMTP server is ready to send emails" });
+    }
+});
 
 const baseUrl = "https://api.mukhtasar.pro/ui";
 export async function sendVerificationMail({ userEmail, userName, verificationToken }: { userEmail: string, userName: string, verificationToken: string }) {
@@ -20,32 +39,25 @@ export async function sendVerificationMail({ userEmail, userName, verificationTo
         .replace(/{{verificationLink}}/g, `${baseUrl}/auth/verify?token=${verificationToken}`)
         .replace(/{{username}}/g, userName)
 
-    // 3. Send with CID attachment
-    const msg = {
+    // 3. Prepare email options
+    const mailOptions = {
+        from: `"مُختصِر" <${process.env.SMTP_FROM}>`,
         to: userEmail,
-        from: 'مُختصِر <support@mukhtasar.pro>',
         subject: "تأكيد البريد الإلكتروني - مُختصِر",
         html: htmlTemplate,
-        trackingSettings: {
-            clickTracking: { enable: false, enableText: false },
-            openTracking: { enable: false },
-        },
         attachments: [
             {
-                content: (await fs.readFile(path.join(process.cwd(), "public", "logo-lg.png"))).toString("base64"), // adjust path
                 filename: "logo.png",
-                type: "image/png",
-                disposition: "inline",
-                content_id: "logo_cid", // matches cid in template
+                path: path.join(process.cwd(), "public", "logo-lg.png"),
+                cid: "logo_cid", // matches cid in template
             },
         ],
-    }
+    };
 
-    sgMail
-        .send(msg)
-        .catch((error) => {
-            log(LOG_TYPE.ERROR, { message: "Failed to send email verification mail.", error: error })
-        })
+    transporter.sendMail(mailOptions).catch((error) => {
+        log(LOG_TYPE.ERROR, { message: "Failed to send email verification mail.", error: error })
+    })
+
     const store = asyncStore.getStore();
 
     log(LOG_TYPE.INFO, {
@@ -81,36 +93,25 @@ export async function sendResetMail({
         .replace(/{{resetPasswordLink}}/g, redirectionUrl)
         .replace(/{{username}}/g, userName);
 
-    // 3. Send email
-    const msg = {
+    // 3. Prepare email options
+    const mailOptions = {
+        from: `"مُختصِر" <${process.env.SMTP_FROM}>`,
         to: userEmail,
-        from: "مُختصِر <support@mukhtasar.pro>",
         subject: "إعادة تعيين كلمة المرور - مُختصِر",
         html: htmlTemplate,
-        trackingSettings: {
-            clickTracking: { enable: false, enableText: false },
-            openTracking: { enable: false },
-        },
         attachments: [
             {
-                content: (
-                    await fs.readFile(
-                        path.join(process.cwd(), "public", "logo-lg.png")
-                    )
-                ).toString("base64"),
                 filename: "logo.png",
-                type: "image/png",
-                disposition: "inline",
-                content_id: "logo_cid", // must match the cid in your reset-password.html
+                path: path.join(process.cwd(), "public", "logo-lg.png"),
+                cid: "logo_cid", // matches cid in template
             },
         ],
     };
 
-    sgMail
-        .send(msg)
-        .catch((error) => {
-            log(LOG_TYPE.ERROR, { message: "Failed to send reset password mail.", error: error })
-        })
+    // 4. Send email
+    transporter.sendMail(mailOptions).catch((error) => {
+        log(LOG_TYPE.ERROR, { message: "Failed to send email verification mail.", error: error })
+    })
 
     const store = asyncStore.getStore();
     log(LOG_TYPE.INFO, {
@@ -143,36 +144,25 @@ export async function sendContactNotificationMail({
         .replace(/{{senderEmail}}/g, senderEmail)
         .replace(/{{message}}/g, message.replace(/\n/g, '<br>'));
 
-    // 3. Send email to admin
-    const msg = {
-        to: process.env.CONTACT_EMAIL || 'support@mukhtasar.pro',
-        from: "مُختصِر <noreply@mukhtasar.pro>",
+    // 3. Prepare email options
+    const mailOptions = {
+        from: `"مُختصِر" <${process.env.SMTP_FROM}>`,
+        to: process.env.CONTACT_EMAIL,
         replyTo: senderEmail,
         subject: `رسالة جديدة من ${senderName} - مُختصِر`,
         html: htmlTemplate,
-        trackingSettings: {
-            clickTracking: { enable: false, enableText: false },
-            openTracking: { enable: false },
-        },
         attachments: [
             {
-                content: (
-                    await fs.readFile(
-                        path.join(process.cwd(), "public", "logo-lg.png")
-                    )
-                ).toString("base64"),
                 filename: "logo.png",
-                type: "image/png",
-                disposition: "inline",
-                content_id: "logo_cid",
+                path: path.join(process.cwd(), "public", "logo-lg.png"),
+                cid: "logo_cid", // matches cid in template
             },
         ],
     };
 
-    await sgMail.send(msg)
-        .catch((error) => {
-            log(LOG_TYPE.ERROR, { message: "Failed to contact notification mail.", error: error })
-        })
+    transporter.sendMail(mailOptions).catch((error) => {
+        log(LOG_TYPE.ERROR, { message: "Failed to send email verification mail.", error: error })
+    })
 
     const store = asyncStore.getStore();
     log(LOG_TYPE.INFO, {
