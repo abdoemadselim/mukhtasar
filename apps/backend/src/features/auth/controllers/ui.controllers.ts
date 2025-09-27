@@ -192,11 +192,10 @@ export async function authWithGoogle(req: Request, res: Response) {
         //3- Create user session
         await authService.createUserSession({ res, user })
 
-
-        res.redirect(process.env.ORIGINAL_URL as string)
+        res.redirect(`${process.env.ORIGINAL_URL}/dashboard/urls` as string)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         log(LOG_TYPE.ERROR, { message: error.message, stack: error.stack, code: code?.substring(0, 10) + '...' })
-        return res.redirect(`${process.env.ORIGINAL_URL}/error` as string)
+        return res.redirect(`${process.env.ORIGINAL_URL}/pages/error` as string)
     }
 }
