@@ -20,8 +20,8 @@ const authRepository = {
     async createOAuthUser({ name, email }: { name: string, email: string }) {
         const result = await query(`
             INSERT INTO
-            users(name, email)
-            VALUES($1, $2)
+            users(name, email, verified)
+            VALUES($1, $2, true)
             RETURNING id, name, email
         `, [name, email])
 
