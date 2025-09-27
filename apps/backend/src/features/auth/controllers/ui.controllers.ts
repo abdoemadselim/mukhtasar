@@ -182,10 +182,10 @@ export async function resetPassword(req: Request, res: Response) {
 }
 
 export async function authWithGoogle(req: Request, res: Response) {
-    try {
-        //1- Prepare the data for service and get the authorization code from redirect url
-        const { code } = req.query as { code: string };
+    //1- Prepare the data for service and get the authorization code from redirect url
+    const { code } = req.query as { code: string };
 
+    try {
         //2- Send the data to service
         const user = await authService.authWithGoogle(code);
 
@@ -196,7 +196,7 @@ export async function authWithGoogle(req: Request, res: Response) {
         res.redirect(process.env.ORIGINAL_URL as string)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        log(LOG_TYPE.ERROR, { message: error.message })
+        log(LOG_TYPE.ERROR, { message: error.message, stack: error.stack, code: code?.substring(0, 10) + '...' })
         return res.redirect(`${process.env.ORIGINAL_URL}/error` as string)
     }
 }

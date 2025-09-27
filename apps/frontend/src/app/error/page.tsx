@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { AlertTriangle } from 'lucide-react'
 
-import Navbar from '@/components/layout/navbar'
 import { Button } from '@/components/ui/button'
 
 interface ErrorPageProps {
@@ -23,7 +22,6 @@ export default function ErrorPage({
 }: ErrorPageProps) {
     return (
         <div>
-            <Navbar />
             <main className='flex min-h-[80vh] flex-col justify-center items-center text-primary px-4'>
                 <AlertTriangle className='text-primary mb-6' size={80} />
 

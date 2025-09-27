@@ -11,7 +11,7 @@ router.post("/login", authRateLimiter(15, 20), validateRequest([loginSchema]), l
 router.post("/logout", logout)
 router.get("/verify", authRateLimiter(15, 20), validateRequest([userVerificationSchema]), verify)
 router.post("/signup", authRateLimiter(15, 20), validateRequest([newUserSchema]), signup)
-router.get("/google/callback", authWithGoogle)
+router.get("/google/callback", authRateLimiter(15, 20), authWithGoogle)
 router.post("/password-reset-mail", authRateLimiter(15, 20), validateRequest([resetPasswordMailSchema]), sendResetPasswordMail)
 router.post("/reset-password", authRateLimiter(15, 20), validateRequest([resetPasswordSchemaWithToken]), resetPassword)
 router.get("/me", verifyUser)
