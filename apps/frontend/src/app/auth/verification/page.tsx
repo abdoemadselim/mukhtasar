@@ -1,18 +1,15 @@
-'use client'
-
 import { Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/features/auth/context/auth-context";
+import { getSession } from "@/features/auth/service/auth-session.js";
 
-export default function EmailVerificationPage() {
-    const { user, isLoading } = useAuth()
-    const router = useRouter();
+export default async function EmailVerificationPage() {
+    const session = await getSession()
 
     const component = (
-        user?.verified ?
+        session.data.user?.verified ?
             <p>لقد تم تأكيد بريدك الإلكتروني بالفعل.</p>
             : <p>
                 تم إرسال رسالة إلى بريدك الإلكتروني.
@@ -25,17 +22,8 @@ export default function EmailVerificationPage() {
 
     )
 
-    if (!user && !isLoading) {
-        router.replace("/auth/login")
-    }
-
-    if (isLoading) {
-        // Show loading spinner while checking authentication
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-            </div>
-        );
+    if (!session.data.user) {
+        redirect("/auth/login")
     }
 
     return (

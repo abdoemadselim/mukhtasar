@@ -11,13 +11,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { login } from '@/features/auth/service/auth'
-import { useAuth } from '@/features/auth/context/auth-context'
 import { Eye, EyeClosed } from 'lucide-react';
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
 
-    const { checkAuth } = useAuth()
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<LoginType>({
         resolver: zodResolver(LoginSchema)
     })
@@ -30,8 +28,6 @@ export default function LoginForm() {
             return setError(error as keyof LoginType, { message: errors[error].message })
         }
 
-        // If everything is ok, update auth context and redirect
-        await checkAuth()
         window.location.href = "/dashboard/urls"
     }
 

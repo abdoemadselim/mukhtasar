@@ -7,9 +7,6 @@ import { cairo } from "@/fonts/fonts";
 import { ClientProvider } from "@/context/client-provider";
 import { Toaster } from "@/components/ui/sonner";
 
-import { AuthProvider } from "@/features/auth/context/auth-context";
-import { UrlProvider } from "@/features/url/context/urls-context";
-
 export const metadata: Metadata = {
   title: "مُختصِر | أول منتج عربي متكامل لإختصار الروابط",
   description:
@@ -68,13 +65,9 @@ export default function RootLayout({
         className={`${cairo.className} antialiased `}
       >
         <ClientProvider>
-          <AuthProvider>
-            <UrlProvider>
-              {children}
-              <SpeedInsights />
-              <Analytics />
-            </UrlProvider>
-          </AuthProvider>
+          {children}
+          <SpeedInsights />
+          <Analytics />
           <Toaster position="top-center" richColors />
         </ClientProvider>
       </body>

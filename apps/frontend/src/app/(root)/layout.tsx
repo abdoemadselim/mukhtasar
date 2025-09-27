@@ -16,7 +16,7 @@ export default async function NavLayout({
     }
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="bg-gradient-to-r from-blue-100 to-purple-50">
             <Navbar />
             {children}
             <Footer />

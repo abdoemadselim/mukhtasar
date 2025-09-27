@@ -1,11 +1,11 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
-import Highlighter from '@/components/ui/highlighter'
 import AnimatedGradientText from "@/components/ui/animated-gradient-text"
+import { Highlight } from "@/components/ui/hero-highlight";
 
 import LandingUrlCreationForm from "@/features/url/components/landing-url-creation-form";
-import Link from "next/link";
 
 export default function HeroSection() {
     return (
@@ -23,8 +23,8 @@ export default function HeroSection() {
                 <AnimatedGradientText text="أول منتج عربي متكامل لإختصار الروابط" />
                 <div className="text-xl sm:text-2xl lg:text-3xl md:max-w-[1000px] max-w-[530px] leading-relaxed px-4 pt-8">
                     فهم أعمق لزوار موقعك = استهداف أدق  =
-                    <Highlighter strokeWidth={2} color="#22C55E">نمو أسرع لشركتك!</Highlighter>
-                    <p className="text-base md:text-md lg:text-xl text-muted-foreground leading-relaxed hidden sm:block">مع إحصائيات مُختصِر الدقيقة: نوع الجهاز، الدولة، المتصفح، مصدر الزيارة،
+                    <Highlight>نمو أسرع لشركتك!</Highlight>
+                    <p className="text-base md:text-md mt-2 lg:text-xl text-muted-foreground leading-relaxed hidden sm:block">مع إحصائيات مُختصِر الدقيقة: نوع الجهاز، الدولة، المتصفح، مصدر الزيارة،
                         <Link href="#more-analytics" className="underline text-blue-400"> وأكثر.</Link></p>
 
                     <p className="pt-4 hidden sm:block"> كل روابطك تتكلم عنك</p>

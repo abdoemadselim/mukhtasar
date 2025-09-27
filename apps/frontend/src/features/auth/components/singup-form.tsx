@@ -12,12 +12,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { signup } from '@/features/auth/service/auth'
-import { useAuth } from '@/features/auth/context/auth-context';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { AlertCircleIcon, Eye, EyeClosed } from 'lucide-react';
 
 export default function SignUpForm() {
-    const { checkAuth } = useAuth()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -35,7 +33,6 @@ export default function SignUpForm() {
         }
 
         // If everything is ok, redirect to the verification page
-        await checkAuth()
         router.replace("/auth/verification")
     }
 

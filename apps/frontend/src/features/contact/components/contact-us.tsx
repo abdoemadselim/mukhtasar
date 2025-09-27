@@ -39,12 +39,12 @@ export default function ContactSection() {
         }
 
         if (isSuccess) {
-            openToaster("تم إرسال رسالتك بنجاح! انتظر رسالتنا 💙", "success");
+            openToaster("تم إرسال رسالتك بنجاح! انتظر رسالتنا", "success");
         }
     }, [isError, isSuccess, error]);
 
     return (
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white" id="contact-us">
             <div className="max-w-4xl mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-12">

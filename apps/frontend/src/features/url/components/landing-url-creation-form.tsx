@@ -196,8 +196,11 @@ export default function LandingUrlCreationForm() {
                                 </div>
                             </div>
                         </div>
-
-                        <Button className="mt-4 cursor-pointer w-full md:text-xl text-lg py-4 md:h-12" type="submit" disabled={form.formState.isSubmitting}>
+                        <Button
+                            className="inline-flex w-full cursor-pointer items-center px-12 py-5 bg-gradient-to-r
+                         from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                            type="submit" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
                         </Button>
                     </form>
