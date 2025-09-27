@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { Highlighter } from "@/components/ui/highlighter";
+import Highlighter from "@/components/ui/highlighter";
 
 import CreateUrlDialog from "@/features/url/components/create-url-dialog";
 import UrlTable from "@/features/url/components/url-table";

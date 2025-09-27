@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { Highlighter } from "@/components/ui/highlighter";
+import Highlighter from "@/components/ui/highlighter";
 
 import CreateTokenDialog from "@/features/token/components/create-token-dialog";
 import TokensTable from "@/features/token/components/tokens-table";
