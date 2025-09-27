@@ -66,7 +66,7 @@ export function TokenSuccessDialog({ isOpen, onClose, token }: TokenSuccessDialo
                                 id="token-display"
                                 value={showToken ? token : maskedToken}
                                 readOnly
-                                className="font-mono text-sm bg-muted"
+                                className="font-mono text-sm bg-mutedfocus-visible:border-blue-600 focus-visible:border-2"
                                 dir="ltr"
                             />
                             <Button

@@ -88,7 +88,7 @@ export default function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialo
                                 name="short_url"
                                 value={currentUrl.short_url}
                                 readOnly
-                                className="bg-muted"
+                                className="bg-muted focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                             />
                         </div>
 
@@ -96,6 +96,7 @@ export default function UpdateUrlDialog({ children, currentUrl }: UpdateUrlDialo
                         <div className="grid gap-3">
                             <Label htmlFor="original_url">الرابط الأصلي</Label>
                             <Input
+                                className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                 id="original_url"
                                 {...register("original_url")}
                             />

@@ -88,6 +88,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                             <FormLabel>الرابط الأصلي</FormLabel>
                                             <FormControl>
                                                 <Input
+                                                    className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                                     id="original_url"
                                                     placeholder="https://example.com/page"
                                                     {...field}
@@ -110,6 +111,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                             <FormControl>
                                                 <Input
                                                     {...field}
+                                                    className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                                     id="description"
                                                     placeholder="أدخل وصفاً للرابط"
                                                 />
@@ -131,6 +133,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                             <FormControl>
                                                 <Input
                                                     {...field}
+                                                    className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                                     id="alias"
                                                     placeholder="my-link"
                                                 />
@@ -151,7 +154,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                             <FormLabel>النطاق</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
-                                                    <SelectTrigger className="sm:w-[200px] w-full border-gray-300">
+                                                    <SelectTrigger className="sm:w-[200px] w-full border-gray-300 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
                                                         <SelectValue placeholder="اختر نطاق" />
                                                     </SelectTrigger>
                                                 </FormControl>

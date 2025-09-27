@@ -82,6 +82,7 @@ export default function UpdateTokenDialog({ children, currentToken }: UpdateToke
                             <Label htmlFor="label">التسمية</Label>
                             <Input
                                 {...register("label")}
+                                className='focus-visible:border-blue-600 focus-visible:border-2'
                                 name="label"
                                 id="label"
                             />

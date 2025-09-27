@@ -68,7 +68,9 @@ export const columns: ColumnDef<FullUrlType>[] = [
       return (
         <div className="flex items-center gap-2" >
           <div className="text-primary cursor-pointer underline lg:text-md" dir="ltr">
-            <LinkPreview url={row.original.original_url}>{row.original.short_url}</LinkPreview>
+            <LinkPreview url={row.original.original_url}>
+            {row.original.short_url}
+            </LinkPreview>
             <Button variant="ghost" className="cursor-pointer" onClick={handleCopy}>
               <Copy size={20} className="text-red-400" />
             </Button>

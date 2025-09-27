@@ -97,7 +97,7 @@ export function DeleteConfirmationDialog<T>({
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             placeholder={`اكتب "${confirmationText}" للتأكيد`}
-                            className="text-right"
+                            className="text-right focus-visible:ring-0  focus-visible:border-blue-600 focus-visible:border-2"
                             autoComplete="off"
                             dir="ltr"
                         />

@@ -86,6 +86,7 @@ export default function CreateDomainDialog({ children }: { children: React.React
                                 <Input
                                     {...register("domain")}
                                     id="domain"
+                                    className="focus-visible:border-blue-600 focus-visible:border-2"
                                     placeholder="go.yourdomain.com"
                                     dir="ltr"
                                 />

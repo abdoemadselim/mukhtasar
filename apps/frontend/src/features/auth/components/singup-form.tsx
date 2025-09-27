@@ -57,6 +57,7 @@ export default function SignUpForm() {
                         </Label>
                         <Input
                             {...register("name")}
+                            className='focus-visible:border-blue-600 focus-visible:border-2'
                             type="text"
                             name="name"
                             id="name"
@@ -79,6 +80,7 @@ export default function SignUpForm() {
                         </Label>
                         <Input
                             {...register("email")}
+                            className='focus-visible:border-blue-600 focus-visible:border-2'
                             type="text"
                             name="email"
                             id="email"
@@ -108,7 +110,7 @@ export default function SignUpForm() {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
-                                className="input sz-md variant-mixed pr-8"
+                                className="input sz-md variant-mixed pr-8 focus-visible:border-blue-600 focus-visible:border-2"
                                 aria-invalid={errors.password ? "true" : "false"}
                             />
                             <button
@@ -145,7 +147,7 @@ export default function SignUpForm() {
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="password_confirmation"
                                 id="password_confirmation"
-                                className="input sz-md variant-mixed pr-8"
+                                className="input sz-md variant-mixed pr-8 focus-visible:border-blue-600 focus-visible:border-2"
                                 disabled={isSubmitting}
                                 aria-invalid={errors.password_confirmation ? "true" : "false"}
                             />

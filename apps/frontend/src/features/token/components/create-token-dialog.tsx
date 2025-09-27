@@ -86,6 +86,7 @@ export default function CreateTokenDialog({ children }: { children: React.ReactN
                                 <Input
                                     {...register("label")}
                                     id="label"
+                                    className="focus-visible:border-blue-600 focus-visible:border-2"
                                     placeholder="مثال: Production API"
                                 />
                                 {errors?.label && (

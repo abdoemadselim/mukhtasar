@@ -92,6 +92,7 @@ export default function SendResetPasswordMail() {
                         </Label>
                         <Input
                             {...register("email")}
+                            className='focus-visible:border-blue-600 focus-visible:border-2'
                             type="text"
                             name="email"
                             id="email"

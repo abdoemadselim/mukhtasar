@@ -92,7 +92,7 @@ export default function DomainInstructionsDialog({
                                     <Input
                                         value={domain.split('.')[0]} // just "go"
                                         readOnly
-                                        className="font-mono bg-gray-100"
+                                        className="font-mono bg-gray-100 focus-visible:border-blue-600 focus-visible:border-2"
                                         dir="ltr"
                                     />
                                 </div>
@@ -111,7 +111,7 @@ export default function DomainInstructionsDialog({
                                     <Input
                                         value={domain} // full "go.example.com"
                                         readOnly
-                                        className="font-mono bg-gray-100"
+                                        className="font-mono bg-gray-100 focus-visible:border-blue-600 focus-visible:border-2"
                                         dir="ltr"
                                     />
                                 </div>
@@ -135,7 +135,7 @@ export default function DomainInstructionsDialog({
                                 <Input
                                     value={targetDomain}
                                     readOnly
-                                    className="font-mono bg-gray-100"
+                                    className="font-mono bg-gray-100 focus-visible:border-blue-600 focus-visible:border-2"
                                     dir="ltr"
                                 />
                             </div>

@@ -113,7 +113,7 @@ export default function LandingUrlCreationForm() {
                                         <Input
                                             value={data.short_url}
                                             readOnly
-                                            className="bg-white border-gray-400 rounded-lg"
+                                            className="bg-white border-gray-400 rounded-lg focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                         />
                                         <Button
                                             type="button"
@@ -179,7 +179,7 @@ export default function LandingUrlCreationForm() {
                                             <FormLabel className="text-muted-foreground pb-2">النطاق</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl className="">
-                                                    <SelectTrigger className="w-full  rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
+                                                    <SelectTrigger className="w-full rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
                                                         <SelectValue placeholder="mukhtasar.pro" />
                                                     </SelectTrigger>
                                                 </FormControl>
