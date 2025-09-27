@@ -21,9 +21,9 @@ const authRepository = {
         const result = await query(`
             INSERT INTO
             users(name, email, verified)
-            VALUES($1, $2, true)
-            RETURNING id, name, email
-        `, [name, email])
+            VALUES($1, $2, $3)
+            RETURNING id, name, email, verified
+        `, [name, email, true])
 
         return result.rows[0]
     },
