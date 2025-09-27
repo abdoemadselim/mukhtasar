@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { getSession } from "@/features/auth/service/auth-session.js";
+import { getSession } from "@/features/auth/service/auth-session";
 
 export default async function EmailVerificationPage() {
     const session = await getSession()
