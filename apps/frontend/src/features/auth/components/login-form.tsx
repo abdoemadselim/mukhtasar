@@ -53,7 +53,7 @@ export default function LoginForm() {
                         </Label>
                         <Input
                             {...register("email")}
-                            className='focus-visible:border-blue-600 focus-visible:border-2'
+                            className='focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-2'
                             type="text"
                             name="email"
                             id="email"
@@ -83,7 +83,7 @@ export default function LoginForm() {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
-                                className="input sz-md variant-mixed pr-8  focus-visible:border-blue-600 focus-visible:border-2"
+                                className="input sz-md variant-mixed pr-8 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                 aria-invalid={errors.password ? "true" : "false"}
                             />
                             <button

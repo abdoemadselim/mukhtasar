@@ -57,7 +57,7 @@ export default function PasswordResetConfirmForm({ token }: { token: string }) {
                             type="password"
                             name="password"
                             id="password"
-                            className="input sz-md variant-mixed focus-visible:border-blue-600 focus-visible:border-2"
+                            className="input sz-md variant-mixed focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                             aria-invalid={errors.password ? "true" : "false"}
                         />
 
@@ -84,7 +84,7 @@ export default function PasswordResetConfirmForm({ token }: { token: string }) {
                             type="password"
                             name="password_confirmation"
                             id="password_confirmation"
-                            className="input sz-md variant-mixed  focus-visible:border-blue-600 focus-visible:border-2"
+                            className="input sz-md variant-mixed focus-visible:ring-0  focus-visible:border-blue-600 focus-visible:border-2"
                             disabled={isSubmitting}
                             aria-invalid={errors.password_confirmation ? "true" : "false"}
                         />
