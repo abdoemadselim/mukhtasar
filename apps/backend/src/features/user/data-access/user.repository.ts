@@ -39,6 +39,23 @@ const userRepository = {
         )
 
         return result.rows[0];
+    },
+
+    async updateUser({ id, name, verified }: {
+        id: number;
+        name?: string;
+        verified?: boolean;
+    }): Promise<UserType> {
+        const result = await query(
+            `
+            UPDATE users
+            SET name = $1, verified = $2
+            WHERE id = $3
+            RETURNING id, name, email, verified
+        `,
+            [name, verified, id]
+        );
+        return result.rows[0];
     }
 }
 

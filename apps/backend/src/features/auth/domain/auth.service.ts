@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { NextFunction, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
@@ -16,6 +16,7 @@ import { sendVerificationMail, sendResetMail } from "#lib/email/email.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 import { getSecureSessionConfig } from "#lib/session-handler/session-handler.js";
+import { UserType } from "#root/features/user/types.js";
 
 // TODO: Can't we create a new type instead of omitting the password_confirmation everywhere?
 export async function createUser({ email, password, name }: Omit<NewUserType, "password_confirmation">) {
@@ -225,8 +226,8 @@ export async function authWithGoogle(code: string) {
     // Required body data for oauth 2.0
     const values = {
         client_id: process.env.GOOGLE_OAUTH_CLIENT_ID as string,
-        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET as string,
         redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URL as string,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET as string,
         code,
         grant_type: "authorization_code"
     }
@@ -240,7 +241,46 @@ export async function authWithGoogle(code: string) {
         }
     })
 
+    if (!result.ok) {
+        throw new Error("Failed to authorize Google user")
+    }
+
     // Result should contain (id_token, access_token)
-    const oauth_result = await result.json();
-    return oauth_result;
+    const { id_token } = await result.json();
+
+    const decoded = jwt.decode(id_token) as JwtPayload
+    if (!decoded.email_verified) {
+        throw new Error("Failed to authorize Google user (Unverified Google Email)")
+    }
+
+    const user = await userRepository.getUserByEmail(decoded.email);
+
+    if (!user) {
+        const newUser = await authRepository.createOAuthUser({ name: decoded.name, email: decoded.email });
+        return newUser;
+    } else {
+        const updatedUser = await userRepository.updateUser({ verified: true, name: decoded.name, id: user.id })
+        return updatedUser;
+    }
+}
+
+export async function createUserSession({ res, user }: { res: Response, user: UserType }) {
+    const sessionId = randomUUID()
+    const sessionConfig = getSecureSessionConfig({
+        key: process.env.AUTH_SESSION_NAME as string,
+        value: sessionId,
+        age: Number(process.env.SESSION_DURATION)
+    });
+
+    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
+
+    await redisClient.setEx(
+        `sessions:${sessionId}`,
+        Number(process.env.SESSION_DURATION) / 1000,
+        JSON.stringify({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            verified: user.verified
+        }))
 }

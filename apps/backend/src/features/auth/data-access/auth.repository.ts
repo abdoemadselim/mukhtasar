@@ -17,6 +17,17 @@ const authRepository = {
         return result.rows[0]
     },
 
+    async createOAuthUser({ name, email }: { name: string, email: string }) {
+        const result = await query(`
+            INSERT INTO
+            users(name, email)
+            VALUES($1, $2)
+            RETURNING id, name, email
+        `, [name, email])
+
+        return result.rows[0]
+    },
+
     async setUserVerified(userId: number): Promise<undefined> {
         const result = await query(`
             UPDATE users

@@ -1,9 +1,6 @@
-import { randomUUID } from "node:crypto";
 import type { Request, Response } from "express";
-
-// TODO: a feature import from the main? (something's wrong here)
-
 import type { NewUserType } from "@mukhtasar/shared";
+
 import * as authService from "#features/auth/domain/auth.service.js"
 import urlRepository from "#features/url/data-access/url.repository.js";
 import { IRequest } from "#features/auth/types";
@@ -11,6 +8,7 @@ import { IRequest } from "#features/auth/types";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 import { NoException, UnAuthorizedException } from "#lib/error-handling/error-types.js";
 import { getSecureSessionConfig } from "#lib/session-handler/session-handler.js";
+import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // ---------------------- LOGIN ----------------------
 export async function login(req: IRequest, res: Response) {
@@ -19,26 +17,7 @@ export async function login(req: IRequest, res: Response) {
     const user = await authService.login({ email, password })
 
     req.user = user;
-
-    const sessionId = randomUUID()
-    const sessionConfig = getSecureSessionConfig({
-        key: process.env.AUTH_SESSION_NAME as string,
-        value: sessionId,
-        age: Number(process.env.SESSION_DURATION)
-    });
-
-    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
-
-    redisClient.setEx(
-        `sessions:${sessionId}`,
-        Number(process.env.SESSION_DURATION) / 1000,
-        JSON.stringify({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            verified: true
-        }))
-
+    await authService.createUserSession({ res, user })
     const response = {
         errors: [],
         code: NoException.NoErrorCode,
@@ -47,7 +26,7 @@ export async function login(req: IRequest, res: Response) {
             user: {
                 name: user.name,
                 email: user.email,
-                verified: true
+                verified: user.verified
             }
         }
     };
@@ -61,27 +40,7 @@ export async function signup(req: IRequest, res: Response) {
     const user = await authService.createUser({ email, password, name })
 
     req.user = user
-
-    const sessionId = randomUUID()
-
-    const sessionConfig = getSecureSessionConfig({
-        key: process.env.AUTH_SESSION_NAME as string,
-        value: sessionId,
-        age: Number(process.env.SESSION_DURATION)
-    });
-
-    res.cookie(sessionConfig.key, sessionConfig.value, sessionConfig.options)
-
-    redisClient.setEx(
-        `sessions:${sessionId}`,
-        Number(process.env.SESSION_DURATION) / 1000,
-        JSON.stringify({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            verified: false
-        })
-    );
+    await authService.createUserSession({ res, user })
 
     const response = {
         errors: [],
@@ -223,13 +182,21 @@ export async function resetPassword(req: Request, res: Response) {
 }
 
 export async function authWithGoogle(req: Request, res: Response) {
-    //1- Prepare the data for service and get the authorization code from redirect url 
-    const { code } = req.query as { code: string };
+    try {
+        //1- Prepare the data for service and get the authorization code from redirect url
+        const { code } = req.query as { code: string };
 
-    //2- Send the data to service
-    await authService.authWithGoogle(code);
-    
+        //2- Send the data to service
+        const user = await authService.authWithGoogle(code);
 
-    //3- Prepare the response
-    res.send("hello")
+        //3- Create user session
+        await authService.createUserSession({ res, user })
+
+
+        res.redirect(process.env.ORIGINAL_URL as string)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        log(LOG_TYPE.ERROR, { message: error.message })
+        return res.redirect(`${process.env.ORIGINAL_URL}/error` as string)
+    }
 }
