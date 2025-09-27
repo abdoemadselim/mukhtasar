@@ -1,7 +1,7 @@
 "use client";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
 import { encode } from "qss";
-import React from "react";
+import React, { useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -53,8 +53,8 @@ export const LinkPreview = ({
     src = imageSrc;
   }
 
-  const [isOpen, setOpen] = React.useState(false);
-  const [isMounted, setIsMounted] = React.useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -114,13 +114,19 @@ export const LinkPreview = ({
                     x: translateX,
                   }}
                 >
-                  <img
-                    src={src}
-                    width={width}
-                    height={height}
-                    className="border border-transparent shadow-2xl rounded-xl bg-white"
-                    alt="Preview"
-                  />
+                  <a
+                    href={url}
+                    className="block p-1 bg-white border-2 border-transparent shadow rounded-xl hover:border-neutral-200 dark:hover:border-neutral-800"
+                    style={{ fontSize: 0 }}
+                  >
+                    <img
+                      src={src}
+                      width={width}
+                      height={height}
+                      className="border border-transparent shadow-2xl rounded-xl bg-white"
+                      alt="Preview"
+                    />
+                  </a>
                 </motion.div>
               )}
             </AnimatePresence>
