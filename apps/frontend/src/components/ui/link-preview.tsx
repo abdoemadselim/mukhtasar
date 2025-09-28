@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 type LinkPreviewProps = {
   children: React.ReactNode;
   url: string;
+  realUrl: string;
   className?: string;
   width?: number;
   height?: number;
@@ -27,6 +28,7 @@ type LinkPreviewProps = {
 export const LinkPreview = ({
   children,
   url,
+  realUrl,
   className,
   width = 200,
   height = 125,
@@ -115,7 +117,7 @@ export const LinkPreview = ({
                   }}
                 >
                   <a
-                    href={url}
+                    href={realUrl}
                     className="block p-1 bg-white border-2 border-transparent shadow rounded-xl hover:border-neutral-200 dark:hover:border-neutral-800"
                     style={{ fontSize: 0 }}
                   >
