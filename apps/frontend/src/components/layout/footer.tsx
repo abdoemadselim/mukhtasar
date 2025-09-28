@@ -3,17 +3,17 @@ import Link from 'next/link'
 
 const links = [
     {
-        title: 'عن مُختصِر',
-        href: '/pages/about',
+        title: 'سياسة الخصوصية',
+        href: '/pages/privacy',
     },
-    // {
-    //     title: 'خطط الأسعار',
-    //     href: '/pages/pricing',
-    // },
     {
-        title: 'روابطك',
-        href: '/dashboard/urls',
+        title: 'حقوق الإستخدام',
+        href: '/pages/terms',
     },
+    {
+        title: 'الدعم',
+        href: '/#contact-us',
+    }
 ]
 
 export default function Footer() {
@@ -32,7 +32,7 @@ export default function Footer() {
                     />
                 </Link>
 
-                <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
+                <div className="my-6 flex flex-wrap justify-center gap-6 text-sm">
                     {links.map((link, index) => (
                         <Link
                             key={index}
@@ -42,26 +42,9 @@ export default function Footer() {
                         </Link>
                     ))}
                 </div>
-                {/* <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
-                    <Link
-                        href="#"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="X/Twitter"
-                        className="text-muted-foreground hover:text-primary block">
-                        <svg
-                            className="size-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24">
-                            <path
-                                fill="currentColor"
-                                d="M10.488 14.651L15.25 21h7l-7.858-10.478L20.93 3h-2.65l-5.117 5.886L8.75 3h-7l7.51 10.015L2.32 21h2.65zM16.25 19L5.75 5h2l10.5 14z"></path>
-                        </svg>
-                    </Link>
-                </div> */}
-                <span className="text-muted-foreground block text-center text-sm"> مُختصِر، كل الحقوق محفوظة.</span>
+                <p className="text-sm text-gray-500 text-center">
+                    © 2025 مُختصِر - جميع الحقوق محفوظة
+                </p>
             </div>
         </footer>
     )
