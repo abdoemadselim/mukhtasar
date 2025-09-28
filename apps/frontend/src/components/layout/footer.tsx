@@ -8,7 +8,7 @@ const links = [
     },
     {
         title: 'حقوق الإستخدام',
-        href: '/pages/terms',
+        href: '/pages/terms-of-service',
     },
     {
         title: 'الدعم',

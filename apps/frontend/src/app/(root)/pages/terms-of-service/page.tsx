@@ -1,6 +1,11 @@
 import Link from "next/link";
-import { FileText, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+import { FileText } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "حقوق الاستخدام | مُختصِر",
+    description: "شروط وأحكام استخدام منصة مُختصِر - أول منتج عربي متكامل لإختصار الروابط. تعرف على حقوقك وواجباتك.",
+};
 
 export default function TermsPage() {
     return (
@@ -9,7 +14,7 @@ export default function TermsPage() {
             <div className="max-w-4xl mx-auto px-6 py-12">
                 <div className="flex items-center gap-3 mb-4">
                     <FileText className="h-6 w-6 text-primary" />
-                    <h1 className="text-2xl font-bold text-primary">شروط الاستخدام</h1>
+                    <h1 className="text-2xl font-bold text-primary">حقوق الاستخدام</h1>
                 </div>
                 <div className="bg-white rounded-lg shadow-md p-8 space-y-8">
                     {/* Introduction */}

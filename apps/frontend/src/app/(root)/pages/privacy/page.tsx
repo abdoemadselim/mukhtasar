@@ -1,6 +1,10 @@
-import Link from "next/link";
-import { Shield, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "سياسة الخصوصية | مُختصِر",
+    description: "سياسة الخصوصية الخاصة بمنصة مُختصِر - أول منتج عربي متكامل لإختصار الروابط. تعرف على حقوقك وواجباتك.",
+};
 
 export default function PrivacyPage() {
     return (
