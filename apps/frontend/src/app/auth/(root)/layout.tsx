@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation.js";
 
 import { getSession } from "@/features/auth/service/auth-session";
+import { HomeIcon, MoveLeft } from "lucide-react";
 
 export default async function Layout({
     children,
@@ -28,10 +29,13 @@ export default async function Layout({
                     />
                 </Link>
                 <p className="text-center pb-8 text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>
-                <section className="flex justify-center">
+                <main className="flex justify-center">
                     {children}
-                </section>
-                <Link href="/" className="text-center mt-6 text-black block text-sm">الذهاب للصفحة الرئيسية</Link>
+                </main>
+                <Link href="/" className="text-center mt-6 text-black text-sm flex items-center justify-center gap-2">
+                    الذهاب للصفحة الرئيسية
+                    <HomeIcon size={20} />
+                </Link>
             </div>
         </>
     );

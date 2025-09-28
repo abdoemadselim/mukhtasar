@@ -7,8 +7,8 @@ import { getGoogleOAuthURL } from "@/features/auth/utils";
 
 export default function OAuth() {
     return (
-        <div className="mt-4">
-            <Button asChild variant="outline" className="flex items-center gap-2 w-[85vw] sm:w-[450px] md:w-[400px] mx-auto cursor-pointer py-5">
+        <div className="sm:mx-4">
+            <Button asChild variant="outline" className="flex items-center gap-2 w-full sm:mt-4  cursor-pointer py-5 rounded-none border-1 border-gray-300 sm:rounded-md">
                 <Link
                     href={getGoogleOAuthURL()}
                 >
