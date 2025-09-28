@@ -121,7 +121,7 @@ export async function verifyEmail({ token, sessionId }: { token: string, session
 export async function login({ email, password }: { email: string, password: string }) {
     const user = await userRepository.getUserByEmail(email)
 
-    if (!user) {
+    if (!user || !user.verified) {
         throw new LoginException();
     }
 

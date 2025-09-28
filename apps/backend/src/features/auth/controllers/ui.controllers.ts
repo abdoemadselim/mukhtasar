@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import type { NewUserType } from "@mukhtasar/shared";
 
 import * as authService from "#features/auth/domain/auth.service.js"
-import urlRepository from "#features/url/data-access/url.repository.js";
 import { IRequest } from "#features/auth/types";
 
 import { client as redisClient } from "#lib/db/redis-connection.js"
@@ -40,7 +39,6 @@ export async function signup(req: IRequest, res: Response) {
     const user = await authService.createUser({ email, password, name })
 
     req.user = user
-    await authService.createUserSession({ res, user })
 
     const response = {
         errors: [],
@@ -54,8 +52,6 @@ export async function signup(req: IRequest, res: Response) {
         code: NoException.NoErrorCode,
         errorCode: NoException.NoErrorCodeString,
     };
-
-    urlRepository.addSampleUrls(Number(user.id));
 
     res.status(201).json(response)
 }

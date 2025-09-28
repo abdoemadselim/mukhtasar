@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation.js";
 
 import { getSession } from "@/features/auth/service/auth-session";
-import { HomeIcon, MoveLeft } from "lucide-react";
+import { HomeIcon } from "lucide-react";
 
 export default async function Layout({
     children,
@@ -28,7 +28,8 @@ export default async function Layout({
                         priority
                     />
                 </Link>
-                <p className="text-center pb-8 text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>
+                <p className="text-center  text-muted-foreground">أول منتج عربي متكامل لإختصار الروابط</p>
+                <p className="text-center text-amber-700 opacity-70 pt-2 pb-8"> نحن الأولى قدماً إذا ما تناكرت أحساب قوم أو تقادم عهدها</p>
                 <main className="flex justify-center">
                     {children}
                 </main>
