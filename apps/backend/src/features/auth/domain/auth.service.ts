@@ -125,6 +125,10 @@ export async function login({ email, password }: { email: string, password: stri
         throw new LoginException();
     }
 
+    if (!user.password) {
+        throw new ValidationException({ email: { message: "هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر." } })
+    }
+
     const isValid = await bcrypt.compare(password, user.password as string)
     if (!isValid) {
         throw new LoginException();

@@ -21,8 +21,6 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { openToaster } from "@/components/ui/sonner";
 
 import { useCreateUrl } from "@/features/url/hooks/urls-query";
-import { useQueryClient } from "@tanstack/react-query";
-import { getUrls } from "@/features/url/service/urls-service";
 
 export default function LandingUrlCreationForm() {
     const form = useForm<ShortUrlType>({
@@ -36,16 +34,6 @@ export default function LandingUrlCreationForm() {
     })
 
     const { mutateAsync, data, isSuccess, isError, error } = useCreateUrl()
-    const queryClient = useQueryClient()
-    useEffect(() => {
-        queryClient.prefetchQuery({
-            queryKey: ["urls", 1, 10],
-            queryFn: () => getUrls({ page: 0, page_size: 10 }),
-            staleTime: 5 * 60 * 1000, // 5 minutes,
-            gcTime: 10 * 60 * 1000,
-            retry: false,
-        })
-    }, [queryClient])
 
     const onSubmit: SubmitHandler<ShortUrlType> = async (data) => {
         await mutateAsync(data)

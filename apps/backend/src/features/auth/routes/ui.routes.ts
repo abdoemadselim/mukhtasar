@@ -7,13 +7,13 @@ import { authRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()
 
-router.post("/login", authRateLimiter(15, 20), validateRequest([loginSchema]), login)
+router.post("/login", authRateLimiter(15, 15), validateRequest([loginSchema]), login)
 router.post("/logout", logout)
-router.get("/verify", authRateLimiter(15, 20), validateRequest([userVerificationSchema]), verify)
-router.post("/signup", authRateLimiter(15, 20), validateRequest([newUserSchema]), signup)
-router.get("/google/callback", authRateLimiter(15, 20), authWithGoogle)
-router.post("/password-reset-mail", authRateLimiter(15, 20), validateRequest([resetPasswordMailSchema]), sendResetPasswordMail)
-router.post("/reset-password", authRateLimiter(15, 20), validateRequest([resetPasswordSchemaWithToken]), resetPassword)
+router.get("/verify", authRateLimiter(15, 15), validateRequest([userVerificationSchema]), verify)
+router.post("/signup", authRateLimiter(15, 15), validateRequest([newUserSchema]), signup)
+router.get("/google/callback", authRateLimiter(15, 15), authWithGoogle)
+router.post("/password-reset-mail", authRateLimiter(15, 15), validateRequest([resetPasswordMailSchema]), sendResetPasswordMail)
+router.post("/reset-password", authRateLimiter(15, 15), validateRequest([resetPasswordSchemaWithToken]), resetPassword)
 router.get("/me", verifyUser)
 
 export default router; 
