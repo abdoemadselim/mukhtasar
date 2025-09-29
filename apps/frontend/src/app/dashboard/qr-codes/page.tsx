@@ -1,7 +1,5 @@
-import QrCodesContent from "@/features/qrcodes/components/qrcodes-content"
+import QrContent from "@/features/qr/components/qr-content"
 
-export default function QrCodesPage() {
-    return (
-        <QrCodesContent />
-    )
+export default async function QrCodesPage() {
+    return <QrContent />
 }

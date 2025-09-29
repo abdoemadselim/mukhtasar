@@ -40,6 +40,11 @@ const items = [
   // {
   //   title: "الباركود (QR Codes)",
   //   url: "/dashboard/qr-codes",
+  //   icon: Globe,
+  // },
+  // {
+  //   title: "الباركود (QR Codes)",
+  //   url: "/dashboard/qr-codes",
   //   icon: QrCode,
   // },
   // {

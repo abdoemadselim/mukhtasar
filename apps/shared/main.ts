@@ -210,3 +210,11 @@ export const ContactMessageSchema = zod.object({
 });
 
 export type ContactMessageType = zod.infer<typeof ContactMessageSchema>;
+
+export const CreateQrSchema = zod.object({
+    destination_url: zod.string().url("يرجى إدخال رابط صحيح"),
+    foreground_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح"),
+    background_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح"),
+})
+
+export type QrType = zod.infer<typeof CreateQrSchema>;

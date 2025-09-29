@@ -15,6 +15,7 @@ export interface FetchOptions extends Omit<RequestInit, 'body'> {
     includeCredentials?: boolean;
     throwOnError?: boolean;
     cache?: RequestCache;
+    responseType?: string
 }
 
 class ApiClient {
