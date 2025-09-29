@@ -44,21 +44,23 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlTy
         }
     }
 
-    // 2. If alias is provided, ensure it's unique
+    // 2. If alias is provided, create with it
     if (alias) {
-        createUrlWithAlias({ alias, resolvedDomain, original_url, user_id, description })
-    }
-
-    // 3. Generate alias when none is provided
-    const uniqueId = await generate_id();
-    const uniqueIdBase62 = toBase62(uniqueId);
-
-    // Create temporary URL for guest users, permanent for authenticated users
-    if (!user_id) {
-        return saveTemporaryUrl({ alias: uniqueIdBase62, resolvedDomain, original_url });
+        return createUrlWithAlias({ alias, resolvedDomain, original_url, user_id, description })
     } else {
-        return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
+        // 3. Generate alias when none is provided
+        const uniqueId = await generate_id();
+        const uniqueIdBase62 = toBase62(uniqueId);
+
+
+        // Create temporary URL for guest users, permanent for authenticated users
+        if (!user_id) {
+            return saveTemporaryUrl({ alias: uniqueIdBase62, resolvedDomain, original_url });
+        } else {
+            return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
+        }
     }
+
 }
 
 async function createUrlWithAlias({
