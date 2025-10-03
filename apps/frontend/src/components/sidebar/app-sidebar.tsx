@@ -37,11 +37,13 @@ const items = [
     url: "/dashboard/domains",
     icon: Globe,
   },
-  // {
-  //   title: "الباركود (QR Codes)",
-  //   url: "/dashboard/qr-codes",
-  //   icon: Globe,
-  // },
+  /*
+   {
+     title: "الباركود (QR Codes)",
+     url: "/dashboard/qr-codes",
+     icon: Globe,
+   },
+   */
   // {
   //   title: "الباركود (QR Codes)",
   //   url: "/dashboard/qr-codes",

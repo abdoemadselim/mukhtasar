@@ -10,8 +10,9 @@ export default async function NavLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     const session = await getSession()
-    if (session?.data.user && session?.data.user.verified) {
+    if (session?.data.user) {
         redirect("/dashboard/urls")
     }
 

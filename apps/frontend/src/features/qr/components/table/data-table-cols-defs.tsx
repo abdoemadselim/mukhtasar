@@ -1,7 +1,5 @@
-// apps/frontend/src/features/qr/components/data-table-cols-defs.tsx
 'use client'
 
-import Link from "next/link"
 import dynamic from "next/dynamic"
 import { Copy, Download, MoreVertical, Settings, Delete, Eye } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
@@ -17,13 +15,14 @@ import {
 import { openToaster } from "@/components/ui/sonner"
 
 import { QrCodeType } from "@/features/qr/types"
+import Image from "next/image.js"
 
-const UpdateQrDialog = dynamic(() => import("@/features/qr/components/update-qr-dialog"), {
+const UpdateQrDialog = dynamic(() => import("@/features/qr/components/dialogs/update-qr-dialog"), {
     loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
     ssr: false
 })
 
-const DeleteQrDialog = dynamic(() => import("@/features/qr/components/delete-qr-dialog"), {
+const DeleteQrDialog = dynamic(() => import("@/features/qr/components/dialogs/delete-qr-dialog"), {
     loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
     ssr: false
 })
@@ -36,10 +35,12 @@ export const columns: ColumnDef<QrCodeType>[] = [
         cell: ({ row }) => (
             <div className="pr-2">
                 {row.original.qr_code_url ? (
-                    <img
+                    <Image
                         src={row.original.qr_code_url}
                         alt="QR Code"
                         className="w-12 h-12 object-contain border rounded"
+                        width={48}
+                        height={48}
                     />
                 ) : (
                     <div className="w-12 h-12 bg-gray-200 border rounded flex items-center justify-center">
@@ -48,6 +49,36 @@ export const columns: ColumnDef<QrCodeType>[] = [
                 )}
             </div>
         )
+    },
+    {
+        accessorKey: "short_url",
+        header: () => <p className="lg:text-lg">الرابط المختصر</p>,
+        cell: ({ row }) => {
+            if (!row.original.alias || !row.original.domain) {
+                return <span className="text-gray-400">-</span>
+            }
+
+            const shortUrl = `${row.original.domain}/${row.original.alias}`
+            const fullUrl = `https://${shortUrl}`
+
+            const handleCopy = async () => {
+                await navigator.clipboard.writeText(fullUrl)
+                openToaster("تم نسخ الرابط المختصر", "success")
+            }
+
+            return (
+                <div className="flex items-center gap-2">
+                    <div className="text-primary cursor-pointer underline lg:text-md" dir="ltr">
+                        <a href={fullUrl} target="_blank" rel="noopener noreferrer">
+                            {shortUrl}
+                        </a>
+                    </div>
+                    <Button variant="ghost" size="sm" className="cursor-pointer" onClick={handleCopy}>
+                        <Copy size={16} className="text-gray-400" />
+                    </Button>
+                </div>
+            )
+        }
     },
     {
         accessorKey: "destination_url",

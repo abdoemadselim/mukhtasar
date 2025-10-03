@@ -8,7 +8,7 @@ import DataTableSkeleton from "@/components/data-table/data-table-skeleton"
 import { PaginatedDataTable } from "@/components/data-table/paginated-data-table"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 
-import { columns } from "@/features/qr/components/data-table-cols-defs"
+import { columns } from "@/features/qr/components/table/data-table-cols-defs"
 import { useGetQrCodes } from "@/features/qr/hooks/qr-query"
 import { QrCodeType } from "@/features/qr/types"
 

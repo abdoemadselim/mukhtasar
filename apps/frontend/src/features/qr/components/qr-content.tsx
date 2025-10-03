@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/button"
 import DataTableSkeleton from "@/components/data-table/data-table-skeleton"
 import Highlighter from "@/components/ui/highlighter"
 
-import CreateQrDialog from "@/features/qr/components/create-qr-dialog"
-import QrTable from "@/features/qr/components/qr-table"
+import CreateQrDialog from "@/features/qr/components/dialogs/create-qr-dialog"
+import QrTable from "@/features/qr/components/table/qr-table"
 
 export default function QrContent() {
     return (
         <>
             <div className="flex justify-between items-center px-6 pt-2 pb-3">
                 <Highlighter action="underline" strokeWidth={1} color="blue">
-                    <h1 className="text-3xl">أكواد الاستجابة السريعة QR</h1>
+                    <h1 className="text-xl md:text-3xl">أكواد الاستجابة السريعة QR</h1>
                 </Highlighter>
                 <CreateQrDialog>
                     <Button size="sm" className="cursor-pointer">

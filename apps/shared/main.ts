@@ -212,9 +212,16 @@ export const ContactMessageSchema = zod.object({
 export type ContactMessageType = zod.infer<typeof ContactMessageSchema>;
 
 export const CreateQrSchema = zod.object({
-    destination_url: zod.string().url("يرجى إدخال رابط صحيح"),
-    foreground_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح"),
-    background_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح"),
+    destination_url: zod.url("يرجى إدخال رابط صحيح"),
+    foreground_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#000000"),
+    background_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#ffffff"),
+    alias: zod.string().optional(),
+    domain: zod.string().default("mukhtasar.pro"),
+    frame_type: zod.enum(['none', 'frame_only', 'frame_with_text']).default('none'),
+    frame_text: zod.string().optional(),
+    frame_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#000000"),
+    frame_text_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#ffffff"),
+    logo: zod.any().optional(),
 })
 
 export type QrType = zod.infer<typeof CreateQrSchema>;
