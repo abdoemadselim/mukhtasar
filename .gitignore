@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 
 # typescripts files
 /dist
+
+.husky
