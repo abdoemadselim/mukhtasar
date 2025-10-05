@@ -1,6 +1,6 @@
 
 import { AddDomainType } from "@mukhtasar/shared";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/shared/lib/api-client";
 
 export async function getDomains() {
     return apiClient.get('/domain', {

@@ -1,14 +1,44 @@
-'use client'
-
 import { Palette } from "lucide-react"
+import { useCallback, useRef } from "react"
 
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
+import { Input } from "@/shared/components/ui/input"
+
 import ColorPresetPicker from "@/features/qr/components/forms/color-preset-picker"
+
+// Color validation utility
+function isValidHexColor(color: string): boolean {
+    const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+    return hexColorRegex.test(color)
+}
 
 interface ColorSectionProps {
     control: any
     stepNumber: number
+}
+
+// Debounced color picker component for color input
+function DebouncedColorPicker({ value, onChange, ...props }: any) {
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+    const debouncedOnChange = useCallback((newValue: string) => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            onChange(newValue)
+        }, 150) // Shorter delay for color picker (150ms)
+    }, [onChange])
+
+    return (
+        <Input
+            {...props}
+            type="color"
+            value={value}
+            onChange={(e) => debouncedOnChange(e.target.value)}
+        />
+    )
 }
 
 export default function ColorSection({ control, stepNumber }: ColorSectionProps) {
@@ -39,16 +69,22 @@ export default function ColorSection({ control, stepNumber }: ColorSectionProps)
                         {/* Manual Color Input */}
                         <div className="flex items-center gap-2 pt-2">
                             <FormControl>
-                                <Input
-                                    type="color"
+                                <DebouncedColorPicker
                                     {...field}
                                     className="w-12 h-10 p-0 cursor-pointer border-1 rounded-none"
                                 />
                             </FormControl>
                             <FormControl>
                                 <Input
+                                    dir="ltr"
                                     {...field}
+                                    onChange={(e) => {
+                                        if (isValidHexColor(e.target.value)) {
+                                            field.onChange(e.target.value)
+                                        }
+                                    }}
                                     className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
+                                    maxLength={7}
                                     placeholder="#000000"
                                 />
                             </FormControl>
@@ -68,8 +104,7 @@ export default function ColorSection({ control, stepNumber }: ColorSectionProps)
                         {/* Manual Color Input */}
                         <div className="flex items-center gap-2 pt-2">
                             <FormControl>
-                                <Input
-                                    type="color"
+                                <DebouncedColorPicker
                                     {...field}
                                     className="w-12 h-10 border-1 cursor-pointer rounded-none p-0"
                                 />
@@ -77,6 +112,13 @@ export default function ColorSection({ control, stepNumber }: ColorSectionProps)
                             <FormControl>
                                 <Input
                                     {...field}
+                                    dir="ltr"
+                                    onChange={(e) => {
+                                        if (isValidHexColor(e.target.value)) {
+                                            field.onChange(e.target.value)
+                                        }
+                                    }}
+                                    maxLength={7}
                                     className="focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2"
                                     placeholder="#ffffff"
                                 />

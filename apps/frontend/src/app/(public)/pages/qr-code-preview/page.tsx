@@ -3,8 +3,8 @@
 import { ArrowLeft, CheckCircle, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/shared/components/ui/button"
+import { Card, CardContent } from "@/shared/components/ui/card"
 
 export default function QRCodePreviewPage() {
     return (

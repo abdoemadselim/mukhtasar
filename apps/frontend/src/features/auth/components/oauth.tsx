@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link.js";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 
 import { getGoogleOAuthURL } from "@/features/auth/utils";
 

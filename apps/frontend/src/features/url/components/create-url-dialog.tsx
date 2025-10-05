@@ -5,8 +5,8 @@ import { ShortUrlSchema, ShortUrlType } from "@mukhtasar/shared"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
+import { Button } from "@/shared/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -16,10 +16,10 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { openToaster } from "@/components/ui/sonner"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/shared/components/ui/dialog"
+import { Input } from "@/shared/components/ui/input"
+import { openToaster } from "@/shared/components/ui/sonner"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 
 import { useCreateUrl } from "@/features/url/hooks/urls-query"
 import { useGetActiveDomains } from "@/features/domain/hooks/domain-query"

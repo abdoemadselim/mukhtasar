@@ -3,8 +3,8 @@
 import { useEffect } from "react"
 import { FullUrlType } from "@mukhtasar/shared"
 
-import { openToaster } from "@/components/ui/sonner"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
+import { openToaster } from "@/shared/components/ui/sonner"
+import { DeleteConfirmationDialog } from "@/shared/components/data-table/delete-confirmation-dialog"
 
 import { useDeleteUrl } from "@/features/url/hooks/urls-query"
 

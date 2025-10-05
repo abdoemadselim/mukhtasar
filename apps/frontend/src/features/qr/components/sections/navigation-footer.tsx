@@ -2,8 +2,8 @@
 
 import { MoveRight, MoveLeft } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { DialogClose } from "@/components/ui/dialog"
+import { Button } from "@/shared/components/ui/button"
+import { DialogClose } from "@/shared/components/ui/dialog"
 
 interface NavigationFooterProps {
     currentStep: number

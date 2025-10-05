@@ -1,8 +1,8 @@
 import { RotateCcw } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-import { Button } from "@/components/ui/button";
-import { openToaster } from "@/components/ui/sonner";
+import { Button } from "@/shared/components/ui/button";
+import { openToaster } from "@/shared/components/ui/sonner";
 
 import { useRefreshDomain } from "@/features/domain/hooks/domain-query";
 

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react"
 
-import { openToaster } from "@/components/ui/sonner"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
+import { openToaster } from "@/shared/components/ui/sonner"
+import { DeleteConfirmationDialog } from "@/shared/components/data-table/delete-confirmation-dialog"
 
 import { useDeleteDomain } from "@/features/domain/hooks/domain-query"
 import { DomainType } from "@/features/domain/types"

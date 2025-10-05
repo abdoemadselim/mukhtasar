@@ -1,9 +1,9 @@
 import { Plus } from "lucide-react";
 import { Suspense } from "react";
 
-import { Button } from "@/components/ui/button";
-import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import Highlighter from "@/components/ui/highlighter";
+import { Button } from "@/shared/components/ui/button";
+import DataTableSkeleton from "@/shared/components/data-table/data-table-skeleton";
+import Highlighter from "@/shared/components/ui/highlighter";
 
 import CreateUrlDialog from "@/features/url/components/create-url-dialog";
 import UrlTable from "@/features/url/components/url-table";

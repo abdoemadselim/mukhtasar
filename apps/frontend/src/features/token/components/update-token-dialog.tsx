@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToUpdateTokenSchema, ToUpdateTokenType } from '@mukhtasar/shared';
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -13,11 +13,11 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { openToaster } from '@/components/ui/sonner';
+} from "@/shared/components/ui/dialog"
+import { Input } from "@/shared/components/ui/input"
+import { Label } from "@/shared/components/ui/label"
+import { Checkbox } from "@/shared/components/ui/checkbox"
+import { openToaster } from '@/shared/components/ui/sonner';
 
 import { useUpdateToken } from '@/features/token/hooks/tokens-query';
 

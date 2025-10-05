@@ -7,12 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { NewUserSchema, NewUserType } from '@mukhtasar/shared'
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { Label } from '@/shared/components/ui/label'
 
 import { signup } from '@/features/auth/service/auth'
-import { Alert, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertTitle } from '@/shared/components/ui/alert';
 import { AlertCircleIcon, Eye, EyeClosed } from 'lucide-react';
 
 export default function SignUpForm() {

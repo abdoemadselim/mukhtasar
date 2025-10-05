@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
+import { Card } from "@/shared/components/ui/card"
+import { Button } from "@/shared/components/ui/button"
+import { Badge } from "@/shared/components/ui/badge"
+import { Input } from "@/shared/components/ui/input"
 import { Minus, Plus, Link, Globe, QrCode, Check, Star } from "lucide-react"
 
 interface PricingConfig {

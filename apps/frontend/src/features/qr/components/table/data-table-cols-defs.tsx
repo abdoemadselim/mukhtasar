@@ -4,15 +4,15 @@ import dynamic from "next/dynamic"
 import { Copy, Download, MoreVertical, Settings, Delete, Eye } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/shared/components/ui/badge"
+import { Button } from "@/shared/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { openToaster } from "@/components/ui/sonner"
+} from "@/shared/components/ui/dropdown-menu"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 import { QrCodeType } from "@/features/qr/types"
 import Image from "next/image.js"

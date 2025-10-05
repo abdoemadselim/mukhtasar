@@ -3,14 +3,14 @@
 import { Delete, MoreVertical } from "lucide-react"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/shared/components/ui/badge"
+import { Button } from "@/shared/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/shared/components/ui/dropdown-menu"
 
 import { DomainType } from "@/features/domain/types"
 import DomainStatusBadge from "@/features/domain/components/domain-status-badge"

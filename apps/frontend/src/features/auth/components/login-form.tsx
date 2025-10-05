@@ -6,9 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, LoginType } from '@mukhtasar/shared'
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { Label } from '@/shared/components/ui/label'
 
 import { login } from '@/features/auth/service/auth'
 import { Eye, EyeClosed } from 'lucide-react';

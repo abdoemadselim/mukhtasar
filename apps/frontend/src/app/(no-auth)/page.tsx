@@ -2,9 +2,9 @@ import Image from "next/image";
 import { BadgeQuestionMark } from "lucide-react";
 import dynamic from "next/dynamic";
 
-import HeroSection from "@/components/layout/hero-section";
-import WobbleCard from "@/components/ui/wobble-card";
-const Highlighter = dynamic(() => import('@/components/ui/highlighter'))
+import HeroSection from "@/shared/components/layout/hero-section";
+import WobbleCard from "@/shared/components/ui/wobble-card";
+const Highlighter = dynamic(() => import('@/shared/components/ui/highlighter'))
 
 const AnalyticsShowcaseSection = dynamic(() => import("@/features/analytics/components/analytics-showcase-section"));
 const ContactUs = dynamic(() => import("@/features/contact/components/contact-us"))

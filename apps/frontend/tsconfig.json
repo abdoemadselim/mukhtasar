@@ -22,8 +22,10 @@
     "paths": {
       "@/*": ["*"],
       "@/styles/*": ["styles/*"],
-      "@/components/*": ["components/*"],
-      "@/features/*": ["features/*"]
+      "@/components/*": ["shared/components/*"],
+      "@/features/*": ["features/*"],
+      "@/shared/*": ["shared/*"],
+      "@/lib/*": ["shared/lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

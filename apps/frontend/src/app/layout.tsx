@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "@/app/globals.css";
-import { cairo } from "@/fonts/fonts";
+import { cairo } from "@/fonts";
 
-import { ClientProvider } from "@/context/client-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { ClientProvider } from "@/shared/context/client-provider";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "مُختصِر | أول منتج عربي متكامل لإختصار الروابط",

@@ -2,8 +2,8 @@
 
 import { Calendar, Clock, MousePointer, Users } from "lucide-react"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { Skeleton } from "@/shared/components/ui/skeleton"
 import { useGetAnalyticsOverview } from "@/features/analytics/hooks/analytics.hook";
 
 export default function StatsCards({ alias }: { alias: string }) {

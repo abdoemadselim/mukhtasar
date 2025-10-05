@@ -1,5 +1,5 @@
 // apps/frontend/src/features/qr/service/qr-service.ts
-import { apiClient } from "@/lib/api-client"
+import { apiClient } from "@/shared/lib/api-client"
 import { CreateQrCodeType, UpdateQrCodeType } from "@/features/qr/types"
 
 export async function createQrCode(data: CreateQrCodeType) {
@@ -12,11 +12,11 @@ export async function createQrCode(data: CreateQrCodeType) {
 export async function getQrCodes({ page = 1, page_size = 10 }: { page: number, page_size: number }) {
     const realPage = page > 0 ? page : 1
     const endpoint = `/qr?page=${realPage - 1}&pageSize=${page_size}`
-
-    return apiClient.get(endpoint, {
-        throwOnError: true,
-        includeCredentials: true
-    })
+    return null;
+    // return apiClient.get(endpoint, {
+    //     throwOnError: true,
+    //     includeCredentials: true
+    // })
 }
 
 export async function deleteQrCode(id: string) {

@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect } from "react"
-import { openToaster } from "@/components/ui/sonner"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 import { useDeleteToken } from "@/features/token/hooks/tokens-query"
-import { DeleteConfirmationDialog } from "@/components/data-table/delete-confirmation-dialog"
+import { DeleteConfirmationDialog } from "@/shared/components/data-table/delete-confirmation-dialog"
 
 type DeleteConfirmationDialogProps = {
     children: React.ReactNode

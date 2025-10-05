@@ -2,123 +2,107 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { UseFormReturn } from "react-hook-form"
-import { openToaster } from "@/components/ui/sonner"
-import { generateCompleteQRCodeSVG, determineErrorCorrection, QRGenerationConfig } from "@/features/qr/utils"
+
+import { QRGenerationConfig, generateCompleteQRCode } from "@/features/qr/utils"
+import { QR_DEFAULT_CONFIG, getQRSize } from "@/features/qr/config"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 export interface UseQrGeneratorProps {
     form: UseFormReturn<any>
 }
 
 export interface UseQrGeneratorReturn {
-    qrCodeDataUrl: string
-    canvasRef: React.RefObject<HTMLCanvasElement | null>
+    setCanvasRef: (node: HTMLCanvasElement | null) => void
     previewQrCode: string
     isPending: boolean
     generatePreviewQr: () => void
-    handleLogoUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
-    removeLogo: () => void
     downloadQrCode: () => void
-    resetQrState: () => void
 }
 
 export function useQrGenerator({ form }: UseQrGeneratorProps): UseQrGeneratorReturn {
-    const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("")
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [previewQrCode, setPreviewQrCode] = useState<string>("")
     const [isPending, setIsPending] = useState<boolean>(false)
+    const [canvasReady, setCanvasReady] = useState<boolean>(false)
 
     const generatePreviewQr = useCallback(async () => {
-        const values = form.getValues()
+        if (!canvasRef.current || !canvasReady) return
         setIsPending(true)
 
+        const values = form.getValues()
+
+        // logo preview url
+        const logoPreview = values.logo ? URL.createObjectURL(values.logo) : undefined
+
+        // Generate complete QR code configuration
+        const config: QRGenerationConfig = {
+            destinationUrl: QR_DEFAULT_CONFIG.preview.destinationUrl,
+            size: getQRSize('preview'), // Use preview size
+            foregroundColor: values.foreground_color || QR_DEFAULT_CONFIG.colors.foreground,
+            backgroundColor: values.background_color || QR_DEFAULT_CONFIG.colors.background,
+            logoSrc: logoPreview,
+            frameType: values.frame_type || "none",
+            frameText: values.frame_text,
+            frameColor: values.frame_color || QR_DEFAULT_CONFIG.frame.foreground,
+            frameTextColor: values.frame_text_color || QR_DEFAULT_CONFIG.frame.foreground,
+            isPreview: true,
+        }
+
+        const previewUrl = await generateCompleteQRCode(canvasRef.current, config)
+        setIsPending(false)
+        setPreviewQrCode(previewUrl)
+    }, [form, canvasReady])
+
+    const setCanvasRef = useCallback((node: HTMLCanvasElement | null) => {
+        canvasRef.current = node
+        if (node) {
+            setCanvasReady(true)
+        }
+    }, [])
+
+    // Generate QR code when canvas becomes ready
+    useEffect(() => {
+        if (canvasReady) {
+            generatePreviewQr()
+        }
+    }, [canvasReady, generatePreviewQr])
+
+    const downloadQrCode = async () => {
         try {
-            // Auto-determine error correction based on logo presence
-            const hasLogo = values.logo !== undefined && values.logo !== null
-            const errorCorrection = determineErrorCorrection(hasLogo)
+            setIsPending(true)
 
-            // Generate logo preview URL if logo exists
-            let logoSrc = ""
-            let logoUrlToCleanup = ""
-            if (values.logo) {
-                logoUrlToCleanup = URL.createObjectURL(values.logo)
-                logoSrc = logoUrlToCleanup
-            }
+            const values = form.getValues()
 
-            // Generate complete QR code with all features but static URL
+            // logo preview url
+            const logoPreview = values.logo ? URL.createObjectURL(values.logo) : undefined
+
             const config: QRGenerationConfig = {
-                destinationUrl: "https://mukhtasar.pro/dashboard/qr-codes/qr-code-preview", // Static URL for preview
-                size: 240,
-                margin: 4,
-                foregroundColor: values.foreground_color || "#000000",
-                backgroundColor: values.background_color || "#ffffff",
-                errorCorrection,
-                logoSrc,
+                destinationUrl: QR_DEFAULT_CONFIG.preview.destinationUrl,
+                size: getQRSize('download'), // Use download size (1024px)
+                foregroundColor: values.foreground_color || QR_DEFAULT_CONFIG.colors.foreground,
+                backgroundColor: values.background_color || QR_DEFAULT_CONFIG.colors.background,
+                logoSrc: logoPreview,
                 frameType: values.frame_type || "none",
                 frameText: values.frame_text,
-                frameColor: values.frame_color || "#000000",
-                frameTextColor: values.frame_text_color || "#ffffff",
+                frameColor: values.frame_color || QR_DEFAULT_CONFIG.frame.foreground,
+                frameTextColor: values.frame_text_color || QR_DEFAULT_CONFIG.frame.foreground,
+                isPreview: false,
             }
 
-            const previewUrl = await generateCompleteQRCodeSVG(config)
-            setPreviewQrCode(previewUrl)
-
-            // Clean up the logo URL to prevent memory leaks
-            if (logoUrlToCleanup) {
-                URL.revokeObjectURL(logoUrlToCleanup)
-            }
-        } catch (error) {
-            console.error('Error generating QR preview:', error)
-        } finally {
+            const downloadUrl = await generateCompleteQRCode(canvasRef.current as HTMLCanvasElement, config)
             setIsPending(false)
-        }
-    }, [form])
 
-    useEffect(() => {
-        form.watch(() => {
-            generatePreviewQr()
-        })
-    }, [form, generatePreviewQr])
-
-    const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
-        if (!file) return;
-
-        if (file.size > 2 * 1024 * 1024) { // 2MB limit
-            openToaster("حجم الملف يجب أن يكون أقل من 2 ميجابايت", "error")
-            return
+            const link = document.createElement('a')
+            link.href = downloadUrl
+            link.download = 'qr-code.png'
+            link.click()
+        } catch (error) {
+            console.error(error)
+            openToaster("حدث خطأ أثناء تحميل الباركود", "error")
         }
 
-        // Set the logo file in the form
-        form.setValue('logo', file)
+        setIsPending(false)
     }
 
-    const removeLogo = () => {
-        // Remove the logo from the form
-        form.setValue('logo', undefined)
-    }
-
-    const downloadQrCode = () => {
-        if (!qrCodeDataUrl) return
-
-        const link = document.createElement('a')
-        link.download = 'qrcode.png'
-        link.href = qrCodeDataUrl
-        link.click()
-    }
-
-    const resetQrState = () => {
-        setQrCodeDataUrl("")
-    }
-
-    return {
-        qrCodeDataUrl,
-        canvasRef,
-        previewQrCode,
-        isPending,
-        generatePreviewQr,
-        handleLogoUpload,
-        removeLogo,
-        downloadQrCode,
-        resetQrState,
-    }
+    return { generatePreviewQr, setCanvasRef, previewQrCode, isPending, downloadQrCode }
 }

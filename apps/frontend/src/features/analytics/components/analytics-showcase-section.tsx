@@ -11,9 +11,9 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
-import Highlighter from "@/components/ui/highlighter"
-import { Button } from "@/components/ui/button"
-import WobbleCard from "@/components/ui/wobble-card"
+import Highlighter from "@/shared/components/ui/highlighter"
+import { Button } from "@/shared/components/ui/button"
+import WobbleCard from "@/shared/components/ui/wobble-card"
 
 const analyticsFeatures = [
     {

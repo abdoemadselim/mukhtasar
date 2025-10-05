@@ -14,14 +14,14 @@ import {
 } from "@tanstack/react-table"
 import { FullTokenType } from "@mukhtasar/shared"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Badge } from "@/components/ui/badge"
+} from "@/shared/components/ui/dropdown-menu"
+import { Badge } from "@/shared/components/ui/badge"
 
 import UpdateTokenDialog from "@/features/token/components/update-token-dialog"
 import { DeleteTokenDialog } from "@/features/token/components/delete-token-dialog"

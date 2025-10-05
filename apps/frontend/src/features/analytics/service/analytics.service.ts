@@ -1,4 +1,4 @@
-import { apiClient, ApiError } from "@/lib/api-client";
+import { apiClient, ApiError } from "@/shared/lib/api-client";
 
 export type AnalyticsOverview = {
     total_clicks: number;
@@ -58,7 +58,7 @@ export type RefererStatsParams = AnalyticsParams & {
 
 
 // Get analytics overview (summary stats)
-export async function getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams){
+export async function getAnalyticsOverview({ alias, startDate, endDate }: AnalyticsParams) {
     const params = new URLSearchParams({
         alias,
         ...(startDate && { startDate }),

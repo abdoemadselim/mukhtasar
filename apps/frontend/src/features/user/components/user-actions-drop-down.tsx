@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LinkIcon, Lock, LogOut } from "lucide-react";
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/context/auth-context";
 
 export default function UserActionsDropDown({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,7 @@
 
 import { TokenType } from "@mukhtasar/shared";
 
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/shared/lib/api-client";
 
 export async function createToken(data: TokenType) {
   return apiClient.post("/token", data, {

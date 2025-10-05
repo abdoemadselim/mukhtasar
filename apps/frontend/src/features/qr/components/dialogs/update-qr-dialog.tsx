@@ -8,8 +8,8 @@ import { z } from "zod"
 import QRCode from "qrcode"
 import { Upload, Download, X } from "lucide-react"
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
+import { Button } from "@/shared/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -19,15 +19,15 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { openToaster } from "@/components/ui/sonner"
+} from "@/shared/components/ui/dialog"
+import { Input } from "@/shared/components/ui/input"
+import { Label } from "@/shared/components/ui/label"
+import { Slider } from "@/shared/components/ui/slider"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 import { useUpdateQrCode } from "@/features/qr/hooks/qr-query"
-import { QrCodeType, UpdateQrCodeType } from "@/features/qr/types"
+import { QrCodeType, CreateQrCodeType } from "@/features/qr/types"
 
 const UpdateQrSchema = z.object({
     destination_url: z.string().url("يرجى إدخال رابط صحيح"),
@@ -52,7 +52,7 @@ export default function UpdateQrDialog({ children, currentQr }: UpdateQrDialogPr
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    const form = useForm<UpdateQrCodeType>({
+    const form = useForm<CreateQrCodeType>({
         resolver: zodResolver(UpdateQrSchema),
         defaultValues: {
             destination_url: currentQr.destination_url,
@@ -198,7 +198,7 @@ export default function UpdateQrDialog({ children, currentQr }: UpdateQrDialogPr
         link.click()
     }
 
-    const onSubmit = async (data: UpdateQrCodeType) => {
+    const onSubmit = async (data: CreateQrCodeType) => {
         if (!currentQr.id) return
 
         await mutateAsync({ id: currentQr.id, data })

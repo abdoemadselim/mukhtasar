@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FullUrlType, ToUpdateUrlSchema, ToUpdateUrlType } from "@mukhtasar/shared"
 import { useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -13,10 +13,10 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { openToaster } from "@/components/ui/sonner"
+} from "@/shared/components/ui/dialog"
+import { Input } from "@/shared/components/ui/input"
+import { Label } from "@/shared/components/ui/label"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 import { useUpdateUrl } from "@/features/url/hooks/urls-query"
 

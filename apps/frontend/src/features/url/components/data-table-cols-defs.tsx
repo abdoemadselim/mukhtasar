@@ -16,16 +16,16 @@ import {
 } from "@tanstack/react-table"
 import { FullUrlType } from "@mukhtasar/shared"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/shared/components/ui/badge"
+import { Button } from "@/shared/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { openToaster } from "@/components/ui/sonner"
-import { LinkPreview } from "@/components/ui/link-preview"
+} from "@/shared/components/ui/dropdown-menu"
+import { openToaster } from "@/shared/components/ui/sonner"
+import { LinkPreview } from "@/shared/components/ui/link-preview"
 
 const UpdateUrlDialog = dynamic(() => import("@/features/url/components/update-url-dialog"), {
   loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,

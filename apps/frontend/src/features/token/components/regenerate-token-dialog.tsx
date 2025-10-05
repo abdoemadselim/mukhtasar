@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Check, X } from "lucide-react"
 import { FullTokenType } from "@mukhtasar/shared"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -14,8 +14,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { openToaster } from "@/components/ui/sonner"
+} from "@/shared/components/ui/dialog"
+import { openToaster } from "@/shared/components/ui/sonner"
 
 import { useRegenerateToken } from "@/features/token/hooks/tokens-query"
 import { TokenSuccessDialog } from "@/features/token/components/token-success-dialog"

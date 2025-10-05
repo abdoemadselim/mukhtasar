@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation"
 
-import { AppSidebar } from "@/components/sidebar/app-sidebar"
-import { SiteHeader } from "@/components/sidebar/site-header"
+import { AppSidebar } from "@/shared/components/sidebar/app-sidebar"
+import { SiteHeader } from "@/shared/components/sidebar/site-header"
 import {
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar"
+} from "@/shared/components/ui/sidebar"
 import { getSession } from "@/features/auth/service/auth-session"
 import { AuthProvider } from "@/features/auth/context/auth-context"
 

@@ -4,9 +4,9 @@ import { AlertCircleIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { FullTokenType } from "@mukhtasar/shared";
 
-import { PaginatedDataTable } from "@/components/data-table/paginated-data-table";
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
+import { PaginatedDataTable } from "@/shared/components/data-table/paginated-data-table";
+import { Alert, AlertTitle } from "@/shared/components/ui/alert";
+import DataTableSkeleton from "@/shared/components/data-table/data-table-skeleton";
 
 import { columns } from "@/features/token/components/data-table-cols-defs";
 import { useGetTokens } from "@/features/token/hooks/tokens-query";

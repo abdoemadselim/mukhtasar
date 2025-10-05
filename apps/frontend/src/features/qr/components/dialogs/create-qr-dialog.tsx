@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateQrSchema } from "@mukhtasar/shared"
 
-import { Form } from "@/components/ui/form"
+import { Form } from "@/shared/components/ui/form"
 import {
     Dialog,
     DialogContent,
@@ -14,18 +14,14 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { openToaster } from "@/components/ui/sonner"
+} from "@/shared/components/ui/dialog"
+import { openToaster } from "@/shared/components/ui/sonner"
 
-import { useGetActiveDomains } from "@/features/domain/hooks/domain-query"
 import { useCreateQrCode } from "@/features/qr/hooks/qr-query"
 import { useQrGenerator } from "@/features/qr/hooks/use-qr-generator"
 import QRCodePreview from "@/features/qr/components/preview/qr-code-preview"
-import UrlAndLogoSection from "@/features/qr/components/sections/url-and-logo-section"
-import ColorSection from "@/features/qr/components/sections/color-section"
-import ShortLinkSection from "@/features/qr/components/sections/short-link-section"
-import FrameSection from "@/features/qr/components/sections/frame-section"
 import NavigationFooter from "@/features/qr/components/sections/navigation-footer"
+import QrCodeDialogControllers from "@/features/qr/components/sections/qr-code-dialog-controllers"
 
 export default function CreateQrDialog({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -59,37 +55,22 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
         }
     })
 
-    const { data: activeDomains } = useGetActiveDomains()
     const { mutateAsync, isError, isSuccess, error } = useCreateQrCode()
 
     // Use only the QR generator hook
     const {
+        generatePreviewQr,
+        setCanvasRef,
         previewQrCode,
         isPending,
         downloadQrCode,
-        resetQrState,
-        generatePreviewQr
     } = useQrGenerator({ form })
 
     const onSubmit = async (data: any) => {
-        const formData = new FormData()
-        Object.entries(data).forEach(([key, value]) => {
-            if (value !== undefined && value !== null) {
-                formData.append(key, value.toString())
-            }
-        })
-
+        console.log(data)
         await mutateAsync(data)
         setIsOpen(false)
         form.reset()
-        resetQrState()
-    }
-
-    const handleDialogClose = () => {
-        setIsOpen(false)
-        form.reset()
-        resetQrState()
-        setCurrentStep(0)
     }
 
     useEffect(() => {
@@ -102,12 +83,20 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
         }
     }, [isError, isSuccess, error])
 
+    const handleDialogClose = () => {
+        setIsOpen(false)
+        form.reset()
+        setCurrentStep(0)
+    }
+
     useEffect(() => {
-        generatePreviewQr()
-    }, [generatePreviewQr])
+        form.watch(() => {
+            generatePreviewQr()
+        })
+    }, [form, generatePreviewQr])
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog>
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
@@ -123,42 +112,19 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
 
                         {/* QR Code Preview */}
                         <QRCodePreview
+                            setCanvasRef={setCanvasRef}
                             previewQrCode={previewQrCode}
                             isPending={isPending}
                             onDownload={downloadQrCode}
                         />
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6">
-                            {/* Form controls */}
-                            {currentStep === 0 && (
-                                <>
-                                    <UrlAndLogoSection
-                                        control={form.control}
-                                        stepNumber={currentStep + 1}
-                                    />
-                                    <ColorSection
-                                        control={form.control}
-                                        stepNumber={currentStep + 2}
-                                    />
-                                </>
-                            )}
+                        {/* Qr Code Dialog Controllers (e.g. destination url input, logo, colors, etc.) */}
+                        <QrCodeDialogControllers
+                            form={form}
+                            currentStep={currentStep}
+                        />
 
-                            {currentStep === 1 && (
-                                <>
-                                    <ShortLinkSection
-                                        control={form.control}
-                                        activeDomains={activeDomains}
-                                        stepNumber={currentStep + 2}
-                                    />
-                                    <FrameSection
-                                        control={form.control}
-                                        watch={form.watch}
-                                        stepNumber={currentStep + 3}
-                                    />
-                                </>
-                            )}
-                        </div>
-
+                        {/* Navigation Footer: responsible for the navigation between the steps */}
                         <DialogFooter className="sm:justify-start">
                             <NavigationFooter
                                 currentStep={currentStep}

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
+import Navbar from "@/shared/components/layout/navbar";
+import Footer from "@/shared/components/layout/footer";
 
 import { getSession } from "@/features/auth/service/auth-session";
 

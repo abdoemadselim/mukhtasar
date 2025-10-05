@@ -2,9 +2,9 @@
 
 import { AlertCircleIcon } from "lucide-react";
 
-import DataTableSkeleton from "@/components/data-table/data-table-skeleton";
-import { DataTable } from "@/components/data-table/data-table";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import DataTableSkeleton from "@/shared/components/data-table/data-table-skeleton";
+import { DataTable } from "@/shared/components/data-table/data-table";
+import { Alert, AlertTitle } from "@/shared/components/ui/alert";
 
 import { columns } from "@/features/domain/components/data-table-cols-defs";
 import { useGetDomains } from "@/features/domain/hooks/domain-query";

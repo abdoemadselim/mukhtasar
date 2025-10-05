@@ -9,14 +9,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/shared/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/shared/components/ui/chart"
+import { Skeleton } from '@/shared/components/ui/skeleton';
 import { ClickOverTime } from '@/features/analytics/service/analytics.service';
 
 export const description = "An interactive bar chart"

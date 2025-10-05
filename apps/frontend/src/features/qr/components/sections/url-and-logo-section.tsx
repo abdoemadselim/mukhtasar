@@ -4,20 +4,22 @@ import { useRef } from "react"
 import { Upload, X } from "lucide-react"
 import Image from "next/image"
 
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
+import { Button } from "@/shared/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
 
 interface UrlAndLogoSectionProps {
     control: any
     stepNumber: number
+    resetFieldValue: (field: string) => void
 }
 
 export default function UrlAndLogoSection({
     control,
-    stepNumber
+    stepNumber,
+    resetFieldValue
 }: UrlAndLogoSectionProps) {
-    // Why ref? because we need to access the button element to trigger the file input and to hide the input element for better UI
+    // Why ref? because we we want when user clicks on the button element to trigger the file upload input
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     return (
@@ -72,6 +74,7 @@ export default function UrlAndLogoSection({
                                             size="sm"
                                             onClick={() => {
                                                 field.onChange(undefined);
+                                                resetFieldValue("logo")
                                                 if (fileInputRef.current) {
                                                     fileInputRef.current.value = "";
                                                 }
@@ -96,7 +99,7 @@ export default function UrlAndLogoSection({
                                 </div>
                                 {field.value && (
                                     <Image
-                                        src={URL.createObjectURL(field.value)}
+                                        src={field.value ? URL.createObjectURL(field.value) : ""}
                                         alt="Logo preview"
                                         width={32}
                                         height={32}

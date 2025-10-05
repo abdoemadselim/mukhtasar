@@ -2,8 +2,8 @@
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/shared/components/ui/badge"
+import { Button } from "@/shared/components/ui/button"
 
 export default async function UrlAnalyticsLayout({
     children,

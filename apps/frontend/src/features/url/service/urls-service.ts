@@ -1,7 +1,7 @@
 
 import { ParamsType, ShortUrlType, ToUpdateUrlType } from "@mukhtasar/shared";
 
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/shared/lib/api-client";
 
 export async function createUrl(data: ShortUrlType) {
     return apiClient.post('/url', data, { throwOnError: true, includeCredentials: true });

@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/shared/components/ui/separator";
 
 import SignUpForm from "@/features/auth/components/singup-form";
 import OAuth from "@/features/auth/components/oauth";

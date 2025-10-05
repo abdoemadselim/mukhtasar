@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import DataTableSkeleton from "@/components/data-table/data-table-skeleton"
+import { Button } from "@/shared/components/ui/button";
+import DataTableSkeleton from "@/shared/components/data-table/data-table-skeleton"
 
 export default function UrlPageLoading() {
     return (

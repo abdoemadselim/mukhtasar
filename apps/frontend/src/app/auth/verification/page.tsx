@@ -2,7 +2,7 @@ import { Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import { getSession } from "@/features/auth/service/auth-session";
 
 export default async function EmailVerificationPage() {

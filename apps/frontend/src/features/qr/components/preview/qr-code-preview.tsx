@@ -1,19 +1,27 @@
 import { Download } from "lucide-react"
-import Image from "next/image"
+import Image from "next/image.js"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 
 interface QRCodePreviewProps {
     onDownload: () => void
     previewQrCode: string
     isPending: boolean
+    setCanvasRef: (node: HTMLCanvasElement | null) => void
 }
 
-export default function QRCodePreview({ onDownload, previewQrCode, isPending }: QRCodePreviewProps) {
+export default function QRCodePreview({ onDownload, previewQrCode, isPending, setCanvasRef }: QRCodePreviewProps) {
     return (
         <div className="flex flex-col items-center justify-center space-y-4 pb-8">
+            {/* Hidden canvas for QR code generation */}
+            <canvas
+                ref={setCanvasRef}
+                className="hidden"
+                width={240}
+                height={310}
+            />
             {/* Loading dots */}
-            {isPending ? (
+            {isPending || !previewQrCode ? (
                 <div className="w-[240px] h-[310px]">
                     <div className="flex space-x-1 justify-center pt-4">
                         <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
@@ -22,16 +30,14 @@ export default function QRCodePreview({ onDownload, previewQrCode, isPending }: 
                     </div>
                 </div>
             ) : (
-                <div className="border-dashed border-1">
-                    {previewQrCode && (
-                        <Image
-                            src={previewQrCode}
-                            alt="معاينة كود QR"
-                            width={240}
-                            height={310}
-                            className="h-auto w-auto object-contain"
-                        />
-                    )}
+                <div >
+                    <Image
+                        src={previewQrCode}
+                        alt="معاينة كود QR"
+                        width={240}
+                        height={310}
+                        className="h-auto w-auto object-contain"
+                    />
                 </div>
             )}
             <Button
