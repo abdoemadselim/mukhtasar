@@ -30,7 +30,12 @@
     "migrate": "node-pg-migrate",
     "copy-assets": "cp -r ./src/lib/geo/*.mmdb dist/lib/geo/ || true",
     "migrate:up": "PGSSLMODE=require node-pg-migrate up",
-    "migrate:down": "PGSSLMODE=require node-pg-migrate down"
+    "migrate:down": "PGSSLMODE=require node-pg-migrate down",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:url": "jest src/features/url/test",
+    "test:url:watch": "jest --watch src/features/url/test"
   },
   "keywords": [
     "URL",
@@ -71,6 +76,7 @@
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^7.0.1",
     "@types/pg": "^8.15.5",
