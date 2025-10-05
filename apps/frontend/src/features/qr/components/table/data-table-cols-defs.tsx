@@ -17,10 +17,10 @@ import { openToaster } from "@/shared/components/ui/sonner"
 import { QrCodeType } from "@/features/qr/types"
 import Image from "next/image.js"
 
-const UpdateQrDialog = dynamic(() => import("@/features/qr/components/dialogs/update-qr-dialog"), {
-    loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
-    ssr: false
-})
+// const UpdateQrDialog = dynamic(() => import("@/features/qr/components/dialogs/update-qr-dialog"), {
+//     loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
+//     ssr: false
+// })
 
 const DeleteQrDialog = dynamic(() => import("@/features/qr/components/dialogs/delete-qr-dialog"), {
     loading: () => <div className="h-8 w-16 bg-gray-200 animate-pulse rounded" />,
@@ -203,14 +203,14 @@ export const columns: ColumnDef<QrCodeType>[] = [
                             <span className="text-sm font-semibold">تحميل</span>
                             <Download size={16} />
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
+                        {/* <DropdownMenuItem asChild>
                             <UpdateQrDialog currentQr={row.original}>
                                 <Button variant="ghost" className="w-full text-end flex h-fit py-1 justify-end px-2 items-center text-sm">
                                     تعديل
                                     <Settings size={16} />
                                 </Button>
                             </UpdateQrDialog>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                         <DropdownMenuItem asChild>
                             <DeleteQrDialog
                                 resource={row.original}
