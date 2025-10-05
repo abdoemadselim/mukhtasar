@@ -18,7 +18,7 @@
   },
   "description": "Mokhtasar allows you to convert long unaccessible URL to short, neat URL",
   "engines": {
-    "node": ">= 14.0.0",
+    "node": ">=18",
     "npm": ">= 6.0.0"
   },
   "main": "./dist/main.js",
