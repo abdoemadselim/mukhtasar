@@ -93,17 +93,26 @@ class ApiClient {
 
         const fetchOptions: RequestInit = {
             headers: {
-                'Content-Type': 'application/json',
                 ...headers,
             },
             ...restOptions,
         };
 
+        // Only set Content-Type for non-FormData bodies
+        if (!(body instanceof FormData)) {
+            fetchOptions.headers = {
+                'Content-Type': 'application/json',
+                ...headers,
+            };
+        }
+
         if (includeCredentials) {
             fetchOptions.credentials = 'include';
         }
 
-        if (body) {
+        if (body instanceof FormData) {
+            fetchOptions.body = body;
+        } else {
             fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
         }
 

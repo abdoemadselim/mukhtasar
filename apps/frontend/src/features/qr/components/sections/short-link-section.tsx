@@ -1,4 +1,5 @@
 import { Link } from "lucide-react"
+import { useFormContext } from "react-hook-form"
 
 import { DomainType } from "@/features/domain/types"
 
@@ -7,16 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/shared/components/ui/input"
 
 interface ShortLinkSectionProps {
-    control: any
     activeDomains?: { domains: DomainType[] }
     stepNumber: number
 }
 
 export default function ShortLinkSection({
-    control,
     activeDomains,
     stepNumber
 }: ShortLinkSectionProps) {
+    const { control } = useFormContext()
     return (
         <section className="bg-white p-4 rounded-lg relative">
             <span className="bg-primary text-white w-7 h-7 flex items-center justify-center font-bold text-center p-4 rounded-full text-xl absolute top-[-17px] right-[-10px] border-1">

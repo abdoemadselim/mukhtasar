@@ -45,6 +45,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.901.0",
     "@maxmind/geoip2-node": "^6.1.0",
     "@mukhtasar/shared": "workspace:*",
     "bcrypt": "^6.0.0",
@@ -66,6 +67,7 @@
     "swagger-ui-express": "^5.0.1",
     "ua-parser-js": "^2.0.4",
     "winston": "^3.17.0",
+    "wrangler": "^4.42.0",
     "zod": "^4.0.15"
   },
   "devDependencies": {

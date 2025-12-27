@@ -6,7 +6,7 @@ import analyticsRoutes from "#features/analytics/routes/api.routes.js"
 import { authToken } from "#features/token/domain/token-service.js";
 import { READ_URL_PERMISSION } from "#features/token/data-access/const.js";
 
-import swaggerApiDoc from "../../docs/api-doc.json" with {type: "json"}
+import swaggerApiDoc from "../../docs/api-doc.json" with { type: "json" }
 import { apiRateLimiter } from "#lib/rate-limiting/rate-limiters.js";
 
 const router = Router()

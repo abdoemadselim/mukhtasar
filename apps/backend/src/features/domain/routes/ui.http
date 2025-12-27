@@ -1,0 +1,103 @@
+### Domain Feature UI Routes Tests
+### Base URL: http://localhost:3000/domain
+
+### Variables
+@baseUrl = http://localhost:3000/domain
+@domainId = 123
+@domain = example.com
+
+### 1. Get User Domains
+GET {{baseUrl}}/
+Content-Type: application/json
+
+###
+
+### 2. Get User Active Domains
+GET {{baseUrl}}/active
+Content-Type: application/json
+
+###
+
+### 3. Add Domain
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": "{{domain}}"
+}
+
+###
+
+### 4. Add Custom Domain
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": "mycustomdomain.com"
+}
+
+###
+
+### 5. Add Subdomain
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": "subdomain.example.com"
+}
+
+###
+
+### 6. Refresh Domain
+POST {{baseUrl}}/{{domainId}}/refresh
+Content-Type: application/json
+
+###
+
+### 7. Delete Domain
+DELETE {{baseUrl}}/{{domainId}}
+Content-Type: application/json
+
+###
+
+### 8. Test with Invalid Domain Format (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": "invalid-domain-format"
+}
+
+###
+
+### 9. Test with Blocked Domain (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": "google.com"
+}
+
+###
+
+### 10. Test with Empty Domain (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "domain": ""
+}
+
+###
+
+### 11. Test with Invalid Domain ID (should fail)
+POST {{baseUrl}}/invalid-id/refresh
+Content-Type: application/json
+
+###
+
+### 12. Test Delete with Invalid Domain ID (should fail)
+DELETE {{baseUrl}}/invalid-id
+Content-Type: application/json
+
+###

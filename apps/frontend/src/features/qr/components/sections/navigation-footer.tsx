@@ -1,6 +1,7 @@
 'use client'
 
 import { MoveRight, MoveLeft } from "lucide-react"
+import { useFormContext } from "react-hook-form"
 
 import { Button } from "@/shared/components/ui/button"
 import { DialogClose } from "@/shared/components/ui/dialog"
@@ -8,7 +9,6 @@ import { DialogClose } from "@/shared/components/ui/dialog"
 interface NavigationFooterProps {
     currentStep: number
     totalSteps: number
-    formState: any
     onNextStep: () => void
     onBackStep: () => void
     onDialogClose: () => void
@@ -17,11 +17,11 @@ interface NavigationFooterProps {
 export default function NavigationFooter({
     currentStep,
     totalSteps,
-    formState,
     onNextStep,
     onBackStep,
     onDialogClose
 }: NavigationFooterProps) {
+    const { formState } = useFormContext()
     return (
         <div className="flex gap-2 pt-4">
             <DialogClose asChild>

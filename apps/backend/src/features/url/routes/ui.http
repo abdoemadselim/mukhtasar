@@ -1,0 +1,84 @@
+### URL Feature UI Routes Tests
+### Base URL: http://localhost:3000/ui/url
+
+### Variables
+@baseUrl = http://localhost:3000/ui/url
+@domain = your-domain.com
+@alias = your-alias
+
+### 1. Get URLs Page (with pagination)
+GET {{baseUrl}}/?page=0&pageSize=10
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 2. Create Short URL (UI route - no auth required)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com/very-long-url-that-needs-to-be-shortened",
+  "domain": "{{domain}}",
+  "alias": "{{alias}}",
+  "description": "Example URL for testing"
+}
+
+###
+
+### 3. Create URL with minimal data (UI route)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "original_url": "https://www.minimal-example.com",
+  "domain": "{{domain}}"
+}
+
+###
+
+### 4. Create URL with empty domain (uses default)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com",
+  "domain": ""
+}
+
+###
+
+### 5. Update Short URL (UI route - requires session)
+PATCH {{baseUrl}}/{{domain}}/{{alias}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com/updated-very-long-url-that-needs-to-be-shortened"
+}
+
+###
+
+### 6. Delete Short URL (UI route - requires session)
+DELETE {{baseUrl}}/{{domain}}/{{alias}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 7. Get URLs Page with different pagination
+GET {{baseUrl}}/?page=1&pageSize=20
+Cookie: session-id=your-session-id-here
+
+###
+
+### 8. Test without session (should fail for protected routes)
+GET {{baseUrl}}/?page=0&pageSize=10
+
+###
+
+### 9. Test with invalid session
+GET {{baseUrl}}/?page=0&pageSize=10
+Cookie: session-id=invalid-session-id
+
+###

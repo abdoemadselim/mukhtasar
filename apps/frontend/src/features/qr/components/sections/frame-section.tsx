@@ -1,16 +1,19 @@
 import { Link } from "lucide-react"
+import { useFormContext, useWatch } from "react-hook-form"
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 import { Input } from "@/shared/components/ui/input"
 
+import DebouncedColorPicker from "@/features/qr/components/ui/debounce-color-picker"
+
 interface FrameSectionProps {
-    control: any
-    watch: any
     stepNumber: number
 }
 
-export default function FrameSection({ control, watch, stepNumber }: FrameSectionProps) {
+export default function FrameSection({ stepNumber }: FrameSectionProps) {
+    const { control } = useFormContext()
+    const frameType = useWatch({ name: "frame_type" })
     return (
         <section className="bg-white p-4 rounded-lg flex flex-col gap-3 relative">
             <span className="bg-primary text-white w-7 h-7 flex items-center justify-center font-bold text-center p-4 rounded-full text-xl absolute top-[-17px] right-[-10px] border-1">
@@ -46,7 +49,7 @@ export default function FrameSection({ control, watch, stepNumber }: FrameSectio
             />
 
             {/* Frame Text - Only show if frame_with_text is selected */}
-            {watch('frame_type') === 'frame_with_text' && (
+            {frameType === 'frame_with_text' && (
                 <div className="flex flex-col gap-3">
                     <FormField
                         control={control}
@@ -76,8 +79,7 @@ export default function FrameSection({ control, watch, stepNumber }: FrameSectio
                                     <FormLabel className="text-md">لون الإطار</FormLabel>
                                     <div className="flex items-center gap-2">
                                         <FormControl>
-                                            <Input
-                                                type="color"
+                                            <DebouncedColorPicker
                                                 {...field}
                                                 className="w-12 h-10 border-2"
                                             />
@@ -103,8 +105,7 @@ export default function FrameSection({ control, watch, stepNumber }: FrameSectio
                                     <FormLabel className="text-lg">لون نص الإطار</FormLabel>
                                     <div className="flex items-center gap-2">
                                         <FormControl>
-                                            <Input
-                                                type="color"
+                                            <DebouncedColorPicker
                                                 {...field}
                                                 className="w-12 h-10 border-2"
                                             />

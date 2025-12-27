@@ -1,0 +1,115 @@
+### Auth Feature UI Routes Tests
+### Base URL: http://localhost:3000/auth
+
+### Variables
+@baseUrl = http://localhost:3000/auth
+@email = user@example.com
+@password = password123
+@name = John Doe
+@verificationToken = your-verification-token-here
+@resetToken = your-reset-token-here
+
+### 1. User Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### 2. User Signup
+POST {{baseUrl}}/signup
+Content-Type: application/json
+
+{
+  "name": "{{name}}",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "password_confirmation": "{{password}}"
+}
+
+###
+
+### 3. User Logout
+POST {{baseUrl}}/logout
+Content-Type: application/json
+
+###
+
+### 4. Verify User Email
+GET {{baseUrl}}/verify?token={{verificationToken}}
+
+###
+
+### 5. Get Current User Info
+GET {{baseUrl}}/me
+Content-Type: application/json
+
+###
+
+### 6. Send Password Reset Email
+POST {{baseUrl}}/password-reset-mail
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+###
+
+### 7. Reset Password with Token
+POST {{baseUrl}}/reset-password
+Content-Type: application/json
+
+{
+  "password": "newpassword123",
+  "password_confirmation": "newpassword123",
+  "token": "{{resetToken}}"
+}
+
+###
+
+### 8. Google OAuth Callback
+GET {{baseUrl}}/google/callback
+
+###
+
+### 9. Test Login with Invalid Credentials (should fail)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "invalid@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+### 10. Test Signup with Mismatched Passwords (should fail)
+POST {{baseUrl}}/signup
+Content-Type: application/json
+
+{
+  "name": "{{name}}",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "password_confirmation": "differentpassword"
+}
+
+###
+
+### 11. Test Signup with Invalid Email (should fail)
+POST {{baseUrl}}/signup
+Content-Type: application/json
+
+{
+  "name": "{{name}}",
+  "email": "invalid-email",
+  "password": "{{password}}",
+  "password_confirmation": "{{password}}"
+}
+
+###

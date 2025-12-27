@@ -1,0 +1,122 @@
+### QR Feature UI Routes Tests
+### Base URL: http://localhost:3000/qr
+
+### Variables
+@baseUrl = http://localhost:3000/qr
+@destinationUrl = https://www.example.com
+@domain = mukhtasar.pro
+@alias = my-qr-code
+
+### 1. Create QR Code (minimal)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}"
+}
+
+###
+
+### 2. Create QR Code with Custom Colors
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "foreground_color": "#FF0000",
+  "background_color": "#FFFFFF"
+}
+
+###
+
+### 3. Create QR Code with Frame (frame only)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "foreground_color": "#000000",
+  "background_color": "#FFFFFF",
+  "frame_type": "frame_only",
+  "frame_color": "#333333"
+}
+
+###
+
+### 4. Create QR Code with Frame and Text
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "foreground_color": "#000000",
+  "background_color": "#FFFFFF",
+  "frame_type": "frame_with_text",
+  "frame_text": "Scan Me!",
+  "frame_color": "#333333",
+  "frame_text_color": "#FFFFFF"
+}
+
+###
+
+### 5. Create QR Code with Custom Domain and Alias
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "domain": "{{domain}}",
+  "alias": "{{alias}}"
+}
+
+###
+
+### 6. Create QR Code with All Options
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "foreground_color": "#0066CC",
+  "background_color": "#F0F8FF",
+  "alias": "{{alias}}",
+  "domain": "{{domain}}",
+  "frame_type": "frame_with_text",
+  "frame_text": "Visit Our Site",
+  "frame_color": "#0066CC",
+  "frame_text_color": "#FFFFFF"
+}
+
+###
+
+### 7. Test with Invalid URL (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "not-a-valid-url"
+}
+
+###
+
+### 8. Test with Invalid Color Format (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "foreground_color": "red"
+}
+
+###
+
+### 9. Test with Invalid Frame Type (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "destination_url": "{{destinationUrl}}",
+  "frame_type": "invalid_type"
+}
+
+###

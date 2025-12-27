@@ -1,0 +1,102 @@
+### Analytics Feature UI Routes Tests
+### Base URL: http://localhost:3000/ui/analytics
+
+### Variables
+@baseUrl = http://localhost:3000/ui/analytics
+@alias = your-alias
+@startDate = 2024-01-01T00:00:00.000Z
+@endDate = 2024-12-31T23:59:59.000Z
+
+### 1. Get URL Analytics (comprehensive - requires session)
+GET {{baseUrl}}/?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 2. Get Analytics Overview (summary stats - requires session)
+GET {{baseUrl}}/overview?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 3. Get Browser Statistics (requires session)
+GET {{baseUrl}}/browsers?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 4. Get Device Statistics (requires session)
+GET {{baseUrl}}/devices?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 5. Get Clicks Over Time (requires session)
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}&groupBy=day
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 6. Get Geographic Statistics (requires session)
+GET {{baseUrl}}/geography?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 7. Get Referer Statistics (requires session)
+GET {{baseUrl}}/referers?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 8. Get Hourly Statistics (requires session)
+GET {{baseUrl}}/hourly?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Cookie: session-id=your-session-id-here
+Content-Type: application/json
+
+###
+
+### 9. Create Analytics Event (no session required)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "alias": "{{alias}}",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+  "ip": "192.168.1.1",
+  "referer": "https://google.com",
+  "country": "US",
+  "city": "New York"
+}
+
+###
+
+### 10. Get Analytics for last 7 days
+GET {{baseUrl}}/overview?alias={{alias}}&startDate=2024-01-01T00:00:00.000Z&endDate=2024-01-07T23:59:59.000Z
+Cookie: session-id=your-session-id-here
+
+###
+
+### 11. Get Clicks Over Time with different groupBy options
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}&groupBy=hour
+Cookie: session-id=your-session-id-here
+
+###
+
+### 12. Test without session (should fail for protected routes)
+GET {{baseUrl}}/overview?alias={{alias}}
+
+###
+
+### 13. Test with invalid parameters (should fail)
+GET {{baseUrl}}/overview?invalidParam=test
+Cookie: session-id=your-session-id-here
+
+###

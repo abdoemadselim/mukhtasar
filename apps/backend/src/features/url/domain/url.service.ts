@@ -22,59 +22,82 @@ export async function getUrlInfo({ domain, alias }: ParamsType) {
 }
 
 export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlType & { is_temporary: boolean }>> {
-    const { domain, alias, original_url, user_id, description = "" } = newUrl as UrlInputType;
+    const { domain, alias, original_url, user_id, description = "", qr_purpose_only = false, has_qr = false } = newUrl as UrlInputType;
 
     // 1- Domain authorization logic
     const originalDomain = process.env.ORIGINAL_DOMAIN as string;
-    let resolvedDomain = domain || originalDomain;
+    const resolvedDomain = domain || originalDomain;
 
-    if (!user_id) {
-        // Guest users can only use the original domain
-        if (domain && domain !== originalDomain) {
-            throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
-        }
-        resolvedDomain = originalDomain;
-    } else {
-        // Authenticated users can use original domain or their own domains
-        if (domain && domain !== originalDomain) {
-            const userOwnsDomain = await domainRepository.checkUserOwnsDomain({ userId: user_id, domain });
-            if (!userOwnsDomain) {
-                throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
-            }
-        }
+    // 2- If guest user, use the original domain only
+    if (!user_id && domain && domain !== originalDomain) {
+        throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
     }
 
-    // 2. If alias is provided, create with it
+    // 3- Check if user owns the provided domain
+    await validateDomainOwnership(user_id, domain);
+
+    // 4. If alias is provided, create with it, otherwise generate one
     if (alias) {
-        return createUrlWithAlias({ alias, resolvedDomain, original_url, user_id, description })
+        return createUrlWithCustomAlias({ alias, resolvedDomain, original_url, user_id, description, qr_purpose_only, has_qr })
     } else {
-        // 3. Generate alias when none is provided
-        const uniqueId = await generate_id();
-        const uniqueIdBase62 = toBase62(uniqueId);
-
-
-        // Create temporary URL for guest users, permanent for authenticated users
-        if (!user_id) {
-            return saveTemporaryUrl({ alias: uniqueIdBase62, resolvedDomain, original_url });
-        } else {
-            return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description });
-        }
+        return createUrlWithoutCustomAlias({ resolvedDomain, original_url, user_id, qr_purpose_only, description, has_qr })
     }
-
 }
 
-async function createUrlWithAlias({
+async function validateDomainOwnership(user_id: number, domain: string) {
+    const originalDomain = process.env.ORIGINAL_DOMAIN as string;
+    if (user_id && domain && domain !== originalDomain) {
+        const userOwnsDomain = await domainRepository.checkUserOwnsDomain({ userId: user_id, domain });
+        if (!userOwnsDomain) {
+            throw new ValidationException({ domain: { message: "لا يمكنك استخدام هذا النطاق." } })
+        }
+    }
+}
+
+async function createUrlWithoutCustomAlias({
+    resolvedDomain,
+    original_url,
+    user_id,
+    qr_purpose_only,
+    description,
+    has_qr
+}: {
+    resolvedDomain: string;
+    original_url: string;
+    user_id: number;
+    qr_purpose_only: boolean;
+    description: string;
+    has_qr: boolean;
+}) {
+    // 3. Generate alias when none is provided
+    const uniqueId = await generate_id();
+    const uniqueIdBase62 = toBase62(uniqueId);
+
+    // Create temporary URL for guest users, permanent for authenticated users
+    if (!user_id) {
+        return saveTemporaryUrl({ alias: uniqueIdBase62, resolvedDomain, original_url });
+    } else {
+        return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description, qr_purpose_only, has_qr });
+    }
+}
+
+async function createUrlWithCustomAlias({
     alias,
     resolvedDomain,
     original_url,
     user_id,
-    description }: {
-        alias: string;
-        resolvedDomain: string;
-        original_url: string;
-        user_id: number;
-        description: string;
-    }) {
+    qr_purpose_only,
+    description,
+    has_qr
+}: {
+    alias: string;
+    resolvedDomain: string;
+    original_url: string;
+    user_id: number;
+    description: string;
+    qr_purpose_only: boolean;
+    has_qr: boolean
+}) {
     // Check both permanent URLs and temporary URLs
     const aliasExists = await urlRepository.getUrlByAliasAndDomain({ alias, domain: resolvedDomain });
     const tempUrlExists = await redisClient.get(`temp_url:${resolvedDomain}-${alias}`);
@@ -87,7 +110,7 @@ async function createUrlWithAlias({
     if (!user_id) {
         return saveTemporaryUrl({ alias, resolvedDomain, original_url });
     } else {
-        return saveUrl({ alias, resolvedDomain, original_url, user_id, description });
+        return saveUrl({ alias, resolvedDomain, original_url, user_id, description, qr_purpose_only, has_qr });
     }
 }
 
@@ -96,19 +119,26 @@ async function saveUrl({
     resolvedDomain,
     original_url,
     user_id,
-    description }: {
-        alias: string;
-        resolvedDomain: string;
-        original_url: string;
-        user_id: number;
-        description: string;
-    }) {
+    description,
+    qr_purpose_only,
+    has_qr
+}: {
+    alias: string;
+    resolvedDomain: string;
+    original_url: string;
+    user_id: number;
+    description: string;
+    qr_purpose_only: boolean;
+    has_qr: boolean;
+}) {
     const createdUrl = await urlRepository.createUrl({
         alias,
         domain: resolvedDomain,
         original_url,
         user_id,
-        description
+        description,
+        qr_purpose_only,
+        has_qr
     });
 
     redisClient.setEx(`url:${resolvedDomain}-${alias}`, 86400 * 3, original_url);
@@ -119,7 +149,7 @@ async function saveUrl({
         original_url,
         description,
         created_at: createdUrl.created_at,
-        short_url: createdUrl.short_url
+        short_url: createdUrl.short_url,
     };
 }
 
@@ -198,8 +228,6 @@ export async function getOriginalUrl({ domain, alias }: { domain: string, alias:
     if (tempUrl) {
         return tempUrl;
     }
-
-    console.log(tempUrl)
 
     // Then check permanent URLs (Logged-in Users)
     let url = await redisClient.get(`url:${domain}-${alias}`);

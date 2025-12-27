@@ -1,26 +1,31 @@
 'use client'
 
-import { useRef } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import { Upload, X } from "lucide-react"
 import Image from "next/image"
+import { useFormContext } from "react-hook-form"
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 
-interface UrlAndLogoSectionProps {
-    control: any
-    stepNumber: number
-    resetFieldValue: (field: string) => void
-}
-
-export default function UrlAndLogoSection({
-    control,
-    stepNumber,
-    resetFieldValue
-}: UrlAndLogoSectionProps) {
+const UrlAndLogoSection = memo(function UrlAndLogoSection({ stepNumber }: { stepNumber: number }) {
     // Why ref? because we we want when user clicks on the button element to trigger the file upload input
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const { subscribe, control, resetField } = useFormContext()
+    const [logoPreview, setLogoPreview] = useState<string | null>(null)
+    useEffect(() => {
+        const callback = subscribe({
+            name: ["logo"],
+            callback: (data) => {
+                if (data.values.logo) {
+                    setLogoPreview(URL.createObjectURL(data.values.logo))
+                }
+            }
+        })
+
+        return () => callback()
+    }, [subscribe])
 
     return (
         <section className="space-y-4 bg-white p-4 rounded-lg h-fit relative">
@@ -67,14 +72,14 @@ export default function UrlAndLogoSection({
                                         <Upload className="h-4 w-4 ml-2" />
                                         رفع شعار
                                     </Button>
-                                    {field.value && (
+                                    {logoPreview && (
                                         <Button
                                             type="button"
                                             variant="outline"
                                             size="sm"
                                             onClick={() => {
                                                 field.onChange(undefined);
-                                                resetFieldValue("logo")
+                                                resetField("logo")
                                                 if (fileInputRef.current) {
                                                     fileInputRef.current.value = "";
                                                 }
@@ -97,9 +102,9 @@ export default function UrlAndLogoSection({
                                         className="hidden"
                                     />
                                 </div>
-                                {field.value && (
+                                {logoPreview && (
                                     <Image
-                                        src={field.value ? URL.createObjectURL(field.value) : ""}
+                                        src={logoPreview}
                                         alt="Logo preview"
                                         width={32}
                                         height={32}
@@ -114,4 +119,6 @@ export default function UrlAndLogoSection({
             />
         </section>
     )
-}
+})
+
+export default UrlAndLogoSection

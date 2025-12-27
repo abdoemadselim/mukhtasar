@@ -1,15 +1,12 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { UseFormReturn } from "react-hook-form"
 
 import { QRGenerationConfig, generateCompleteQRCode } from "@/features/qr/utils"
 import { QR_DEFAULT_CONFIG, getQRSize } from "@/features/qr/config"
 import { openToaster } from "@/shared/components/ui/sonner"
-
-export interface UseQrGeneratorProps {
-    form: UseFormReturn<any>
-}
+import { CreateQrCodeType } from "../types.js"
+import { createPortal } from "react-dom"
 
 export interface UseQrGeneratorReturn {
     setCanvasRef: (node: HTMLCanvasElement | null) => void
@@ -19,17 +16,21 @@ export interface UseQrGeneratorReturn {
     downloadQrCode: () => void
 }
 
-export function useQrGenerator({ form }: UseQrGeneratorProps): UseQrGeneratorReturn {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+
+export function useQrGenerator() {
     const [previewQrCode, setPreviewQrCode] = useState<string>("")
     const [isPending, setIsPending] = useState<boolean>(false)
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [canvasReady, setCanvasReady] = useState<boolean>(false)
 
-    const generatePreviewQr = useCallback(async () => {
-        if (!canvasRef.current || !canvasReady) return
-        setIsPending(true)
+    const setCanvasRef = useCallback((node: HTMLCanvasElement | null) => {
+        canvasRef.current = node;
+        setCanvasReady(true)
+    }, []);
 
-        const values = form.getValues()
+    const generatePreviewQr = useCallback(async (values: CreateQrCodeType) => {
+        if (!canvasRef.current) return
+        setIsPending(true)
 
         // logo preview url
         const logoPreview = values.logo ? URL.createObjectURL(values.logo) : undefined
@@ -51,27 +52,11 @@ export function useQrGenerator({ form }: UseQrGeneratorProps): UseQrGeneratorRet
         const previewUrl = await generateCompleteQRCode(canvasRef.current, config)
         setIsPending(false)
         setPreviewQrCode(previewUrl)
-    }, [form, canvasReady])
+    }, [canvasReady])
 
-    const setCanvasRef = useCallback((node: HTMLCanvasElement | null) => {
-        canvasRef.current = node
-        if (node) {
-            setCanvasReady(true)
-        }
-    }, [])
-
-    // Generate QR code when canvas becomes ready
-    useEffect(() => {
-        if (canvasReady) {
-            generatePreviewQr()
-        }
-    }, [canvasReady, generatePreviewQr])
-
-    const downloadQrCode = async () => {
+    const downloadQrCode = useCallback(async (values: CreateQrCodeType) => {
         try {
             setIsPending(true)
-
-            const values = form.getValues()
 
             // logo preview url
             const logoPreview = values.logo ? URL.createObjectURL(values.logo) : undefined
@@ -102,7 +87,7 @@ export function useQrGenerator({ form }: UseQrGeneratorProps): UseQrGeneratorRet
         }
 
         setIsPending(false)
-    }
+    }, [])
 
-    return { generatePreviewQr, setCanvasRef, previewQrCode, isPending, downloadQrCode }
+    return { generatePreviewQr, previewQrCode, isPending, downloadQrCode, setCanvasRef }
 }

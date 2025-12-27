@@ -137,7 +137,6 @@ export default function PrivacyPage() {
                             <p>نستخدم خدمات خارجية موثوقة مثل:</p>
                             <ul className="list-disc pr-6 space-y-2">
                                 <li><strong>Umami Cloud:</strong> لتحليل استخدام الموقع</li>
-                                <li><strong>Vercel insights:</strong> لمراقبة الأداء</li>
                                 <li><strong>خدمات الدفع:</strong> لمعالجة المدفوعات الآمنة</li>
                                 <li><strong>خدمات البريد:</strong> لإرسال الإشعارات</li>
                                 <li><strong>خدمات الاستضافة:</strong> لتخزين البيانات بأمان</li>

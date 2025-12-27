@@ -1,0 +1,82 @@
+### URL Feature API Tests
+### Base URL: http://localhost:3000/api/url
+
+### Variables
+@baseUrl = http://localhost:3000/api/url
+@token = your-auth-token-here
+@domain = your-domain.com
+@alias = your-alias
+
+### 1. Get Short URL Info
+GET {{baseUrl}}/{{domain}}/{{alias}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 2. Create Short URL
+POST {{baseUrl}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com/very-long-url-that-needs-to-be-shortened",
+  "domain": "{{domain}}",
+  "alias": "{{alias}}",
+  "description": "Example URL for testing"
+}
+
+###
+
+### 3. Create URL with minimal data (auto-generated alias)
+POST {{baseUrl}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "original_url": "https://www.minimal-example.com",
+  "domain": "{{domain}}"
+}
+
+###
+
+### 4. Create URL with empty domain (uses default)
+POST {{baseUrl}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com",
+  "domain": ""
+}
+
+###
+
+### 5. Update Short URL
+PATCH {{baseUrl}}/{{domain}}/{{alias}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "original_url": "https://www.example.com/updated-very-long-url-that-needs-to-be-shortened"
+}
+
+###
+
+### 6. Delete Short URL
+DELETE {{baseUrl}}/{{domain}}/{{alias}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 7. Test without authorization (should fail)
+GET {{baseUrl}}/{{domain}}/{{alias}}
+
+###
+
+### 8. Test with invalid domain/alias
+GET {{baseUrl}}/invalid-domain/invalid-alias
+Authorization: Bearer {{token}}
+
+###

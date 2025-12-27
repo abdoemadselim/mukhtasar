@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateQrSchema } from "@mukhtasar/shared"
+import { CreateQrSchema, CreateQrCodeType } from "@mukhtasar/shared"
 
 import { Form } from "@/shared/components/ui/form"
 import {
@@ -31,15 +31,7 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
         'short_link_frame_settings',
     ]
 
-    const handleNextStep = () => {
-        setCurrentStep((prev) => (prev + 1 <= formSections.length ? prev + 1 : prev))
-    }
-
-    const handleBackStep = () => {
-        setCurrentStep((prev) => (prev - 1 >= 0 ? prev - 1 : prev))
-    }
-
-    const form = useForm({
+    const form = useForm<CreateQrCodeType>({
         resolver: zodResolver(CreateQrSchema),
         defaultValues: {
             destination_url: "",
@@ -55,19 +47,38 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
         }
     })
 
+    const handleNextStep = useCallback(async () => {
+        // Define which fields belong to each step
+        const stepFields = {
+            0: ['destination_url', 'logo'] as const, // URL and logo section
+            1: ['alias', 'domain', 'frame_type', 'frame_text', 'frame_color', 'frame_text_color'] as const // Short link and frame settings
+        }
+
+        // Validate current step fields before proceeding
+        const currentStepFields = stepFields[currentStep as keyof typeof stepFields] || []
+        const isValid = await form.trigger(currentStepFields)
+
+        if (isValid) {
+            setCurrentStep((prev) => (prev + 1 <= formSections.length ? prev + 1 : prev))
+        }
+    }, [currentStep, form, formSections.length])
+
+    const handleBackStep = useCallback(() => {
+        setCurrentStep((prev) => (prev - 1 >= 0 ? prev - 1 : prev))
+    }, [])
+
     const { mutateAsync, isError, isSuccess, error } = useCreateQrCode()
 
     // Use only the QR generator hook
     const {
         generatePreviewQr,
-        setCanvasRef,
         previewQrCode,
         isPending,
         downloadQrCode,
-    } = useQrGenerator({ form })
+        setCanvasRef,
+    } = useQrGenerator()
 
     const onSubmit = async (data: any) => {
-        console.log(data)
         await mutateAsync(data)
         setIsOpen(false)
         form.reset()
@@ -90,10 +101,19 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
     }
 
     useEffect(() => {
-        form.watch(() => {
-            generatePreviewQr()
+        generatePreviewQr(form.getValues() as CreateQrCodeType)
+
+        const callback = form.subscribe({
+            formState: {
+                values: true
+            },
+            callback: (data) => {
+                generatePreviewQr(data.values as CreateQrCodeType)
+            }
         })
-    }, [form, generatePreviewQr])
+
+        return () => callback()
+    }, [generatePreviewQr, form.subscribe])
 
     return (
         <Dialog>
@@ -101,6 +121,7 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
                 {children}
             </DialogTrigger>
             <DialogContent className="xl:max-w-6xl sm:max-w-3xl pt-10 max-h-[90vh] overflow-y-auto">
+                <canvas ref={setCanvasRef} style={{ display: "none" }} />
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <DialogHeader className="pb-4">
@@ -112,15 +133,13 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
 
                         {/* QR Code Preview */}
                         <QRCodePreview
-                            setCanvasRef={setCanvasRef}
                             previewQrCode={previewQrCode}
                             isPending={isPending}
-                            onDownload={downloadQrCode}
+                            onDownload={() => downloadQrCode(form.getValues() as CreateQrCodeType)}
                         />
 
                         {/* Qr Code Dialog Controllers (e.g. destination url input, logo, colors, etc.) */}
                         <QrCodeDialogControllers
-                            form={form}
                             currentStep={currentStep}
                         />
 
@@ -129,7 +148,6 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
                             <NavigationFooter
                                 currentStep={currentStep}
                                 totalSteps={formSections.length}
-                                formState={form.formState}
                                 onNextStep={handleNextStep}
                                 onBackStep={handleBackStep}
                                 onDialogClose={handleDialogClose}

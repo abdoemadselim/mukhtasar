@@ -22,7 +22,8 @@ import {
 const navigationLinks = [
   // { href: "/pages/pricing", label: "خطط الأسعار", active: true },
   { href: `${process.env.NEXT_PUBLIC_API_URL}/api/docs`, label: "وئاثق المبرمجين" },
-  { href: `#contact-us`, label: "دعم" },
+  { href: `/#contact-us`, label: "دعم" },
+  { href: `/pages/pricing`, label: "الخطط" },
 ]
 
 export default function Navbar() {

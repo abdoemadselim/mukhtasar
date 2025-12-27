@@ -11,7 +11,7 @@ export function useGetDomains() {
         staleTime: 5 * 60 * 1000, // 5 minutes,
         gcTime: 10 * 60 * 1000,
         retry: 2,
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
     })
 }
 

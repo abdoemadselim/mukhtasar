@@ -18,11 +18,6 @@ async function handleRequest(request, event) {
     return handleApiRequest(request, event)
   }
 
-  // Handle Vercel-specific requests (vercel analytics or speed insights requests)
-  if (path.startsWith("/_vercel")) {
-    return fetch(request.url)
-  }
-
   const isMainDomain = domain === 'mukhtasar.pro' || domain === 'www.mukhtasar.pro'
 
   if (isMainDomain) {

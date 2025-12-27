@@ -1,0 +1,151 @@
+### Token Feature UI Routes Tests
+### Base URL: http://localhost:3000/token
+
+### Variables
+@baseUrl = http://localhost:3000/token
+@tokenId = 123
+@label = My API Token
+
+### 1. Generate Token (Full Permissions)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "{{label}}",
+  "can_create": true,
+  "can_update": true,
+  "can_delete": true
+}
+
+###
+
+### 2. Generate Token (Read Only)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "Read Only Token",
+  "can_create": false,
+  "can_update": false,
+  "can_delete": false
+}
+
+###
+
+### 3. Generate Token (Create and Update Only)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "Create & Update Token",
+  "can_create": true,
+  "can_update": true,
+  "can_delete": false
+}
+
+###
+
+### 4. Generate Token (Create Only)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "Create Only Token",
+  "can_create": true,
+  "can_update": false,
+  "can_delete": false
+}
+
+###
+
+### 5. Get Tokens Page
+GET {{baseUrl}}/
+Content-Type: application/json
+
+###
+
+### 6. Update Token
+PATCH {{baseUrl}}/{{tokenId}}
+Content-Type: application/json
+
+{
+  "label": "Updated Token Label",
+  "can_create": true,
+  "can_update": false,
+  "can_delete": true
+}
+
+###
+
+### 7. Regenerate Token
+POST {{baseUrl}}/{{tokenId}}/regenerate
+Content-Type: application/json
+
+###
+
+### 8. Delete Token
+DELETE {{baseUrl}}/{{tokenId}}
+Content-Type: application/json
+
+###
+
+### 9. Test with Empty Label (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "",
+  "can_create": true,
+  "can_update": true,
+  "can_delete": true
+}
+
+###
+
+### 10. Test with Label Too Long (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "This is a very long label that exceeds the maximum allowed length of 100 characters and should cause validation to fail",
+  "can_create": true,
+  "can_update": true,
+  "can_delete": true
+}
+
+###
+
+### 11. Test with Invalid Token ID (should fail)
+PATCH {{baseUrl}}/invalid-id
+Content-Type: application/json
+
+{
+  "label": "{{label}}",
+  "can_create": true,
+  "can_update": true,
+  "can_delete": true
+}
+
+###
+
+### 12. Test with Missing Required Fields (should fail)
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "label": "{{label}}"
+}
+
+###
+
+### 13. Test Regenerate with Invalid Token ID (should fail)
+POST {{baseUrl}}/invalid-id/regenerate
+Content-Type: application/json
+
+###
+
+### 14. Test Delete with Invalid Token ID (should fail)
+DELETE {{baseUrl}}/invalid-id
+Content-Type: application/json
+
+###

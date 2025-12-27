@@ -1,0 +1,111 @@
+### Analytics Feature API Tests
+### Base URL: http://localhost:3000/api/analytics
+
+### Variables
+@baseUrl = http://localhost:3000/api/analytics
+@token = your-auth-token-here
+@alias = your-alias
+@startDate = 2024-01-01T00:00:00.000Z
+@endDate = 2024-12-31T23:59:59.000Z
+
+### 1. Get URL Analytics (comprehensive)
+GET {{baseUrl}}/?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 2. Get Analytics Overview (summary stats)
+GET {{baseUrl}}/overview?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 3. Get Browser Statistics
+GET {{baseUrl}}/browsers?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 4. Get Device Statistics
+GET {{baseUrl}}/devices?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 5. Get Clicks Over Time (default groupBy: day)
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 6. Get Clicks Over Time grouped by hour
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}&groupBy=hour
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 7. Get Clicks Over Time grouped by week
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}&groupBy=week
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 8. Get Clicks Over Time grouped by month
+GET {{baseUrl}}/clicks-over-time?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}&groupBy=month
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 9. Get Geographic Statistics
+GET {{baseUrl}}/geography?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 10. Get Referer Statistics
+GET {{baseUrl}}/referers?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 11. Get Hourly Statistics
+GET {{baseUrl}}/hourly?alias={{alias}}&startDate={{startDate}}&endDate={{endDate}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 12. Get Analytics for last 7 days
+GET {{baseUrl}}/overview?alias={{alias}}&startDate=2024-01-01T00:00:00.000Z&endDate=2024-01-07T23:59:59.000Z
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 13. Get Analytics with only alias (no date range)
+GET {{baseUrl}}/overview?alias={{alias}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 14. Test without authorization (should fail)
+GET {{baseUrl}}/overview?alias={{alias}}
+
+###
+
+### 15. Test with invalid alias (should fail)
+GET {{baseUrl}}/overview?alias=invalid-alias-that-is-too-long
+Authorization: Bearer {{token}}
+
+###

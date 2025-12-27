@@ -29,4 +29,5 @@ export interface CreateQrCodeType {
     frame_text?: string
     frame_color?: string
     frame_text_color?: string
+    logo?: File
 }

@@ -10,7 +10,7 @@ export function useGetUrls({ page, page_size }: { page: number, page_size: numbe
         staleTime: 5 * 60 * 1000, // 5 minutes,
         gcTime: 10 * 60 * 1000,
         retry: 2,
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
     })
 
     return { data, isError, isPending, isSuccess, error };

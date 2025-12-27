@@ -224,4 +224,5 @@ export const CreateQrSchema = zod.object({
     logo: zod.any().optional(),
 })
 
-export type QrType = zod.infer<typeof CreateQrSchema>;
+export type CreateQrCodeType = zod.infer<typeof CreateQrSchema>;
+

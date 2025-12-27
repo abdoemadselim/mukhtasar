@@ -1,10 +1,12 @@
 import { Palette } from "lucide-react"
-import { useCallback, useRef } from "react"
+import { useFormContext } from "react-hook-form"
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
 
 import ColorPresetPicker from "@/features/qr/components/forms/color-preset-picker"
+import DebouncedColorPicker from "@/features/qr/components/ui/debounce-color-picker"
+
 
 // Color validation utility
 function isValidHexColor(color: string): boolean {
@@ -13,35 +15,12 @@ function isValidHexColor(color: string): boolean {
 }
 
 interface ColorSectionProps {
-    control: any
     stepNumber: number
 }
 
-// Debounced color picker component for color input
-function DebouncedColorPicker({ value, onChange, ...props }: any) {
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-    const debouncedOnChange = useCallback((newValue: string) => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-        }
-
-        timeoutRef.current = setTimeout(() => {
-            onChange(newValue)
-        }, 150) // Shorter delay for color picker (150ms)
-    }, [onChange])
-
-    return (
-        <Input
-            {...props}
-            type="color"
-            value={value}
-            onChange={(e) => debouncedOnChange(e.target.value)}
-        />
-    )
-}
-
-export default function ColorSection({ control, stepNumber }: ColorSectionProps) {
+export default function ColorSection({ stepNumber }: ColorSectionProps) {
+    const { control } = useFormContext()
     return (
         <section className="space-y-4 bg-white p-4 rounded-lg relative">
             <span className="bg-primary text-white w-7 h-7 flex items-center justify-center font-bold text-center p-4 rounded-full text-xl absolute top-[-17px] right-[-10px] border-1">
