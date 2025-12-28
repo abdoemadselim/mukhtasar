@@ -37,6 +37,10 @@
     "test:url": "jest src/features/url/test",
     "test:url:watch": "jest --watch src/features/url/test"
   },
+  "overrides": {
+    "glob": ">=11.1.0",
+    "js-yaml": ">=4.1.1"
+  },
   "keywords": [
     "URL",
     "URI",
