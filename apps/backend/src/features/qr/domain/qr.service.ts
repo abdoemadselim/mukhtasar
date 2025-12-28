@@ -39,7 +39,7 @@ export async function createQrCode(
         domain,
         original_url: destination_url,
         user_id: userId,
-        qr_purpose_only: false,
+        // qr_purpose_only: false,
         description: `QR Code for ${destination_url}`,
         has_qr: true
     });
