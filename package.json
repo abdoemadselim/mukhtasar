@@ -9,7 +9,7 @@
   },
   "description": "Minimourl allows you to convert long unaccessible URL to short, neat URL",
   "engines": {
-    "node": ">= 20.0.0",
+    "node": ">= 20.9.0",
     "npm": ">= 6.0.0"
   },
   "pnpm": {
