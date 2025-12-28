@@ -31,7 +31,7 @@ export async function deleteDomain(domainId: number) {
 }
 
 export async function refreshDomain(domainId: number) {
-    return apiClient.post(`/domain/${domainId}/refresh`, null, {
+    return apiClient.post(`/domain/${domainId}/refresh`, { domainId }, {
         throwOnError: true,
         includeCredentials: true
     });
