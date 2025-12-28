@@ -11,7 +11,7 @@ export type UrlType = {
   short_url?: string;
   description: string;
   // qr_purpose_only?: boolean;
-  has_qr?: boolean;
+  // has_qr?: boolean;
 };
 
 export type UrlInputType = {
@@ -23,7 +23,7 @@ export type UrlInputType = {
   domain: string;
   original_url: string;
   // qr_purpose_only?: boolean;
-  has_qr?: boolean;
+  // has_qr?: boolean;
 }
 
 export interface IRequest extends Request {

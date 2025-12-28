@@ -22,7 +22,7 @@ export async function getUrlInfo({ domain, alias }: ParamsType) {
 }
 
 export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlType & { is_temporary: boolean }>> {
-    const { domain, alias, original_url, user_id, description = "", /*qr_purpose_only = false,*/ has_qr = false } = newUrl as UrlInputType;
+    const { domain, alias, original_url, user_id, description = "", /*qr_purpose_only = false, has_qr = false*/ } = newUrl as UrlInputType;
 
     // 1- Domain authorization logic
     const originalDomain = process.env.ORIGINAL_DOMAIN as string;
@@ -38,9 +38,9 @@ export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlTy
 
     // 4. If alias is provided, create with it, otherwise generate one
     if (alias) {
-        return createUrlWithCustomAlias({ alias, resolvedDomain, original_url, user_id, description, /*qr_purpose_only,*/ has_qr })
+        return createUrlWithCustomAlias({ alias, resolvedDomain, original_url, user_id, description, /*qr_purpose_only, has_qr*/ })
     } else {
-        return createUrlWithoutCustomAlias({ resolvedDomain, original_url, user_id, /*qr_purpose_only,*/ description, has_qr })
+        return createUrlWithoutCustomAlias({ resolvedDomain, original_url, user_id, /*qr_purpose_only, has_qr*/ description, })
     }
 }
 
@@ -60,14 +60,14 @@ async function createUrlWithoutCustomAlias({
     user_id,
     // qr_purpose_only,
     description,
-    has_qr
+    // has_qr
 }: {
     resolvedDomain: string;
     original_url: string;
     user_id: number;
     // qr_purpose_only: boolean;
     description: string;
-    has_qr: boolean;
+    // has_qr: boolean;
 }) {
     // 3. Generate alias when none is provided
     const uniqueId = await generate_id();
@@ -77,7 +77,7 @@ async function createUrlWithoutCustomAlias({
     if (!user_id) {
         return saveTemporaryUrl({ alias: uniqueIdBase62, resolvedDomain, original_url });
     } else {
-        return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description, /*qr_purpose_only,*/ has_qr });
+        return saveUrl({ alias: uniqueIdBase62, resolvedDomain, original_url, user_id, description, /*qr_purpose_only, has_qr*/ });
     }
 }
 
@@ -88,7 +88,7 @@ async function createUrlWithCustomAlias({
     user_id,
     // qr_purpose_only,
     description,
-    has_qr
+    // has_qr
 }: {
     alias: string;
     resolvedDomain: string;
@@ -96,7 +96,7 @@ async function createUrlWithCustomAlias({
     user_id: number;
     description: string;
     // qr_purpose_only: boolean;
-    has_qr: boolean
+    // has_qr: boolean
 }) {
     // Check both permanent URLs and temporary URLs
     const aliasExists = await urlRepository.getUrlByAliasAndDomain({ alias, domain: resolvedDomain });
@@ -110,7 +110,7 @@ async function createUrlWithCustomAlias({
     if (!user_id) {
         return saveTemporaryUrl({ alias, resolvedDomain, original_url });
     } else {
-        return saveUrl({ alias, resolvedDomain, original_url, user_id, description, /*qr_purpose_only,*/ has_qr });
+        return saveUrl({ alias, resolvedDomain, original_url, user_id, description, /*qr_purpose_only, has_qr*/ });
     }
 }
 
@@ -121,7 +121,7 @@ async function saveUrl({
     user_id,
     description,
     // qr_purpose_only,
-    has_qr
+    // has_qr
 }: {
     alias: string;
     resolvedDomain: string;
@@ -129,7 +129,7 @@ async function saveUrl({
     user_id: number;
     description: string;
     // qr_purpose_only: boolean;
-    has_qr: boolean;
+    // has_qr: boolean
 }) {
     const createdUrl = await urlRepository.createUrl({
         alias,
@@ -138,7 +138,7 @@ async function saveUrl({
         user_id,
         description,
         // qr_purpose_only,
-        has_qr
+        // has_qr
     });
 
     redisClient.setEx(`url:${resolvedDomain}-${alias}`, 86400 * 3, original_url);

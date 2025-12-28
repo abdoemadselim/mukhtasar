@@ -71,9 +71,9 @@ const qrRepository = {
         `, [urlId]);
     },
 
-    async getUrlById(urlId: number): Promise<{ id: number; alias: string; domain: string; original_url: string; short_url: string;/* qr_purpose_only: boolean;*/ has_qr: boolean } | undefined> {
+    async getUrlById(urlId: number): Promise<{ id: number; alias: string; domain: string; original_url: string; short_url: string;/* qr_purpose_only: boolean; has_qr: boolean*/ } | undefined> {
         const result = await query(`
-            SELECT id, alias, domain, original_url, short_url, has_qr
+            SELECT id, alias, domain, original_url, short_url
             FROM url
             WHERE id = $1
         `, [urlId]);

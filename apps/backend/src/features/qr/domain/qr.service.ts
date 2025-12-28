@@ -41,7 +41,7 @@ export async function createQrCode(
         user_id: userId,
         // qr_purpose_only: false,
         description: `QR Code for ${destination_url}`,
-        has_qr: true
+        // has_qr: true
     });
 
     const urlId = urlResult.id;
