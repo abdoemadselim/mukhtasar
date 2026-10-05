@@ -1,4 +1,5 @@
 'use client'
+import { SHORT_DOMAIN } from "@/lib/site";
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ShortUrlSchema, ShortUrlType } from "@mukhtasar/shared"
@@ -32,7 +33,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
         defaultValues: {
             original_url: "",
             alias: "",
-            domain: "mukhtasar.pro",
+            domain: SHORT_DOMAIN,
             description: "",
         },
     })
@@ -160,8 +161,8 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                                 </FormControl>
                                                 <SelectContent>
                                                     {/* Always include your default domain as first option */}
-                                                    <SelectItem value="mukhtasar.pro">
-                                                        mukhtasar.pro (افتراضي)
+                                                    <SelectItem value={SHORT_DOMAIN}>
+                                                        {SHORT_DOMAIN} (افتراضي)
                                                     </SelectItem>
 
                                                     {activeDomains.domains.map((domain: DomainType) => (

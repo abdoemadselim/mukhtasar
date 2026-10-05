@@ -18,7 +18,7 @@ export async function createQrCode(
         background_color = "#ffffff",
         with_custom_link = false,
         alias,
-        domain = "mukhtasar.pro",
+        domain = process.env.ORIGINAL_DOMAIN || "mukhtasar.pro",
         frame_type = "none",
         frame_text,
         frame_color = "#000000",

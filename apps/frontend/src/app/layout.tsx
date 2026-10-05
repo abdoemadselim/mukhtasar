@@ -1,3 +1,4 @@
+import { SITE_URL, API_ORIGIN } from "@/lib/site";
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { cairo } from "@/fonts";
@@ -21,11 +22,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Abdelrahman Emad", url: "https://github.com/abdoemadselim" }],
   creator: "Abdelrahman Emad",
   publisher: "مُختصِر",
-  metadataBase: new URL("https://mukhtasar.pro"),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "ar_EG",
-    url: "https://mukhtasar.pro",
+    url: SITE_URL,
     title: "مُختصِر | أول منتج عربي متكامل لإختصار الروابط",
     description:
       "مُختصِر هو أول منتج عربي لإختصار الروابط، يوفر أدوات متكاملة لإدارة الروابط بسهولة وكفاءة.",
@@ -57,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth">
       <head>
-        <link rel="preconnect" href="https://api.mukhtasar.pro" />
+        <link rel="preconnect" href={API_ORIGIN} />
       </head>
       <body
         className={`${cairo.className} antialiased `}

@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import apiRoutes from "#routes/api.routes.js"
 import uiRoutes from "#routes/ui.routes.js"
 import publicRoutes from "#routes/public.routes.js"
+import redirectRoutes from "#features/url/routes/redirect.routes.js";
 
 import errorHandlerMiddleware from "#middlewares/error-handler.js";
 import routesContext from "#middlewares/routes-context.js";
@@ -16,11 +17,14 @@ import { initGeoIp } from '#lib/geo/geoip.js';
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 
 // These are the allowed origins (to avoid issues with CORS and cookies)
+// The site's domain comes from ORIGINAL_DOMAIN (e.g. mukhtasar.pro or mukhtasar.site); extra origins via CORS_ORIGINS (comma-separated).
+const siteDomain = process.env.ORIGINAL_DOMAIN || "mukhtasar.pro";
 const allowedOrigins = [
-    "https://mukhtasar.pro", // For Frontend
-    "https://www.mukhtasar.pro", // For Frontend
-    "https://api.mukhtasar.pro", // For swagger
+    `https://${siteDomain}`, // For Frontend
+    `https://www.${siteDomain}`, // For Frontend
+    `https://api.${siteDomain}`, // For swagger
     "http://localhost:3002",
+    ...(process.env.CORS_ORIGINS || "").split(",").map((o) => o.trim()).filter(Boolean),
 ];
 
 function createServer() {
@@ -70,6 +74,7 @@ function createServer() {
     app.use("/api", apiRoutes)
     app.use("/ui", uiRoutes)
     app.use("/public", publicRoutes)
+    app.use("/r", redirectRoutes)
 
     // ------ Handling any other not existent routes (e.g. /not-existent-route) ------
     app.use("*splash", () => {

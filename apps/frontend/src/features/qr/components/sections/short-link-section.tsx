@@ -1,3 +1,4 @@
+import { SHORT_DOMAIN } from "@/lib/site";
 import { Link } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 
@@ -43,8 +44,8 @@ export default function ShortLinkSection({
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="mukhtasar.pro">
-                                        mukhtasar.pro (افتراضي)
+                                    <SelectItem value={SHORT_DOMAIN}>
+                                        {SHORT_DOMAIN} (افتراضي)
                                     </SelectItem>
                                     {activeDomains?.domains?.map((domain: DomainType) => (
                                         <SelectItem key={domain.id} value={domain.domain}>

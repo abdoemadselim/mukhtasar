@@ -1,4 +1,5 @@
 'use client'
+import { SHORT_DOMAIN } from "@/lib/site";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -26,7 +27,7 @@ export default function LandingUrlCreationForm() {
     const form = useForm<ShortUrlType>({
         resolver: zodResolver(ShortUrlSchema),
         defaultValues: {
-            domain: "mukhtasar.pro",
+            domain: SHORT_DOMAIN,
             alias: "",
             original_url: "",
             description: "",
@@ -168,11 +169,11 @@ export default function LandingUrlCreationForm() {
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl className="">
                                                     <SelectTrigger className="w-full rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
-                                                        <SelectValue placeholder="mukhtasar.pro" />
+                                                        <SelectValue placeholder={SHORT_DOMAIN} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent >
-                                                    <SelectItem value="mukhtasar.pro">mukhtasar.pro</SelectItem>
+                                                    <SelectItem value={SHORT_DOMAIN}>{SHORT_DOMAIN}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <div className="min-h-[20px]" >
