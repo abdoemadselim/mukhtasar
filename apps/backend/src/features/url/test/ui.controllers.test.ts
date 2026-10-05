@@ -54,17 +54,17 @@ describe('URL UI Controllers', () => {
             const urlInput = {
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
             };
             const sessionId = 'session123';
             const userSession = { id: 1, email: 'test@example.com' };
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
-                short_url: 'https://mukhtasar.pro/test-alias',
+                short_url: 'https://mukhtasar.site/test-alias',
                 description: 'Test URL',
                 is_temporary: false,
             };
@@ -82,7 +82,7 @@ describe('URL UI Controllers', () => {
             expect(mockUrlService.createUrl).toHaveBeenCalledWith({
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
                 user_id: 1,
             });
@@ -100,15 +100,15 @@ describe('URL UI Controllers', () => {
             const urlInput = {
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
             };
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
-                short_url: 'https://mukhtasar.pro/test-alias',
+                short_url: 'https://mukhtasar.site/test-alias',
                 description: 'Test URL',
                 is_temporary: true,
             };
@@ -124,7 +124,7 @@ describe('URL UI Controllers', () => {
             expect(mockUrlService.createUrl).toHaveBeenCalledWith({
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
                 user_id: null,
             });
@@ -135,16 +135,16 @@ describe('URL UI Controllers', () => {
             const urlInput = {
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
             };
             const sessionId = 'invalid-session';
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
-                short_url: 'https://mukhtasar.pro/test-alias',
+                short_url: 'https://mukhtasar.site/test-alias',
                 description: 'Test URL',
                 is_temporary: true,
             };
@@ -161,7 +161,7 @@ describe('URL UI Controllers', () => {
             expect(mockUrlService.createUrl).toHaveBeenCalledWith({
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
                 user_id: null,
             });
@@ -172,7 +172,7 @@ describe('URL UI Controllers', () => {
             const urlInput = {
                 original_url: 'invalid-url',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: 'Test URL',
             };
             mockRequest.body = urlInput;
@@ -191,14 +191,14 @@ describe('URL UI Controllers', () => {
             const urlInput = {
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             };
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
-                short_url: 'https://mukhtasar.pro/test-alias',
+                short_url: 'https://mukhtasar.site/test-alias',
                 description: '',
                 is_temporary: false,
             };
@@ -214,7 +214,7 @@ describe('URL UI Controllers', () => {
             expect(mockUrlService.createUrl).toHaveBeenCalledWith({
                 original_url: 'https://example.com',
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 description: '',
                 user_id: null,
             });
@@ -359,7 +359,7 @@ describe('URL UI Controllers', () => {
         it('When valid alias and domain are provided, should delete URL successfully', async () => {
             // Arrange
             const deletedUrl = createTestUrl();
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.deleteUrl.mockResolvedValue(deletedUrl);
 
             // Act
@@ -368,7 +368,7 @@ describe('URL UI Controllers', () => {
             // Assert
             expect(mockUrlService.deleteUrl).toHaveBeenCalledWith({
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             });
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: deletedUrl,
@@ -380,7 +380,7 @@ describe('URL UI Controllers', () => {
 
         it('When URL to delete is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockUrlService.deleteUrl.mockRejectedValue(new URLNotFoundException());
 
             // Act & Assert
@@ -394,7 +394,7 @@ describe('URL UI Controllers', () => {
         it('When valid alias, domain and new URL are provided, should update URL successfully', async () => {
             // Arrange
             const newUrl = 'https://updated-example.com';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockRequest.body = { original_url: newUrl };
             mockUrlService.updateUrl.mockResolvedValue(newUrl);
 
@@ -403,14 +403,14 @@ describe('URL UI Controllers', () => {
 
             // Assert
             expect(mockUrlService.updateUrl).toHaveBeenCalledWith(
-                { alias: 'test-alias', domain: 'mukhtasar.pro' },
+                { alias: 'test-alias', domain: 'mukhtasar.site' },
                 newUrl
             );
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: {
                     url: newUrl,
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                 },
                 errors: [],
                 code: 0,
@@ -420,7 +420,7 @@ describe('URL UI Controllers', () => {
 
         it('When URL to update is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockRequest.body = { original_url: 'https://updated-example.com' };
             mockUrlService.updateUrl.mockRejectedValue(new URLNotFoundException());
 

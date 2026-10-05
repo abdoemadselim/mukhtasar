@@ -364,7 +364,7 @@ export const up = (pgm) => {
         p_email VARCHAR(200),
         p_password CHAR(60),
         p_name VARCHAR(40),
-        p_domain VARCHAR(100) DEFAULT 'mukhtasar.pro',
+        p_domain VARCHAR(100) DEFAULT 'mukhtasar.site',
         p_url_count INTEGER DEFAULT 20,
         p_analytics_count INTEGER DEFAULT 50
     )

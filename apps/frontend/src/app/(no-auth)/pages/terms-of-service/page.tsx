@@ -162,8 +162,8 @@ export default function TermsPage() {
                                 إذا كان لديك أي استفسارات حول شروط الاستخدام، يمكنك التواصل معنا:
                             </p>
                             <ul className="list-none space-y-2">
-                                <li>• البريد الإلكتروني: support@mukhtasar.pro</li>
-                                <li>• الموقع الإلكتروني: mukhtasar.pro</li>
+                                <li>• البريد الإلكتروني: support@mukhtasar.site</li>
+                                <li>• الموقع الإلكتروني: mukhtasar.site</li>
                             </ul>
                         </div>
                     </section>

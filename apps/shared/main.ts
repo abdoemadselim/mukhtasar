@@ -65,7 +65,7 @@ const BLOCKED_ALIAS = [
     "favicon.ico", "robots.txt", "sitemap.xml",
 
     // brand protection
-    "mukhtasar", "mukhtasar.pro",
+    "mukhtasar", "mukhtasar.site",
 
     // ─── Sensitive / phishing prone ───
     "paypal", "stripe", "checkout", "payment", "billing",
@@ -177,7 +177,7 @@ const BLOCKED_DOMAINS = [
     "amazon.com", "microsoft.com", "apple.com", "linkedin.com", "instagram.com",
     "whatsapp.com", "telegram.org", "discord.com", "slack.com", "zoom.us",
 
-    "mukhtasar.pro", "api.mukhtasar.pro",
+    "mukhtasar.site", "api.mukhtasar.site",
 
     // Other common services
     "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
@@ -216,7 +216,7 @@ export const CreateQrSchema = zod.object({
     foreground_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#000000"),
     background_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#ffffff"),
     alias: zod.string().optional(),
-    domain: zod.string().default("mukhtasar.pro"),
+    domain: zod.string().default("mukhtasar.site"),
     frame_type: zod.enum(['none', 'frame_only', 'frame_with_text']).default('none'),
     frame_text: zod.string().optional(),
     frame_color: zod.string().regex(/^#[0-9A-Fa-f]{6}$/, "لون غير صحيح").default("#000000"),

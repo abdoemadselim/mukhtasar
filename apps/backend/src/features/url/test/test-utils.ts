@@ -46,19 +46,19 @@ export const mockBaseConverter = {
 export const createTestUrl = (overrides = {}) => ({
     id: 1,
     alias: 'test-alias',
-    domain: 'mukhtasar.pro',
+    domain: 'mukhtasar.site',
     original_url: 'https://example.com',
     user_id: 1,
     analytics_enabled: true,
     created_at: '2024-01-01T00:00:00Z',
-    short_url: 'https://mukhtasar.pro/test-alias',
+    short_url: 'https://mukhtasar.site/test-alias',
     description: 'Test URL',
     ...overrides,
 });
 
 export const createUrlInput = (overrides = {}) => ({
     alias: 'test-alias',
-    domain: 'mukhtasar.pro',
+    domain: 'mukhtasar.site',
     original_url: 'https://example.com',
     user_id: 1,
     description: 'Test URL',
@@ -105,10 +105,10 @@ export const setupSuccessfulMocks = () => {
     mockUrlService.getUrlInfo.mockResolvedValue(createTestUrl());
     mockUrlService.createUrl.mockResolvedValue({
         alias: 'test-alias',
-        domain: 'mukhtasar.pro',
+        domain: 'mukhtasar.site',
         original_url: 'https://example.com',
         created_at: '2024-01-01T00:00:00Z',
-        short_url: 'https://mukhtasar.pro/test-alias',
+        short_url: 'https://mukhtasar.site/test-alias',
         description: 'Test URL',
     });
     mockUrlService.deleteUrl.mockResolvedValue(createTestUrl());

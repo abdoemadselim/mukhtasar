@@ -41,7 +41,7 @@ describe('URL API Controllers', () => {
         it('When valid alias and domain are provided, should return URL information successfully', async () => {
             // Arrange
             const expectedUrl = createTestUrl();
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getUrlInfo.mockResolvedValue(expectedUrl);
 
             // Act
@@ -50,7 +50,7 @@ describe('URL API Controllers', () => {
             // Assert
             expect(mockUrlService.getUrlInfo).toHaveBeenCalledWith({
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             });
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: expectedUrl,
@@ -62,7 +62,7 @@ describe('URL API Controllers', () => {
 
         it('When URL is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockUrlService.getUrlInfo.mockRejectedValue(new URLNotFoundException());
 
             // Act & Assert
@@ -89,7 +89,7 @@ describe('URL API Controllers', () => {
 
         it('When alias parameter is missing, should pass undefined alias to service', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro' };
+            mockRequest.params = { domain: 'mukhtasar.site' };
             const expectedUrl = createTestUrl();
             mockUrlService.getUrlInfo.mockResolvedValue(expectedUrl);
 
@@ -99,7 +99,7 @@ describe('URL API Controllers', () => {
             // Assert
             expect(mockUrlService.getUrlInfo).toHaveBeenCalledWith({
                 alias: undefined,
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             });
         });
     });
@@ -110,7 +110,7 @@ describe('URL API Controllers', () => {
             const urlInput = createUrlInput();
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
                 description: 'Test URL',
@@ -142,7 +142,7 @@ describe('URL API Controllers', () => {
             const urlInput = createUrlInput();
             const expectedResponse = {
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: 'https://example.com',
                 created_at: '2024-01-01T00:00:00Z',
                 description: 'Test URL',
@@ -196,7 +196,7 @@ describe('URL API Controllers', () => {
             mockRequest.user = { id: 1 };
             const expectedResponse = {
                 alias: 'generated-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 original_url: undefined,
                 created_at: '2024-01-01T00:00:00Z',
                 description: undefined,
@@ -217,7 +217,7 @@ describe('URL API Controllers', () => {
         it('When valid alias and domain are provided, should delete URL successfully', async () => {
             // Arrange
             const deletedUrl = createTestUrl();
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.deleteUrl.mockResolvedValue(deletedUrl);
 
             // Act
@@ -226,7 +226,7 @@ describe('URL API Controllers', () => {
             // Assert
             expect(mockUrlService.deleteUrl).toHaveBeenCalledWith({
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             });
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: deletedUrl,
@@ -238,7 +238,7 @@ describe('URL API Controllers', () => {
 
         it('When URL to delete is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockUrlService.deleteUrl.mockRejectedValue(new URLNotFoundException());
 
             // Act & Assert
@@ -268,7 +268,7 @@ describe('URL API Controllers', () => {
         it('When valid alias, domain and new URL are provided, should update URL successfully', async () => {
             // Arrange
             const newUrl = 'https://updated-example.com';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockRequest.body = { original_url: newUrl };
             mockUrlService.updateUrl.mockResolvedValue(newUrl);
 
@@ -277,14 +277,14 @@ describe('URL API Controllers', () => {
 
             // Assert
             expect(mockUrlService.updateUrl).toHaveBeenCalledWith(
-                { alias: 'test-alias', domain: 'mukhtasar.pro' },
+                { alias: 'test-alias', domain: 'mukhtasar.site' },
                 newUrl
             );
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: {
                     url: newUrl,
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                 },
                 errors: [],
                 code: 0,
@@ -294,7 +294,7 @@ describe('URL API Controllers', () => {
 
         it('When URL to update is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockRequest.body = { original_url: 'https://updated-example.com' };
             mockUrlService.updateUrl.mockRejectedValue(new URLNotFoundException());
 
@@ -306,7 +306,7 @@ describe('URL API Controllers', () => {
 
         it('When original_url is missing from request body, should pass undefined to service', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockRequest.body = {};
             mockUrlService.updateUrl.mockResolvedValue(undefined);
 
@@ -315,7 +315,7 @@ describe('URL API Controllers', () => {
 
             // Assert
             expect(mockUrlService.updateUrl).toHaveBeenCalledWith(
-                { alias: 'test-alias', domain: 'mukhtasar.pro' },
+                { alias: 'test-alias', domain: 'mukhtasar.site' },
                 undefined
             );
         });
@@ -323,7 +323,7 @@ describe('URL API Controllers', () => {
         it('When service returns same URL as input, should still return success response', async () => {
             // Arrange
             const sameUrl = 'https://example.com';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockRequest.body = { original_url: sameUrl };
             mockUrlService.updateUrl.mockResolvedValue(sameUrl);
 
@@ -335,7 +335,7 @@ describe('URL API Controllers', () => {
                 data: {
                     url: sameUrl,
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                 },
                 errors: [],
                 code: 0,
@@ -348,7 +348,7 @@ describe('URL API Controllers', () => {
         it('When valid alias and domain are provided, should return click count successfully', async () => {
             // Arrange
             const clickCount = 42;
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getUrlClickCount.mockResolvedValue(clickCount);
 
             // Act
@@ -357,12 +357,12 @@ describe('URL API Controllers', () => {
             // Assert
             expect(mockUrlService.getUrlClickCount).toHaveBeenCalledWith({
                 alias: 'test-alias',
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
             });
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: {
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                     clickCount: 42,
                 },
                 errors: [],
@@ -373,7 +373,7 @@ describe('URL API Controllers', () => {
 
         it('When URL for click count is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockUrlService.getUrlClickCount.mockRejectedValue(new URLNotFoundException());
 
             // Act & Assert
@@ -385,7 +385,7 @@ describe('URL API Controllers', () => {
         it('When click count is zero, should return zero successfully', async () => {
             // Arrange
             const clickCount = 0;
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getUrlClickCount.mockResolvedValue(clickCount);
 
             // Act
@@ -395,7 +395,7 @@ describe('URL API Controllers', () => {
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: {
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                     clickCount: 0,
                 },
                 errors: [],
@@ -407,7 +407,7 @@ describe('URL API Controllers', () => {
         it('When click count is very large, should handle it correctly', async () => {
             // Arrange
             const clickCount = 999999;
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getUrlClickCount.mockResolvedValue(clickCount);
 
             // Act
@@ -417,7 +417,7 @@ describe('URL API Controllers', () => {
             expect(mockResponse.json).toHaveBeenCalledWith({
                 data: {
                     alias: 'test-alias',
-                    domain: 'mukhtasar.pro',
+                    domain: 'mukhtasar.site',
                     clickCount: 999999,
                 },
                 errors: [],

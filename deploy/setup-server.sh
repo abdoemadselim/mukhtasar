@@ -71,7 +71,7 @@ if [[ ! -f "$ENV_FILE" ]]; then
   cat >"$ENV_FILE" <<EOF
 PORT=3003
 NODE_ENV=production
-ORIGINAL_DOMAIN=mukhtasar.pro
+ORIGINAL_DOMAIN=mukhtasar.site
 PUBLIC_BASE_URL=$PUBLIC_ORIGIN
 MACHINE_ID=0
 AUTH_SESSION_NAME=mukhtasar-session
@@ -103,8 +103,8 @@ fi
 cat >"$APP_ROOT/apps/frontend/.env.production" <<EOF
 NEXT_PUBLIC_API_URL=$PUBLIC_ORIGIN
 API_URL=http://127.0.0.1:3003
-SHORT_DOMAIN=mukhtasar.pro
-NEXT_PUBLIC_FALLBACK_ORIGIN=domains.mukhtasar.pro
+SHORT_DOMAIN=mukhtasar.site
+NEXT_PUBLIC_FALLBACK_ORIGIN=domains.mukhtasar.site
 EOF
 
 cd "$APP_ROOT"

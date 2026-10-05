@@ -1,5 +1,5 @@
 // Mock environment variables
-process.env.ORIGINAL_DOMAIN = 'mukhtasar.pro';
+process.env.ORIGINAL_DOMAIN = 'mukhtasar.site';
 process.env.NODE_ENV = 'test';
 process.env.AUTH_SESSION_NAME = 'auth_session';
 

@@ -28,7 +28,7 @@ transporter.verify((error) => {
     }
 });
 
-const baseUrl = `${process.env.API_URL || `https://api.${process.env.ORIGINAL_DOMAIN || "mukhtasar.pro"}`}/ui`;
+const baseUrl = `${process.env.API_URL || `https://api.${process.env.ORIGINAL_DOMAIN || "mukhtasar.site"}`}/ui`;
 export async function sendVerificationMail({ userEmail, userName, verificationToken }: { userEmail: string, userName: string, verificationToken: string }) {
     // 1. Load the template
     const templatePath = path.join(process.cwd(), "templates", "email-verification.html")
@@ -85,7 +85,7 @@ export async function sendResetMail({
     let htmlTemplate = await fs.readFile(templatePath, "utf8");
 
     const redirectionUrl = process.env.NODE_ENV === "production" ?
-        `${process.env.WEB_URL || `https://${process.env.ORIGINAL_DOMAIN || "mukhtasar.pro"}`}/auth/password-reset-confirm?token=${resetPasswordToken}` :
+        `${process.env.WEB_URL || `https://${process.env.ORIGINAL_DOMAIN || "mukhtasar.site"}`}/auth/password-reset-confirm?token=${resetPasswordToken}` :
         `http://localhost:3002/auth/password-reset-confirm?token=${resetPasswordToken}`;
 
     // 2. Replace placeholders
