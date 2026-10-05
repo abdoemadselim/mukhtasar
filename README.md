@@ -28,7 +28,7 @@ At its heart, a URL shortener has **two primary functions**:
 
 1. **URL Creation**  
    - User submits a long URL (e.g., `https://example.com/very/long/link`).  
-   - The system generates a **short alias** (e.g., `https://mukhtasar.pro/abc123`) or (the provided user's alias is used)  
+   - The system generates a **short alias** (e.g., `https://mukhtasar.site/abc123`) or (the provided user's alias is used)  
    - The alias and original URL are stored in the database.  
    
    ![High level](docs/imgs/url-shortener-id-generation.png)
@@ -51,8 +51,8 @@ At its heart, a URL shortener has **two primary functions**:
 ![Redirection High Level](docs/imgs/redirection%20high%20level.png)
    
 Two requests under the same domain:  
-- https://mukhtasar.pro/* → should respond with a page  
-- https://mukhtasar.pro/[alias] → should respond with a redirection to original URL  
+- https://mukhtasar.site/* → should respond with a page  
+- https://mukhtasar.site/[alias] → should respond with a redirection to original URL  
 
 A reverse proxy routes traffic based on the request path:  
 - If the path starts with a reserved keyword (`pages`, `dashboard`, `auth`), the request is forwarded to the frontend.  
