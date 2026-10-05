@@ -16,15 +16,21 @@ import { requestLogger } from '#middlewares/logger.js';
 import { initGeoIp } from '#lib/geo/geoip.js';
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 
-// These are the allowed origins (to avoid issues with CORS and cookies)
-// The site's domain comes from ORIGINAL_DOMAIN (e.g. mukhtasar.pro or mukhtasar.site); extra origins via CORS_ORIGINS (comma-separated).
+// These are the allowed origins (to avoid issues with CORS and cookies).
+// The site domain comes from ORIGINAL_DOMAIN. Extra origins come from
+// ALLOWED_ORIGINS (self-host) and CORS_ORIGINS, both comma-separated.
 const siteDomain = process.env.ORIGINAL_DOMAIN || "mukhtasar.site";
+const extraOrigins = [process.env.ALLOWED_ORIGINS, process.env.CORS_ORIGINS]
+    .flatMap((value) => (value || "").split(","))
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
 const allowedOrigins = [
     `https://${siteDomain}`, // For Frontend
     `https://www.${siteDomain}`, // For Frontend
     `https://api.${siteDomain}`, // For swagger
     "http://localhost:3002",
-    ...(process.env.CORS_ORIGINS || "").split(",").map((o) => o.trim()).filter(Boolean),
+    ...extraOrigins,
 ];
 
 function createServer() {
@@ -49,7 +55,17 @@ function createServer() {
     );
     // ------ App Configuration -------------
     app.set("trust proxy", true);
-    app.use("/ui", helmet())
+    // Helmet's HSTS and upgrade-insecure-requests break a plain HTTP deploy.
+    const httpsEnabled = process.env.COOKIE_SECURE === "true";
+    app.use("/ui", helmet({
+        strictTransportSecurity: httpsEnabled ? undefined : false,
+        contentSecurityPolicy: httpsEnabled ? undefined : {
+            useDefaults: true,
+            directives: {
+                upgradeInsecureRequests: null,
+            },
+        },
+    }))
     app.use(bodyParser.json())
 
     // Sets a correlated request Id for logging

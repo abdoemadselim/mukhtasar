@@ -165,7 +165,7 @@ export default function CreateUrlDialog({ children }: { children: React.ReactNod
                                                         {SHORT_DOMAIN} (افتراضي)
                                                     </SelectItem>
 
-                                                    {activeDomains.domains.map((domain: DomainType) => (
+                                                    {(activeDomains?.domains ?? []).map((domain: DomainType) => (
                                                         <SelectItem key={domain.id} value={domain.domain}>{domain.domain}</SelectItem>
                                                     ))}
                                                 </SelectContent>

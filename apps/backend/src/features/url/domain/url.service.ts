@@ -11,6 +11,12 @@ import { ConflictException, ValidationException } from "#lib/error-handling/erro
 import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
+function publicShortUrl(alias: string, stored?: string) {
+    const base = process.env.PUBLIC_BASE_URL?.replace(/\/$/, "");
+    if (base) return `${base}/${alias}`;
+    return stored ?? `https://${process.env.ORIGINAL_DOMAIN}/${alias}`;
+}
+
 // Returns the details of a shortened URL
 export async function getUrlInfo({ domain, alias }: ParamsType) {
     const url = await urlRepository.getUrlByAliasAndDomain({ alias, domain });
@@ -18,7 +24,7 @@ export async function getUrlInfo({ domain, alias }: ParamsType) {
     if (!url) {
         throw new URLNotFoundException();
     }
-    return url
+    return { ...url, short_url: publicShortUrl(url.alias, url.short_url) }
 }
 
 export async function createUrl(newUrl: Partial<UrlType>): Promise<Partial<UrlType & { is_temporary: boolean }>> {
@@ -149,7 +155,7 @@ async function saveUrl({
         original_url,
         description,
         created_at: createdUrl.created_at,
-        short_url: createdUrl.short_url,
+        short_url: publicShortUrl(alias, createdUrl.short_url),
     };
 }
 
@@ -162,7 +168,7 @@ async function saveTemporaryUrl({
     resolvedDomain: string;
     original_url: string;
 }) {
-    const short_url = `https://${resolvedDomain}/${alias}`;
+    const short_url = publicShortUrl(alias, `https://${resolvedDomain}/${alias}`);
 
     await redisClient.setEx(`temp_url:${resolvedDomain}-${alias}`, 300, original_url); // 5 minutes = 300 seconds
 
@@ -246,5 +252,8 @@ export async function getOriginalUrl({ domain, alias }: { domain: string, alias:
 
 export async function getUrlsPage({ user_id, page, page_size }: { user_id: number, page: number, page_size: number }) {
     const { urls, total } = await urlRepository.getUrlsPage({ user_id, page, page_size });
-    return { urls, total };
+    return {
+        urls: urls.map((url) => ({ ...url, short_url: publicShortUrl(url.alias, url.short_url) })),
+        total,
+    };
 }

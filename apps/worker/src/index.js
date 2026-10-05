@@ -1,7 +1,6 @@
 import { lru } from "tiny-lru";
 const cache = lru(1000, 1000 * 60 * 10);
 
-// Cloudflare Worker for mukhtasar.pro URL routing
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request, event))
 })
@@ -13,12 +12,11 @@ async function handleRequest(request, event) {
 
   logRequest(path, 'Worker intercepted')
 
-  // Handle API subdomain
-  if (domain === 'api.mukhtasar.pro') {
+  if (domain === 'api.mukhtasar.site') {
     return handleApiRequest(request, event)
   }
 
-  const isMainDomain = domain === 'mukhtasar.pro' || domain === 'www.mukhtasar.pro'
+  const isMainDomain = domain === 'mukhtasar.site' || domain === 'www.mukhtasar.site'
 
   if (isMainDomain) {
     if (shouldRouteToFrontend(path)) {
@@ -28,8 +26,10 @@ async function handleRequest(request, event) {
 
     logRequest(path, 'Handling redirect for alias', { domain })
     return handleRedirect(request, event, domain)
+  } else if (domain.endsWith('.mukhtasar.site')) {
+    // Other subdomains (mail autoconfig, autodiscover, DKIM, etc.) — pass through
+    return fetch(request)
   } else {
-    // Custom domain logic
     logRequest(path, 'Custom domain detected', { domain })
     return handleCustomDomain(request, event, domain)
   }
@@ -40,19 +40,16 @@ async function handleApiRequest(request, event) {
   const path = url.pathname
   const method = request.method
 
-  logRequest(path, 'API request', { domain: 'api.mukhtasar.pro' })
+  logRequest(path, 'API request', { domain: 'api.mukhtasar.site' })
 
-  // For DELETE and PATCH requests on URLs, we need to handle cache invalidation
   const urlPattern = /^\/(?:api|ui)\/url\/([^\/]+)\/([^\/]+)$/
   const match = path.match(urlPattern)
   if (match && (method === 'DELETE' || method === 'PATCH')) {
     const domain = match[1]
     const alias = match[2]
 
-    // Forward the request to backend first
     const response = await fetch(request)
 
-    // If the backend operation was successful, invalidate cache
     if (response.ok) {
       const cacheKey = `${domain}:${alias}`
       cache.delete(cacheKey)
@@ -66,14 +63,13 @@ async function handleApiRequest(request, event) {
     return response
   }
 
-  // Simply pass other requests through to the backend
   return fetch(request)
 }
 
 function validateAliasFormat(alias) {
   if (!alias || alias.length > 30 || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$/.test(alias)) {
     logRequest(alias, 'Redirects to not found page for not valid alias')
-    return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
+    return Response.redirect(`https://mukhtasar.site/pages/not-found`, 302)
   }
 }
 
@@ -81,31 +77,26 @@ async function handleCustomDomain(request, event, domain) {
   const url = new URL(request.url)
   const path = url.pathname
 
-  // For custom domains, we expect the path to be the alias (e.g., customdomain.com/abc123)
-  // Root path (/) should redirect to the main site or show an error
   if (path === '/' || path === '') {
     logRequest('/', 'Custom domain root access', { domain })
-    return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
+    return Response.redirect(`https://mukhtasar.site/pages/not-found`, 302)
   }
 
   return redirectUrl(path, event, request, domain)
 }
 
-async function redirectUrl(path, event, request, domain = "mukhtasar.pro") {
-  // Extract alias from path (remove leading slash)
-  const alias = path.slice(1).split('/')[0] // Take only first path segment
+async function redirectUrl(path, event, request, domain = "mukhtasar.site") {
+  const alias = path.slice(1).split('/')[0]
 
   validateAliasFormat(alias)
 
   logRequest(alias, 'Looking up alias ', { domain })
 
-  // Use domain-specific cache key
   const cacheKey = `${domain}-${alias}`
   let longUrl = cache.get(cacheKey)
 
   if (!longUrl) {
-    // Backend API call with custom domain context
-    const backendUrl = `https://api.mukhtasar.pro/public/url/${domain}/${alias}`
+    const backendUrl = `https://api.mukhtasar.site/public/url/${domain}/${alias}`
     const backendResponse = await fetch(backendUrl, {
       method: 'GET',
       headers: {
@@ -123,11 +114,10 @@ async function redirectUrl(path, event, request, domain = "mukhtasar.pro") {
       longUrl = data.data.url
       cache.set(cacheKey, longUrl)
     } else {
-      return Response.redirect(`https://mukhtasar.pro/pages/not-found`, 302)
+      return Response.redirect(`https://mukhtasar.site/pages/not-found`, 302)
     }
   }
 
-  // Schedule analytics with custom domain context
   event.waitUntil(sendAnalytics(alias, request, event, domain))
 
   logRequest(alias, 'Redirecting', {
@@ -180,9 +170,9 @@ async function handleRedirect(request, event, domain) {
   return redirectUrl(path, event, request, domain)
 }
 
-async function sendAnalytics(alias, request, event, domain = 'mukhtasar.pro') {
+async function sendAnalytics(alias, request, event, domain = 'mukhtasar.site') {
   try {
-    const analyticsUrl = `https://api.mukhtasar.pro/ui/analytics/`
+    const analyticsUrl = `https://api.mukhtasar.site/ui/analytics/`
 
     await fetch(analyticsUrl, {
       method: 'POST',
@@ -212,4 +202,3 @@ function logRequest(path, action, details = {}) {
     ...details
   }))
 }
-

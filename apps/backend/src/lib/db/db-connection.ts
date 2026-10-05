@@ -15,9 +15,8 @@ export const pool = new Pool({
     // database: process.env.DB_DATABASE_NAME,
     connectionString: process.env.DB_CONNECTION_STRING,
     max: 20,
-    ssl: {
-        rejectUnauthorized: false,
-    },
+    // Local and self-hosted Postgres usually have no SSL. Set DB_SSL=true for a hosted database.
+    ...(process.env.DB_SSL === "true" ? { ssl: { rejectUnauthorized: false } } : {}),
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 10000,
     min: 5
