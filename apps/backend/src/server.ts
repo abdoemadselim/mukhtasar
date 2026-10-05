@@ -22,9 +22,9 @@ const extraOrigins = (process.env.ALLOWED_ORIGINS || "")
     .filter(Boolean);
 
 const allowedOrigins = [
-    "https://mukhtasar.pro", // For Frontend
-    "https://www.mukhtasar.pro", // For Frontend
-    "https://api.mukhtasar.pro", // For swagger
+    "https://mukhtasar.site", // For Frontend
+    "https://www.mukhtasar.site", // For Frontend
+    "https://api.mukhtasar.site", // For swagger
     "http://localhost:3002",
     ...extraOrigins,
 ];
