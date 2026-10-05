@@ -19,10 +19,12 @@ export function getSecureSessionConfig({ key, value = "", age }: { key: string, 
         : process.env.NODE_ENV === "production";
 
     // Empty COOKIE_DOMAIN keeps a host-only cookie, which works for an IP address.
-    // Unset COOKIE_DOMAIN keeps the historical localhost / .mukhtasar.pro split.
+    // Unset COOKIE_DOMAIN uses the site domain in production, and localhost otherwise.
     const domain = process.env.COOKIE_DOMAIN !== undefined
         ? process.env.COOKIE_DOMAIN || undefined
-        : process.env.NODE_ENV === "production" ? ".mukhtasar.pro" : "localhost";
+        : process.env.NODE_ENV === "production"
+            ? `.${process.env.ORIGINAL_DOMAIN || "mukhtasar.site"}`
+            : "localhost";
 
     return {
         key,
