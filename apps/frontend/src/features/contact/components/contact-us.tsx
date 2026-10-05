@@ -154,10 +154,10 @@ export default function ContactSection() {
                         <p className="text-gray-600">
                             أو راسلنا مباشرة على:{' '}
                             <a
-                                href="mailto:support@mukhtasar.pro"
+                                href="mailto:support@mukhtasar.site"
                                 className="text-blue-600 hover:text-blue-700 font-medium"
                             >
-                                support@mukhtasar.pro
+                                support@mukhtasar.site
                             </a>
                         </p>
                     </div>

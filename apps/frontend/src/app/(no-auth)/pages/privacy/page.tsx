@@ -125,7 +125,7 @@ export default function PrivacyPage() {
                                 <li><strong>الحذف:</strong> طلب حذف بياناتك الشخصية</li>
                             </ul>
                             <p>
-                                لممارسة هذه الحقوق، يرجى التواصل معنا على: support@mukhtasar.pro
+                                لممارسة هذه الحقوق، يرجى التواصل معنا على: support@mukhtasar.site
                             </p>
                         </div>
                     </section>

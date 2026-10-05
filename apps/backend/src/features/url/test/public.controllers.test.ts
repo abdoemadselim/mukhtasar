@@ -37,7 +37,7 @@ describe('URL Public Controllers', () => {
         it('When valid alias and domain are provided, should return original URL successfully', async () => {
             // Arrange
             const originalUrl = 'https://example.com';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(originalUrl);
 
             // Act
@@ -45,7 +45,7 @@ describe('URL Public Controllers', () => {
 
             // Assert
             expect(mockUrlService.getOriginalUrl).toHaveBeenCalledWith({
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 alias: 'test-alias',
             });
             expect(mockResponse.json).toHaveBeenCalledWith({
@@ -69,14 +69,14 @@ describe('URL Public Controllers', () => {
 
             // Assert
             expect(mockUrlService.getOriginalUrl).toHaveBeenCalledWith({
-                domain: 'mukhtasar.pro', // Default domain from process.env.ORIGINAL_DOMAIN
+                domain: 'mukhtasar.site', // Default domain from process.env.ORIGINAL_DOMAIN
                 alias: 'test-alias',
             });
         });
 
         it('When URL is not found, should throw URLNotFoundException', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'non-existent' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'non-existent' };
             mockUrlService.getOriginalUrl.mockRejectedValue(new URLNotFoundException());
 
             // Act & Assert
@@ -88,7 +88,7 @@ describe('URL Public Controllers', () => {
         it('When alias parameter is missing, should pass undefined alias to service', async () => {
             // Arrange
             const originalUrl = 'https://example.com';
-            mockRequest.params = { domain: 'mukhtasar.pro' };
+            mockRequest.params = { domain: 'mukhtasar.site' };
             mockUrlService.getOriginalUrl.mockResolvedValue(originalUrl);
 
             // Act
@@ -96,7 +96,7 @@ describe('URL Public Controllers', () => {
 
             // Assert
             expect(mockUrlService.getOriginalUrl).toHaveBeenCalledWith({
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 alias: undefined,
             });
         });
@@ -112,7 +112,7 @@ describe('URL Public Controllers', () => {
 
             // Assert
             expect(mockUrlService.getOriginalUrl).toHaveBeenCalledWith({
-                domain: 'mukhtasar.pro',
+                domain: 'mukhtasar.site',
                 alias: undefined,
             });
         });
@@ -120,7 +120,7 @@ describe('URL Public Controllers', () => {
         it('When service returns a very long URL, should handle it correctly', async () => {
             // Arrange
             const longUrl = 'https://example.com/' + 'a'.repeat(1000);
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(longUrl);
 
             // Act
@@ -140,7 +140,7 @@ describe('URL Public Controllers', () => {
         it('When service returns a URL with special characters, should handle it correctly', async () => {
             // Arrange
             const specialUrl = 'https://example.com/path?param=value&other=test#section';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(specialUrl);
 
             // Act
@@ -160,7 +160,7 @@ describe('URL Public Controllers', () => {
         it('When service returns a URL with Arabic characters, should handle it correctly', async () => {
             // Arrange
             const arabicUrl = 'https://example.com/صفحة-عربية?param=قيمة';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(arabicUrl);
 
             // Act
@@ -180,7 +180,7 @@ describe('URL Public Controllers', () => {
         it('When service returns a URL with encoded characters, should handle it correctly', async () => {
             // Arrange
             const encodedUrl = 'https://example.com/path%20with%20spaces?param=value%20encoded';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(encodedUrl);
 
             // Act
@@ -200,7 +200,7 @@ describe('URL Public Controllers', () => {
         it('When service returns an empty string, should handle it correctly', async () => {
             // Arrange
             const emptyUrl = '';
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             mockUrlService.getOriginalUrl.mockResolvedValue(emptyUrl);
 
             // Act
@@ -219,7 +219,7 @@ describe('URL Public Controllers', () => {
 
         it('When service throws a generic error, should propagate the error', async () => {
             // Arrange
-            mockRequest.params = { domain: 'mukhtasar.pro', alias: 'test-alias' };
+            mockRequest.params = { domain: 'mukhtasar.site', alias: 'test-alias' };
             const genericError = new Error('Generic service error');
             mockUrlService.getOriginalUrl.mockRejectedValue(genericError);
 

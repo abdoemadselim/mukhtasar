@@ -4,7 +4,7 @@
 ### Variables
 @baseUrl = http://localhost:3000/qr
 @destinationUrl = https://www.example.com
-@domain = mukhtasar.pro
+@domain = mukhtasar.site
 @alias = my-qr-code
 
 ### 1. Create QR Code (minimal)

@@ -9,7 +9,7 @@ export const BLOCKED_ALIAS = [
     "favicon.ico", "robots.txt", "sitemap.xml",
 
     // brand protection
-    "mukhtasar", "mukhtasar.pro",
+    "mukhtasar", "mukhtasar.site",
 
     // ─── Sensitive / phishing prone ───
     "paypal", "stripe", "checkout", "payment", "billing",

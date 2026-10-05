@@ -29,7 +29,7 @@ export default function DomainInstructionsDialog({
     domain,
     domainType
 }: DomainInstructionsDialogProps) {
-    const targetDomain = process.env.NEXT_PUBLIC_FALLBACK_ORIGIN || "domains.mukhtasar.pro"
+    const targetDomain = process.env.NEXT_PUBLIC_FALLBACK_ORIGIN || "domains.mukhtasar.site"
 
     const handleCopyRecord = async (text: string) => {
         await navigator.clipboard.writeText(text)
@@ -52,7 +52,7 @@ export default function DomainInstructionsDialog({
                 <p className="text-sm text-gray-700 pb-4">
                     إذا واجهت أي مشكلة، يمكنك{" "}
                     <a
-                        href="mailto:support@mukhtasar.pro"
+                        href="mailto:support@mukhtasar.site"
                         className="text-blue-600 hover:underline font-medium"
                     >
                         التواصل معنا

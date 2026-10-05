@@ -123,7 +123,7 @@ async function seedData() {
   for (let i = 0; i < 1000; i++) {
     const userId = faker.helpers.arrayElement(userIds);
     const alias = faker.string.alphanumeric(8).toLowerCase();
-    const domain = "mukhtasar.pro";
+    const domain = "mukhtasar.site";
     const originalUrl = faker.internet.url();
     const description = faker.lorem.sentence();
 

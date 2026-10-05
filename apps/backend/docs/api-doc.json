@@ -4,13 +4,13 @@
     "title": "مُختصِر - واجهة برمجة التطبيقات الخاصة بمُختصِر",
     "description": "هذه هي مواصفات واجهة برمجة التطبيقات لمُختصِر التي تتيح لك الوصول برمجياً إلى خدمتنا لتحويل الروابط الطويلة إلى روابط مختصرة\n\nالميزات:\n- إنشاء روابط مختصرة (مع أو بدون أسماء مستعارة مخصصة)\n- تحديث وحذف الروابط المختصرة\n- تتبع الإحصائيات الأساسية (النقرات، المرجع، إلخ)\n",
     "contact": {
-      "email": "support@mukhtasar.pro"
+      "email": "support@mukhtasar.site"
     },
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://api.mukhtasar.pro/api"
+      "url": "https://api.mukhtasar.site/api"
     }
   ],
   "tags": [
@@ -53,7 +53,7 @@
                   "domain": {
                     "type": "string",
                     "description": "النطاق المراد استخدامه للرابط المختصر",
-                    "example": "mukhtasar.pro"
+                    "example": "mukhtasar.site"
                   },
                   "description": {
                     "type": "string",
@@ -82,7 +82,7 @@
                         "short_url": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://mukhtasar.pro/myexamplelink"
+                          "example": "https://mukhtasar.site/myexamplelink"
                         },
                         "alias": {
                           "type": "string",
@@ -90,7 +90,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.pro"
+                          "example": "mukhtasar.site"
                         },
                         "original_url": {
                           "type": "string",
@@ -166,7 +166,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.pro"
+              "example": "mukhtasar.site"
             }
           }
         ],
@@ -188,7 +188,7 @@
                         },
                         "short_url": {
                           "type": "string",
-                          "example": "https://mukhtasar.pro/xYz123"
+                          "example": "https://mukhtasar.site/xYz123"
                         },
                         "alias": {
                           "type": "string",
@@ -196,7 +196,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.pro"
+                          "example": "mukhtasar.site"
                         },
                         "created_at": {
                           "type": "string",
@@ -272,7 +272,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.pro"
+              "example": "mukhtasar.site"
             }
           }
         ],
@@ -319,7 +319,7 @@
                         },
                         "domain": {
                           "type": "string",
-                          "example": "mukhtasar.pro"
+                          "example": "mukhtasar.site"
                         }
                       }
                     },
@@ -383,7 +383,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "mukhtasar.pro"
+              "example": "mukhtasar.site"
             }
           }
         ],

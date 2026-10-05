@@ -38,7 +38,7 @@ export default function CreateQrDialog({ children }: { children: React.ReactNode
     //         foreground_color: "#000000",
     //         background_color: "#ffffff",
     //         alias: "",
-    //         domain: "mukhtasar.pro",
+    //         domain: "mukhtasar.site",
     //         frame_type: "none" as const,
     //         frame_text: "امسح للزيارة!",
     //         frame_color: "#000000",
