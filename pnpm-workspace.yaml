@@ -1,6 +1,19 @@
 packages:
   - apps/*
 
+allowBuilds:
+  bcrypt: true
+  sharp: true
+  esbuild: true
+  '@tailwindcss/oxide': true
+  unrs-resolver: true
+  protobufjs: true
+  '@newrelic/fn-inspect': false
+  '@newrelic/native-metrics': false
+  '@scarf/scarf': false
+  '@tsparticles/engine': false
+  workerd: false
+
 overrides:
   axios@>=1.0.0 <1.12.0: '>=1.12.0'
   body-parser@>=2.2.0 <2.2.1: '>=2.2.1'

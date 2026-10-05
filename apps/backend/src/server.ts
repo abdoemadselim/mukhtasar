@@ -16,11 +16,17 @@ import { initGeoIp } from '#lib/geo/geoip.js';
 import { NotFoundException } from "#lib/error-handling/error-types.js"
 
 // These are the allowed origins (to avoid issues with CORS and cookies)
+const extraOrigins = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
 const allowedOrigins = [
     "https://mukhtasar.pro", // For Frontend
     "https://www.mukhtasar.pro", // For Frontend
     "https://api.mukhtasar.pro", // For swagger
     "http://localhost:3002",
+    ...extraOrigins,
 ];
 
 function createServer() {
@@ -45,7 +51,17 @@ function createServer() {
     );
     // ------ App Configuration -------------
     app.set("trust proxy", true);
-    app.use("/ui", helmet())
+    // Helmet's HSTS and upgrade-insecure-requests break a plain HTTP deploy.
+    const httpsEnabled = process.env.COOKIE_SECURE === "true";
+    app.use("/ui", helmet({
+        strictTransportSecurity: httpsEnabled ? undefined : false,
+        contentSecurityPolicy: httpsEnabled ? undefined : {
+            useDefaults: true,
+            directives: {
+                upgradeInsecureRequests: null,
+            },
+        },
+    }))
     app.use(bodyParser.json())
 
     // Sets a correlated request Id for logging

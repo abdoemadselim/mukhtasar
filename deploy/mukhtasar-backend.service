@@ -1,0 +1,14 @@
+[Unit]
+Description=Mukhtasar API
+After=network.target postgresql.service redis-server.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/mukhtasar/apps/backend
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/main.js
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

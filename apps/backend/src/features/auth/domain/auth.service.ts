@@ -40,6 +40,14 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
 
     const user = await authRepository.createUser({ name, email, password: passwordHash })
 
+    // Without SMTP, new accounts can never log in because login requires a verified email.
+    // Turn this on only for local and self-hosted setups that have no mail server.
+    let verified = false
+    if (process.env.AUTO_VERIFY_USERS === "true") {
+        await authRepository.setUserVerified(user.id)
+        verified = true
+    }
+
     const verificationToken = jwt.sign({
         userId: user.id,
         type: "email_verification",
@@ -54,7 +62,7 @@ export async function createUser({ email, password, name }: Omit<NewUserType, "p
     return {
         name: user.name,
         email: user.email,
-        verified: false,
+        verified,
         id: user.id
     };
 }
