@@ -18,7 +18,7 @@ import { NotFoundException } from "#lib/error-handling/error-types.js"
 
 // These are the allowed origins (to avoid issues with CORS and cookies)
 // The site's domain comes from ORIGINAL_DOMAIN (e.g. mukhtasar.pro or mukhtasar.site); extra origins via CORS_ORIGINS (comma-separated).
-const siteDomain = process.env.ORIGINAL_DOMAIN || "mukhtasar.pro";
+const siteDomain = process.env.ORIGINAL_DOMAIN || "mukhtasar.site";
 const allowedOrigins = [
     `https://${siteDomain}`, // For Frontend
     `https://www.${siteDomain}`, // For Frontend
