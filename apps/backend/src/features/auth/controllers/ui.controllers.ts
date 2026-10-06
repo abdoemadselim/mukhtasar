@@ -66,7 +66,7 @@ export async function verify(req: Request, res: Response) {
     if (session) {
         const user = JSON.parse(session);
         if (user.verified) {
-            res.redirect(process.env.WEB_URL as string)
+            return res.redirect(process.env.WEB_URL as string)
         }
     }
 
@@ -79,9 +79,11 @@ export async function verify(req: Request, res: Response) {
         })
 
         res.clearCookie(sessionConfig.key);
+        return res.redirect(process.env.WEB_URL as string)
     }
 
-    res.redirect(process.env.WEB_URL as string)
+    // Sign-up doesn't start a session, so send the verified user to log in
+    res.redirect(`${process.env.WEB_URL}/auth/login?verified=1`)
 }
 
 export async function logout(req: Request, res: Response) {
