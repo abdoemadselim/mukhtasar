@@ -22,7 +22,7 @@ export default function HomePage() {
         </h2>
 
         <div className="flex flex-col lg:flex-row gap-15 items-center justify-center mt-20 px-6">
-          <WobbleCard className="py-10" containerClassName="xl:w-[700px] md:w-[600px] w-[90vw] bg-indigo-200">
+          <WobbleCard className="py-10" containerClassName="xl:w-[700px] md:w-[600px] w-[90vw] bg-indigo-200 rounded-3xl transition-shadow duration-300 hover:shadow-2xl hover:shadow-indigo-300/50">
             <div className="sm:text-2xl lg:text-4xl text-xl parent flex justify-center flex-col items-center">
               <Image
                 src="/customer.png"
@@ -37,7 +37,7 @@ export default function HomePage() {
             </div>
           </WobbleCard>
 
-          <WobbleCard className="py-10" containerClassName="xl:w-[700px] md:w-[600px] w-[90vw] bg-pink-200">
+          <WobbleCard className="py-10" containerClassName="xl:w-[700px] md:w-[600px] w-[90vw] bg-pink-200 rounded-3xl transition-shadow duration-300 hover:shadow-2xl hover:shadow-pink-300/50">
             <div className="sm:text-2xl lg:text-4xl text-xl parent flex justify-center flex-col items-center">
               <Image
                 src="/slider.png"
