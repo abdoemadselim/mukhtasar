@@ -12,6 +12,13 @@ import { toBase62 } from "#lib/base-convertor/base-convertor.js";
 import { client as redisClient } from "#lib/db/redis-connection.js"
 
 function publicShortUrl(alias: string, stored?: string) {
+    // Links on a customer's own domain keep that domain
+    if (stored) {
+        try {
+            if (new URL(stored).hostname !== process.env.ORIGINAL_DOMAIN) return stored;
+        } catch { /* fall through to the default below */ }
+    }
+
     const base = process.env.PUBLIC_BASE_URL?.replace(/\/$/, "");
     if (base) return `${base}/${alias}`;
     return stored ?? `https://${process.env.ORIGINAL_DOMAIN}/${alias}`;
