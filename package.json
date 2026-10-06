@@ -12,14 +12,6 @@
     "node": ">= 20.9.0",
     "npm": ">= 6.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "glob": ">=11.1.0",
-      "js-yaml": ">=4.1.1",
-      "devalue": ">=5.3.2",
-      "tmp": "0.2.4"
-    }
-  },
   "main": "./dist/main.js",
   "scripts": {
     "build": "pnpm install --frozen-lockfile && pnpm -r install && pnpm -r build",
