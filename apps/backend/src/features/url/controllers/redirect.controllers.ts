@@ -3,6 +3,7 @@ import { UAParser } from "ua-parser-js";
 
 import * as urlService from "#features/url/domain/url.service.js";
 import * as analyticsService from "#features/analytics/domain/analytics.service.js";
+import domainRepository from "#features/domain/data-access/domain-repository.js";
 import { log, LOG_TYPE } from "#lib/logger/logger.js";
 
 // Same rule the Cloudflare worker used before forwarding an alias to the backend.
@@ -14,9 +15,15 @@ const ALIAS_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$/;
  It resolves the alias (Redis first, then the DB), records the click like the worker did, then answers 302.
 */
 export async function redirectToOriginalUrl(req: Request, res: Response) {
-    const domain = process.env.ORIGINAL_DOMAIN as string;
-    const notFound = `${process.env.WEB_URL || `https://${domain}`}/pages/not-found`;
+    const mainDomain = process.env.ORIGINAL_DOMAIN as string;
+    const notFound = `${process.env.WEB_URL || `https://${mainDomain}`}/pages/not-found`;
     const alias = String(req.params.alias || "");
+
+    // Cloudflare forwards a customer's own domain in this header; only trust it if it's an active custom domain
+    const forwardedHost = String(req.headers["x-original-host"] || "").toLowerCase().trim();
+    const domain = forwardedHost && forwardedHost !== mainDomain && await domainRepository.isActiveCustomDomain(forwardedHost)
+        ? forwardedHost
+        : mainDomain;
 
     if (alias.length > 30 || !ALIAS_PATTERN.test(alias)) {
         return res.redirect(302, notFound);

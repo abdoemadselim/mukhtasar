@@ -41,6 +41,15 @@ const domainRepository = {
         return result.rows[0];
     },
 
+    async isActiveCustomDomain(domain: string): Promise<boolean> {
+        const result = await query(`
+            SELECT 1 FROM custom_domain
+            WHERE domain = $1 AND status = 'active'
+        `, [domain]);
+
+        return result.rows.length > 0;
+    },
+
     async addDomain({ domain, userId, cloudflare_hostname_id }: { domain: string, userId: number, cloudflare_hostname_id: string }) {
         const result = await query(`
            INSERT INTO custom_domain (domain, user_id, status, cloudflare_hostname_id)
