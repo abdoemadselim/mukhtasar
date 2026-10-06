@@ -1,15 +1,15 @@
 import { Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { getSession } from "@/features/auth/service/auth-session";
 
 export default async function EmailVerificationPage() {
+    // Sign-up doesn't create a session, so this is null right after registering
     const session = await getSession()
 
     const component = (
-        session.data.user?.verified ?
+        session?.data?.user?.verified ?
             <p>لقد تم تأكيد بريدك الإلكتروني بالفعل.</p>
             : <p>
                 تم إرسال رسالة إلى بريدك الإلكتروني.
@@ -21,10 +21,6 @@ export default async function EmailVerificationPage() {
             </p>
 
     )
-
-    if (!session.data.user) {
-        redirect("/auth/login")
-    }
 
     return (
         <>
