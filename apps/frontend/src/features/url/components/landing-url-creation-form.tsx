@@ -128,13 +128,13 @@ export default function LandingUrlCreationForm() {
                     </p>
                 }
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 border-2 sm:w-[70vw] xl:w-[45vw] w-[80vw] rounded-xl">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="relative bg-white p-6 sm:p-8 border border-white/80 shadow-[0_20px_50px_-20px_rgba(79,70,229,0.35),0_2px_6px_rgba(15,23,42,0.06)] sm:w-[70vw] xl:w-[45vw] w-[80vw] rounded-2xl">
                         <div className="pb-2">
                             <FormField control={form.control} name="original_url" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="pb-1 text-lg">ادخل رابطك الطويل</FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="text-end h-[45px] rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="http://example.com/very-long-url" />
+                                        <Input {...field} className="text-end h-12 rounded-xl border-gray-300 bg-gray-50/60 transition-all focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-indigo-100 focus-visible:border-indigo-500" placeholder="http://example.com/very-long-url" />
                                     </FormControl>
                                     <div className="min-h-[20px]" >
                                         <FormMessage />
@@ -152,7 +152,7 @@ export default function LandingUrlCreationForm() {
                                         <FormItem>
                                             <FormLabel className="text-muted-foreground pb-2">الاسم المستعار (اختياري)</FormLabel>
                                             <FormControl>
-                                                <Input {...field} className="text-end w-full rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2" placeholder="products" />
+                                                <Input {...field} className="text-end w-full h-11 rounded-xl border-gray-300 bg-gray-50/60 transition-all focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-indigo-100 focus-visible:border-indigo-500" placeholder="products" />
                                             </FormControl>
                                             <div className="min-h-[20px]" >
                                                 <FormMessage />
@@ -168,7 +168,7 @@ export default function LandingUrlCreationForm() {
                                             <FormLabel className="text-muted-foreground pb-2">النطاق</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl className="">
-                                                    <SelectTrigger className="w-full rounded-md border-gray-400 focus-visible:ring-0 focus-visible:border-blue-600 focus-visible:border-2">
+                                                    <SelectTrigger className="w-full !h-11 rounded-xl border-gray-300 bg-gray-50/60 transition-all focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-indigo-100 focus-visible:border-indigo-500">
                                                         <SelectValue placeholder={SHORT_DOMAIN} />
                                                     </SelectTrigger>
                                                 </FormControl>
@@ -186,9 +186,9 @@ export default function LandingUrlCreationForm() {
                             </div>
                         </div>
                         <Button
-                            className="inline-flex w-full cursor-pointer items-center px-12 py-5 bg-gradient-to-r
-                         from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 
-                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                            className="inline-flex w-full cursor-pointer items-center px-12 h-13 bg-gradient-to-r
+                         from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:from-blue-700 hover:to-purple-700 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 active:translate-y-0 active:scale-[0.99]
+                         focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                             type="submit" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting ? "جاري الإنشاء..." : "قصر رابطك مجاناً"}
                         </Button>

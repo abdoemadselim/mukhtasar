@@ -30,8 +30,8 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="px-4 md:px-6 pt-4 ">
-      <div className="container mx-auto bg-white shadow-sm px-10 rounded-xl">
+    <header className="sticky top-0 z-40 px-4 md:px-6 pt-4">
+      <div className="container mx-auto bg-white/80 backdrop-blur-md border border-white/70 shadow-[0_4px_24px_-8px_rgba(79,70,229,0.18)] px-10 rounded-2xl">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Left side */}
           {/* Mobile menu trigger */}
@@ -87,7 +87,7 @@ export default function Navbar() {
                   <NavigationMenuItem key={index}>
                     <Link
                       href={link.href}
-                      className={clsx("text-md font-medium hover:underline  px-4 rounded-lg", pathname == link.href && "bg-accent text-primary")}
+                      className={clsx("text-md font-medium text-gray-700 hover:text-primary hover:bg-primary/5 transition-colors px-4 py-1.5 rounded-lg", pathname == link.href && "bg-accent text-primary")}
                     >
                       {link.label}
                     </Link>
