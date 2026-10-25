@@ -1,21 +1,17 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextConfig from "eslint-config-next";
 
 const eslintConfig = [
-  ...compat.config({
-    extends: ['next'],
+  ...nextConfig,
+  {
     rules: {
-      "@typescript-eslint/no-explicit-any": "off"
+      "@typescript-eslint/no-explicit-any": "off",
+      // eslint-config-next 16 turns on React Compiler rules. Leave the
+      // existing components alone; this bump is the security patch.
+      "react-hooks/immutability": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/set-state-in-effect": "off",
     },
-  }),
-]
+  },
+];
 
 export default eslintConfig;
